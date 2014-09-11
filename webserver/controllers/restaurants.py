@@ -6,50 +6,50 @@ from webserver.models import Restaurant
 # Define blueprint
 restaurants = Blueprint('restaurants', __name__)
 
-# # Get list
-# @restaurants.route('', methods=['GET', 'OPTIONS'])
-# def list():
-#     """ Return all restaurants.
-#
-#         Method: *GET*
-#         URI: */restaurants*
-#     """
-#
-#     # Query
-#     query = db.session.query(Circuit)
-#     circuits = query.all()
-#
-#     # Build the response
-#     response = make_response(jsonify([c.to_dict() for c in circuits]))
-#     response.status_code = 200
-#     response.mimetype = 'application/json'
-#
-#     return response
-#
-# # Get one restaurant
-# @restaurants.route('/<int:id>', methods=['GET', 'OPTIONS'])
-# def index(id):
-#     """ Return one restaurant by id.
-#
-#         Method: *GET*
-#         URI: */restaurants/id*
-#     """
-#
-#     # Query
-#     query = db.session.query(Circuit)
-#     circuit = query.get(id)
-#
-#     # Check circuit
-#     if circuit is None:
-#         return make_response("The circuit you are trying to target is unknown", 400)
-#
-#     # Build the response
-#     response = make_response(jsonify(circuit.to_dict()))
-#     response.status_code = 200
-#     response.mimetype = 'application/json'
-#
-#     return response
-#
+# Get list
+@restaurants.route('', methods=['GET', 'OPTIONS'])
+def list():
+    """ Return all restaurants.
+
+        Method: *GET*
+        URI: */restaurants*
+    """
+
+    # Query
+    query = db.session.query(Restaurant)
+    restaurants = query.all()
+
+    # Build the response
+    response = make_response(jsonify([r.to_dict() for r in restaurants]))
+    response.status_code = 200
+    response.mimetype = 'application/json'
+
+    return response
+
+# Get one restaurant
+@restaurants.route('/<int:id>', methods=['GET', 'OPTIONS'])
+def index(id):
+    """ Return one restaurant by id.
+
+        Method: *GET*
+        URI: */restaurants/id*
+    """
+
+    # Query
+    query = db.session.query(Restaurant)
+    restaurant = query.get(id)
+
+    # Check circuit
+    if restaurant is None:
+        return make_response("The restaurant you are trying to target is unknown", 400)
+
+    # Build the response
+    response = make_response(jsonify(restaurant.to_dict()))
+    response.status_code = 200
+    response.mimetype = 'application/json'
+
+    return response
+
 # # Create restaurant
 # @restaurants.route('', methods=['POST', 'OPTIONS'])
 # def create():

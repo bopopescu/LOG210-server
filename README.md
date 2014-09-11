@@ -34,3 +34,12 @@ Se placer dans le dossier "LOG210-server" et >python manager.py runserver
 	* config.py: contient la configuration pour se connecter à la base de donnée
 	* models: contient les modèles
 	* controllers: contient les web services
+
+
+### Tests
+
+Installer les requirements (>pip install -r requirements-test.txt)
+Depuis l'environnement virtuel lancer la commande >nosetests
+(-v: visualiser le noms des tests)
+(-x: stopper la série de tests lorsqu'un test échoue)
+(-s -d: visualiser les print pour débugger)
