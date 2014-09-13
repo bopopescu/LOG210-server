@@ -39,7 +39,7 @@ def index(id):
     query = db.session.query(Restaurant)
     restaurant = query.get(id)
 
-    # Check circuit
+    # Check restaurant
     if restaurant is None:
         return make_response("The restaurant you are trying to target is unknown", 400)
 
@@ -80,21 +80,21 @@ def index(id):
 #     if not isinstance(datas['country'], (str, unicode)):
 #         return make_response("The country must be a string", 400)
 #
-#     # Create circuit
-#     circuit = Circuit(name=datas['name'], city=datas['city'], country=datas['country'])
+#     # Create restaurant
+#     restaurant = Restaurant(name=datas['name'], city=datas['city'], country=datas['country'])
 #
-#     # Add circuit
-#     db.session.add(circuit)
+#     # Add restaurant
+#     db.session.add(restaurant)
 #
 #     # Commit
 #     try:
 #         db.session.commit()
 #     except Exception:  # pragma: no cover
 #         db.session.rollback()
-#         return make_response("Due to an unexpected error, the circuit cannot be created", 500)
+#         return make_response("Due to an unexpected error, the restaurant cannot be created", 500)
 #
 #     # Build the response
-#     response = make_response(jsonify(circuit.to_dict()))
+#     response = make_response(jsonify(restaurant.to_dict()))
 #     response.status_code = 201
 #     response.mimetype = 'application/json'
 #
@@ -112,40 +112,40 @@ def index(id):
 #     # Get request values
 #     datas = request.values
 #
-#     circuit = db.session.query(Circuit).get(id)
-#     if circuit is None:
-#         return make_response("The circuit you are trying to target is unknown", 400)
+#     restaurant = db.session.query(Restaurant).get(id)
+#     if restaurant is None:
+#         return make_response("The restaurant you are trying to target is unknown", 400)
 #
 #     # Check name
 #     if 'name' in datas:
 #         if not isinstance(datas['name'], (str, unicode)):
 #             return make_response("The name must be a string", 400)
 #
-#         circuit.name = datas['name']
+#         restaurant.name = datas['name']
 #
 #     # Check city
 #     if 'city' in datas:
 #         if not isinstance(datas['city'], (str, unicode)):
 #             return make_response("The city must be a string", 400)
 #
-#         circuit.city = datas['city']
+#         restaurant.city = datas['city']
 #
 #     # Check country
 #     if 'country' in datas:
 #         if not isinstance(datas['country'], (str, unicode)):
 #             return make_response("The country must be a string", 400)
 #
-#         circuit.country = datas['country']
+#         restaurant.country = datas['country']
 #
 #     # Commit
 #     try:
 #         db.session.commit()
 #     except Exception:  # pragma: no cover
 #         db.session.rollback()
-#         return make_response("Due to an unexpected error, the circuit cannot be updated", 500)
+#         return make_response("Due to an unexpected error, the restaurant cannot be updated", 500)
 #
 #     # Build the response
-#     response = make_response(jsonify(circuit.to_dict()))
+#     response = make_response(jsonify(restaurant.to_dict()))
 #     response.status_code = 200
 #     response.mimetype = 'application/json'
 #
@@ -161,25 +161,25 @@ def index(id):
 #     """
 #
 #     # Query
-#     query = db.session.query(Circuit)
-#     circuit = query.get(id)
+#     query = db.session.query(Restaurant)
+#     restaurant = query.get(id)
 #
-#     # Check circuit
-#     if circuit is None:
-#         return make_response("The circuit you are trying to target is unknown", 400)
+#     # Check restaurant
+#     if restaurant is None:
+#         return make_response("The restaurant you are trying to target is unknown", 400)
 #
-#     # Delete circuit
-#     db.session.delete(circuit)
+#     # Delete restaurant
+#     db.session.delete(restaurant)
 #
 #     # Commit
 #     try:
 #         db.session.commit()
 #     except Exception:  # pragma: no cover
 #         db.session.rollback()
-#         return make_response("Due to an unexpected error, the circuit cannot be updated", 500)
+#         return make_response("Due to an unexpected error, the restaurant cannot be updated", 500)
 #
 #     # Build the response
-#     response = make_response(jsonify(circuit.to_dict()))
+#     response = make_response(jsonify(restaurant.to_dict()))
 #     response.status_code = 200
 #     response.mimetype = 'application/json'
 #
