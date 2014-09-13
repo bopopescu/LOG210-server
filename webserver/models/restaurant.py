@@ -15,7 +15,7 @@ class Restaurant(Base):
 
         my_dict['id'] = self.id
         my_dict['name'] = self.name
-        my_dict['phone'] = self.city
+        my_dict['phone'] = self.phone
         my_dict['address'] = self.address
         my_dict['city'] = self.city
 
