@@ -58,12 +58,26 @@ class MissingParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'The name is a mandatory information'
 
+    def test_missing_address(self):
+        """ POST /restaurants: with missing address """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "La Banquise"
+        data['city'] = "Montreal"
+        data['phone'] = "888-888-8888"
+
+        # Check request
+        response = self.post('/restaurants', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The address is a mandatory information'
+
     def test_missing_city(self):
         """ POST /restaurants: with missing city """
 
         # Prepare data
         data = dict()
-        data['name'] = "Restaurant 1"
+        data['name'] = "La Banquise"
         data['address'] = "1100 Ste-Catherine"
         data['phone'] = "888-888-8888"
 
@@ -71,6 +85,20 @@ class MissingParameters(FunctionalTest):
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
         assert response.data == 'The city is a mandatory information'
+
+    def test_missing_phone(self):
+        """ POST /restaurants: with missing phone """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "La Banquise"
+        data['city'] = "Montreal"
+        data['address'] = "1100 Ste-Catherine"
+
+        # Check request
+        response = self.post('/restaurants', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The phone is a mandatory information'
 
 
 class InvalidParameters(FunctionalTest):
@@ -103,6 +131,21 @@ class InvalidParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'The name must be a string'
 
+    def test_invalid_address(self):
+        """ POST /restaurants: with invalid address """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "La Banquise"
+        data['city'] = "Montreal"
+        data['address'] = 39940
+        data['phone'] = "888-888-8888"
+
+        # Check request
+        response = self.post('/restaurants', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The address must be a string'
+
     def test_invalid_city(self):
         """ POST /restaurants: with invalid city """
 
@@ -117,6 +160,21 @@ class InvalidParameters(FunctionalTest):
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
         assert response.data == 'The city must be a string'
+
+    def test_invalid_phone(self):
+        """ POST /restaurants: with invalid phone """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "La Banquise"
+        data['city'] = "Montreal"
+        data['address'] = "1100 Ste-Catherine"
+        data['phone'] = 34.4
+
+        # Check request
+        response = self.post('/restaurants', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The phone must be a string'
 
 
 class Create(FunctionalTest):

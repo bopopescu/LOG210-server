@@ -84,6 +84,18 @@ class InvalidParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'The name must be a string'
 
+    def test_invalid_address(self):
+        """ PUT /restaurants/id: with invalid address """
+
+        # Prepare data
+        data = dict()
+        data['address'] = 14029
+
+        # Check request
+        response = self.put('/restaurants/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The address must be a string'
+
     def test_invalid_city(self):
         """ PUT /restaurants/id: with invalid city """
 
@@ -95,6 +107,18 @@ class InvalidParameters(FunctionalTest):
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
         assert response.data == 'The city must be a string'
+
+    def test_invalid_phone(self):
+        """ PUT /restaurants/id: with invalid phone """
+
+        # Prepare data
+        data = dict()
+        data['phone'] = 3422.2
+
+        # Check request
+        response = self.put('/restaurants/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'The phone must be a string'
 
 
 class Update(FunctionalTest):
@@ -119,9 +143,9 @@ class Update(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['name'] = "Restaurant 1"
-        data['city'] = "City 1"
-        data['address'] = "Country 1"
+        data['name'] = "Le duc de Lorraine"
+        data['city'] = "Trois-Rivieres"
+        data['address'] = "9000 Boulevard de Carrie"
 
         # Check request
         response = self.put('/restaurants/5', data=data)
@@ -133,6 +157,6 @@ class Update(FunctionalTest):
 
         # Check in database
         restaurant = db.session.query(Restaurant).get(result['id'])
-        assert restaurant.name == 'Restaurant 1'
-        assert restaurant.city == 'City 1'
-        assert restaurant.address == 'Country 1'
+        assert restaurant.name == 'Le duc de Lorraine'
+        assert restaurant.city == 'Trois-Rivieres'
+        assert restaurant.address == '9000 Boulevard de Carrie'
