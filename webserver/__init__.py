@@ -15,6 +15,15 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 from webserver.controllers import add_routes
 add_routes(app)
 
+@app.after_request
+def set_allow_origin(resp):
+    """ Set origin for GET, POST, PUT, DELETE requests """
+
+    h = resp.headers
+    h['Access-Control-Allow-Origin'] = request.headers['Origin']
+
+    return resp
+
 # Merge request parameters
 def merge_params(sender, **extra):
     """ Function which intercept request to concat values in a same dictionary """
