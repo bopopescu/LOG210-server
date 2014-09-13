@@ -20,11 +20,12 @@ def set_allow_origin(resp):
     """ Set origin for GET, POST, PUT, DELETE requests """
 
     h = resp.headers
-    h['Access-Control-Allow-Origin'] = request.headers['Origin']
+
+    if request.method != 'OPTIONS' and 'Origin' in request.headers:
+        h['Access-Control-Allow-Origin'] = request.headers['Origin']
 
     return resp
 
-# Merge request parameters
 def merge_params(sender, **extra):
     """ Function which intercept request to concat values in a same dictionary """
 

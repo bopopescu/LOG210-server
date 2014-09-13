@@ -50,7 +50,7 @@ def index(id):
 
     return response
 
-# # Create restaurant
+# Create restaurant
 @restaurants.route('', methods=['POST', 'OPTIONS'])
 def create():
     """ Create restaurant
@@ -79,7 +79,7 @@ def create():
         return make_response("The address is a mandatory information", 400)
     if not isinstance(datas['address'], (str, unicode)):
         return make_response("The address must be a string", 400)
-    
+
     # Check phone
     if 'phone' not in datas:
         return make_response("The phone is a mandatory information", 400)
@@ -142,12 +142,12 @@ def update(id):
             return make_response("The address must be a string", 400)
 
         restaurant.address = datas['address']
-    
+
     # Check phone
     if 'phone' in datas:
         if not isinstance(datas['phone'], (str, unicode)):
             return make_response("The phone must be a string", 400)
-            
+
         restaurant.phone = datas['phone']
 
     # Commit
