@@ -1,5 +1,5 @@
 from webserver import db
-from webserver.models import Restaurant
+from webserver.models import Restaurant, Restaurateur
 from webserver.tests import build_restaurant, build_restaurateur
 from webserver.tests import delete_restaurants, delete_restaurateurs
 from webserver.tests.functional import FunctionalTest
@@ -38,13 +38,15 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_restaurant(id=1)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_restaurants()
+        db.session.commit()
 
     def test_unkown_id(self):
         """ PUT /restaurants/id: with unkown id """
@@ -52,7 +54,18 @@ class UnknownParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5')
         assert response.status_code == 400
-        assert response.data == 'The restaurant you are trying to target is unknown'
+        assert response.data == 'Le restaurant n\'existe pas.'
+
+    def test_unkown_restaurateur_id(self):
+        """ PUT /restaurants/id: with unkown restaurateur id """
+
+        data = dict()
+        data['restaurateur_id'] = 100
+
+        # Check request
+        response = self.put('/restaurants/1', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le restaurateur n\'existe pas.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -82,7 +95,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'The name must be a string'
+        assert response.data == 'Le nom doit etre une chaine de caractere.'
 
     def test_invalid_address(self):
         """ PUT /restaurants/id: with invalid address """
@@ -94,7 +107,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'The address must be a string'
+        assert response.data == 'L\'adresse doit etre une chaine de caractere.'
 
     def test_invalid_city(self):
         """ PUT /restaurants/id: with invalid city """
@@ -106,7 +119,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'The city must be a string'
+        assert response.data == 'La ville doit etre une chaine de caractere.'
 
     def test_invalid_phone(self):
         """ PUT /restaurants/id: with invalid phone """
@@ -118,7 +131,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'The phone must be a string'
+        assert response.data == 'Le numero de telephone doit etre une chaine de caractere.'
 
 
 class Update(FunctionalTest):
@@ -130,7 +143,6 @@ class Update(FunctionalTest):
 
         r1 = build_restaurateur(id=10)
         build_restaurant(id=5, name="La banquise", restaurateur=r1)
-
         db.session.commit()
 
     @classmethod
@@ -138,6 +150,7 @@ class Update(FunctionalTest):
         """ Clear database fixtures """
 
         delete_restaurants()
+        delete_restaurateurs()
         db.session.commit()
 
     def test_update(self):
@@ -166,3 +179,8 @@ class Update(FunctionalTest):
         assert restaurant.address == '9000 Boulevard de Carrie'
         assert restaurant.city == 'Trois-Rivieres'
         assert restaurant.restaurateur_id == 10
+
+        # Check restaurant in restaurateur
+        restaurateur = db.session.query(Restaurateur).get(10)
+        restaurants_id = [r.id for r in restaurateur.restaurants]
+        assert result['id'] in restaurants_id

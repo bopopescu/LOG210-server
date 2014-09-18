@@ -1,5 +1,5 @@
 from webserver import db
-from webserver.models import Restaurant
+from webserver.models import Restaurant, Restaurateur
 from webserver.tests import build_restaurant, build_restaurateur
 from webserver.tests import delete_restaurants, delete_restaurateurs
 from webserver.tests.functional import FunctionalTest
@@ -216,6 +216,7 @@ class Create(FunctionalTest):
         """ Add database fixtures """
 
         build_restaurateur(id=33)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
@@ -223,7 +224,6 @@ class Create(FunctionalTest):
 
         delete_restaurants()
         delete_restaurateurs()
-
         db.session.commit()
 
     def test_create(self):
@@ -276,3 +276,8 @@ class Create(FunctionalTest):
         # Check in database
         restaurant = db.session.query(Restaurant).get(result['id'])
         assert restaurant is not None
+
+        # Check restaurant in restaurateur
+        restaurateur = db.session.query(Restaurateur).get(33)
+        restaurants_id = [r.id for r in restaurateur.restaurants]
+        assert result['id'] in restaurants_id

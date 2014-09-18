@@ -41,7 +41,7 @@ def index(id):
 
     # Check restaurant
     if restaurant is None:
-        return make_response("The restaurant you are trying to target is unknown", 400)
+        return make_response("Le restaurant n'existe pas.", 400)
 
     # Build the response
     response = make_response(jsonify(restaurant.to_dict()))
@@ -129,7 +129,7 @@ def create():
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response("Due to an unexpected error, the restaurant cannot be created", 500)
+        return make_response("Due a une erreur inconnu, le restaurateur ne peut pas etre cree.", 500)
 
     # Build the response
     response = make_response(jsonify(restaurant.to_dict()))
@@ -150,35 +150,36 @@ def update(id):
     # Get request values
     datas = request.values
 
+    # Check restaurant
     restaurant = db.session.query(Restaurant).get(id)
     if restaurant is None:
-        return make_response("The restaurant you are trying to target is unknown", 400)
+        return make_response("Le restaurant n'existe pas.", 400)
 
     # Check name
     if 'name' in datas:
         if not isinstance(datas['name'], (str, unicode)):
-            return make_response("The name must be a string", 400)
+            return make_response("Le nom doit etre une chaine de caractere.", 400)
 
         restaurant.name = datas['name']
 
     # Check city
     if 'city' in datas:
         if not isinstance(datas['city'], (str, unicode)):
-            return make_response("The city must be a string", 400)
+            return make_response("La ville doit etre une chaine de caractere.", 400)
 
         restaurant.city = datas['city']
 
     # Check country
     if 'address' in datas:
         if not isinstance(datas['address'], (str, unicode)):
-            return make_response("The address must be a string", 400)
+            return make_response("L'adresse doit etre une chaine de caractere.", 400)
 
         restaurant.address = datas['address']
 
     # Check phone
     if 'phone' in datas:
         if not isinstance(datas['phone'], (str, unicode)):
-            return make_response("The phone must be a string", 400)
+            return make_response("Le numero de telephone doit etre une chaine de caractere.", 400)
 
         restaurant.phone = datas['phone']
 
@@ -186,7 +187,7 @@ def update(id):
     if 'restaurateur_id' in datas:
         try:
             restaurateur_id = int(datas['restaurateur_id'])
-        except Exception:
+        except Exception:  # pragma: no cover
             return make_response("restaurateur_id doit etre un identifiant.", 400)
 
         restaurateur = db.session.query(Restaurateur).get(restaurateur_id)
@@ -201,7 +202,7 @@ def update(id):
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response("Due to an unexpected error, the restaurant cannot be updated", 500)
+        return make_response("Due a une erreur inconnu, le restaurant ne peut pas etre modifie.", 500)
 
     # Build the response
     response = make_response(jsonify(restaurant.to_dict()))
@@ -225,7 +226,7 @@ def delete(id):
 
     # Check restaurant
     if restaurant is None:
-        return make_response("The restaurant you are trying to target is unknown", 400)
+        return make_response("Le restaurant n'existe pas.", 404)
 
     # Delete restaurant
     db.session.delete(restaurant)
@@ -235,7 +236,7 @@ def delete(id):
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response("Due to an unexpected error, the restaurant cannot be updated", 500)
+        return make_response("Due a une erreur inconnu, le restaurant ne peut pas etre supprime.", 500)
 
     # Build the response
     response = make_response(jsonify(restaurant.to_dict()))

@@ -50,7 +50,7 @@ class UnknownParameters(FunctionalTest):
         # Check request
         response = self.get('/restaurants/666')
         assert response.status_code == 400
-        assert response.data == 'The restaurant you are trying to target is unknown'
+        assert response.data == 'Le restaurant n\'existe pas.'
 
 
 class Get(FunctionalTest):

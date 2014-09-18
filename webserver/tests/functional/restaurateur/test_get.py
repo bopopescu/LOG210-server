@@ -1,7 +1,7 @@
 from webserver import db
-from webserver.models import Restaurant
-from webserver.tests import build_restaurant
-from webserver.tests import delete_restaurants
+from webserver.models import Restaurateur
+from webserver.tests import build_restaurateur
+from webserver.tests import delete_restaurateurs
 from webserver.tests.functional import FunctionalTest
 
 
@@ -12,27 +12,25 @@ class Exists(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_restaurant(id=5)
-        db.session.commit()
+        pass
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_restaurants()
-        db.session.commit()
+        pass
 
     def test_exists(self):
-        """ DELETE /restaurants/id: exists """
+        """ GET /restaurateurs/id: exists """
 
         # Check request
-        response = self.delete('/restaurants/5')
+        response = self.get('/restaurateurs/1')
         assert response.status_code != 404
         assert response.status_code != 500
 
 
 class UnknownParameters(FunctionalTest):
-    """ Check with no datas """
+    """  Check unknown parameters """
 
     @classmethod
     def setup_class(cls):
@@ -46,43 +44,42 @@ class UnknownParameters(FunctionalTest):
 
         pass
 
-    def test_unkown_id(self):
-        """ DELETE /restaurants/id: with unkown id """
+    def test_unknown_id(self):
+        """ GET /restaurateurs/id: with unknown id """
 
         # Check request
-        response = self.delete('/restaurants/5')
-        assert response.status_code == 404
-        assert response.data == 'Le restaurant n\'existe pas.'
+        response = self.get('/restaurateurs/666')
+        assert response.status_code == 400
+        assert response.data == 'Le restaurateur n\'existe pas.'
 
 
-class Delete(FunctionalTest):
+class Get(FunctionalTest):
     """ Check with valid data """
 
     @classmethod
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_restaurant(id=5)
+        build_restaurateur(id=1)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_restaurants()
+        delete_restaurateurs()
         db.session.commit()
 
-    def test_delete(self):
-        """ DELETE /restaurants/id: with valid data """
+    def test_get(self):
+        """ GET /restaurateurs/id: with valid data """
 
         # Check request
-        response = self.delete('/restaurants/5')
+        response = self.get('/restaurateurs/1')
         assert response.status_code == 200
 
-        # Check response
+        # Check result
         result = self.parse(response.data)
-        assert 'id' in result
+        assert result is not None
 
-        # Check in database
-        restaurant = db.session.query(Restaurant).get(result['id'])
-        assert restaurant is None
+        # Check id
+        assert result['id'] == 1
