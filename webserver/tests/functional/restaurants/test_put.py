@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurant
-from webserver.tests import build_restaurant
-from webserver.tests import delete_restaurants
+from webserver.tests import build_restaurant, build_restaurateur
+from webserver.tests import delete_restaurants, delete_restaurateurs
 from webserver.tests.functional import FunctionalTest
 
 
@@ -128,7 +128,9 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_restaurant(id=5, name="La banquise")
+        r1 = build_restaurateur(id=10)
+        build_restaurant(id=5, name="La banquise", restaurateur=r1)
+
         db.session.commit()
 
     @classmethod
@@ -144,8 +146,10 @@ class Update(FunctionalTest):
         # Prepare data
         data = dict()
         data['name'] = "Le duc de Lorraine"
-        data['city'] = "Trois-Rivieres"
+        data['phone'] = "514-555-5555"
         data['address'] = "9000 Boulevard de Carrie"
+        data['city'] = "Trois-Rivieres"
+        data['restaurateur_id'] = 10
 
         # Check request
         response = self.put('/restaurants/5', data=data)
@@ -158,5 +162,7 @@ class Update(FunctionalTest):
         # Check in database
         restaurant = db.session.query(Restaurant).get(result['id'])
         assert restaurant.name == 'Le duc de Lorraine'
-        assert restaurant.city == 'Trois-Rivieres'
+        assert restaurant.phone == "514-555-5555"
         assert restaurant.address == '9000 Boulevard de Carrie'
+        assert restaurant.city == 'Trois-Rivieres'
+        assert restaurant.restaurateur_id == 10

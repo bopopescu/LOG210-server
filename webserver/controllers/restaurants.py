@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Restaurant
+from webserver.models import Restaurant, Restaurateur
 
 # Define blueprint
 restaurants = Blueprint('restaurants', __name__)
@@ -64,30 +64,62 @@ def create():
 
     # Check name
     if 'name' not in datas:
-        return make_response("The name is a mandatory information", 400)
+        return make_response("Le nom du restaurant est obligatoire.", 400)
     if not isinstance(datas['name'], (str, unicode)):
-      return make_response("The name must be a string", 400)
-
-    # Check city
-    if 'city' not in datas:
-        return make_response("The city is a mandatory information", 400)
-    if not isinstance(datas['city'], (str, unicode)):
-        return make_response("The city must be a string", 400)
-
-    # Check country
-    if 'address' not in datas:
-        return make_response("The address is a mandatory information", 400)
-    if not isinstance(datas['address'], (str, unicode)):
-        return make_response("The address must be a string", 400)
-
-    # Check phone
-    if 'phone' not in datas:
-        return make_response("The phone is a mandatory information", 400)
-    if not isinstance(datas['phone'], (str, unicode)):
-        return make_response("The phone must be a string", 400)
+        return make_response("Le nom doit etre une chaine de caractere.", 400)
 
     # Create restaurant
-    restaurant = Restaurant(name=datas['name'], city=datas['city'], address=datas['address'], phone=datas['phone'])
+    restaurant = Restaurant(name=datas['name'])
+
+    # Check phone
+    if 'phone' in datas:
+        if not isinstance(datas['phone'], (str, unicode)):
+            return make_response("Le numero de telephone doit etre une chaine de caractere.", 400)
+        restaurant.city = datas['phone']
+
+    # Check cooking type
+    if 'cooking_type' in datas:
+        if not isinstance(datas['cooking_type'], (str, unicode)):
+            return make_response("Le type de cuisine doit etre une chaine de caractere.", 400)
+        restaurant.city = datas['cooking_type']
+
+    # Check address
+    if 'address' in datas:
+        if not isinstance(datas['address'], (str, unicode)):
+            return make_response("L'adresse doit etre une chaine de caractere.", 400)
+        restaurant.address = datas['address']
+
+    # Check zipcode
+    if 'zipcode' in datas:
+        if not isinstance(datas['zipcode'], (str, unicode)):
+            return make_response("Le code postal doit etre une chaine de caractere.", 400)
+        restaurant.address = datas['zipcode']
+
+    # Check city
+    if 'city' in datas:
+        if not isinstance(datas['city'], (str, unicode)):
+            return make_response("La ville doit etre une chaine de caractere.", 400)
+        restaurant.city = datas['city']
+
+    # Check country
+    if 'country' in datas:
+        if not isinstance(datas['country'], (str, unicode)):
+            return make_response("Le pays doit etre une chaine de caractere.", 400)
+        restaurant.city = datas['country']
+
+    # Check restaurateur
+    if 'restaurateur_id' in datas:
+        try:
+            restaurateur_id = int(datas['restaurateur_id'])
+        except Exception:
+            return make_response("restaurateur_id doit etre un identifiant.", 400)
+
+        restaurateur = db.session.query(Restaurateur).get(restaurateur_id)
+
+        if restaurateur is None:
+            return make_response("Le restaurateur n\'existe pas.", 404)
+
+        restaurant.restaurateur = restaurateur
 
     # Add restaurant
     db.session.add(restaurant)
@@ -149,6 +181,20 @@ def update(id):
             return make_response("The phone must be a string", 400)
 
         restaurant.phone = datas['phone']
+
+    # Check restaurateur
+    if 'restaurateur_id' in datas:
+        try:
+            restaurateur_id = int(datas['restaurateur_id'])
+        except Exception:
+            return make_response("restaurateur_id doit etre un identifiant.", 400)
+
+        restaurateur = db.session.query(Restaurateur).get(restaurateur_id)
+
+        if restaurateur is None:
+            return make_response("Le restaurateur n\'existe pas.", 404)
+
+        restaurant.restaurateur = restaurateur
 
     # Commit
     try:

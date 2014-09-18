@@ -1,14 +1,21 @@
 from webserver.models import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 class Restaurant(Base):
     __tablename__ = 'restaurant'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100))
+    name = Column(String(100)) # !! Required !!
     phone = Column(String(100))
+    cooking_type = Column(String(100))
     address = Column(String(100))
+    zipcode = Column(String(100))
     city = Column(String(100))
+    country = Column(String(100))
+
+    restaurateur_id = Column(Integer, ForeignKey('restaurateur.id'))
+    restaurateur = relationship("Restaurateur", backref="restaurants")
 
     def to_dict(self):
         my_dict = dict()
@@ -16,7 +23,14 @@ class Restaurant(Base):
         my_dict['id'] = self.id
         my_dict['name'] = self.name
         my_dict['phone'] = self.phone
+        my_dict['cooking_type'] = self.phone
         my_dict['address'] = self.address
+        my_dict['zipcode'] = self.phone
         my_dict['city'] = self.city
+        my_dict['country'] = self.phone
+
+        if self.restaurateur:
+            my_dict['restaurateur_id'] = self.restaurateur.id
+            my_dict['restaurateur'] = self.restaurateur.to_dict()
 
         return my_dict
