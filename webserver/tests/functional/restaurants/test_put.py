@@ -142,7 +142,9 @@ class Update(FunctionalTest):
         """ Add database fixtures """
 
         r1 = build_restaurateur(id=10)
+        r2 = build_restaurateur(id=15)
         build_restaurant(id=5, name="La banquise", restaurateur=r1)
+        build_restaurant(id=7, name="Le tigre rouge", restaurateur=r2)
         db.session.commit()
 
     @classmethod
@@ -162,7 +164,7 @@ class Update(FunctionalTest):
         data['phone'] = "514-555-5555"
         data['address'] = "9000 Boulevard de Carrie"
         data['city'] = "Trois-Rivieres"
-        data['restaurateur_id'] = 10
+        data['restaurateur_id'] = 15
 
         # Check request
         response = self.put('/restaurants/5', data=data)
@@ -178,9 +180,40 @@ class Update(FunctionalTest):
         assert restaurant.phone == "514-555-5555"
         assert restaurant.address == '9000 Boulevard de Carrie'
         assert restaurant.city == 'Trois-Rivieres'
-        assert restaurant.restaurateur_id == 10
+        assert restaurant.restaurateur_id == 15
 
         # Check restaurant in restaurateur
-        restaurateur = db.session.query(Restaurateur).get(10)
+        restaurateur = db.session.query(Restaurateur).get(15)
         restaurants_id = [r.id for r in restaurateur.restaurants]
         assert result['id'] in restaurants_id
+
+    def test_update_without_restaurateur(self):
+        """ PUT /restaurants/id: with valid data """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Le duc de Lorraine"
+        data['phone'] = "514-555-5555"
+        data['address'] = "9000 Boulevard de Carrie"
+        data['city'] = "Trois-Rivieres"
+
+        # Check request
+        response = self.put('/restaurants/7', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        restaurant = db.session.query(Restaurant).get(result['id'])
+        assert restaurant.name == 'Le duc de Lorraine'
+        assert restaurant.phone == "514-555-5555"
+        assert restaurant.address == '9000 Boulevard de Carrie'
+        assert restaurant.city == 'Trois-Rivieres'
+        assert restaurant.restaurateur_id == None
+
+        # Check restaurant in restaurateur
+        restaurateur = db.session.query(Restaurateur).get(15)
+        restaurants_id = [r.id for r in restaurateur.restaurants]
+        assert result['id'] not in restaurants_id

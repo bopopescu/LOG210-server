@@ -196,6 +196,8 @@ def update(id):
             return make_response("Le restaurateur n\'existe pas.", 404)
 
         restaurant.restaurateur = restaurateur
+    else:
+        restaurant.restaurateur = None
 
     # Commit
     try:
