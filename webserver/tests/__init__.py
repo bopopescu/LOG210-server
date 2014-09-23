@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Restaurant, Restaurateur
+from webserver.models import Restaurant, Restaurateur, Role
 
 # Import others
 from datetime import date
@@ -43,3 +43,17 @@ def delete_restaurants():
     for restaurant in db.session.query(Restaurant).all():
         restaurant.restaurateur = None
         db.session.delete(restaurant)
+
+def build_role(id, name="Resto 1"):
+    """ Builder to create a role in database """
+
+    role = Role(id=id, name=name)
+    db.session.add(role)
+
+    return role
+
+def delete_roles():
+    """ Remove all role from database """
+
+    for role in db.session.query(Role).all():
+        db.session.delete(role)

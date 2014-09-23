@@ -13,6 +13,9 @@ def install():
 def install_with_data():
     install()
 
+    # Add roles
+    create_roles()
+
     # Add restaurateurs
     from webserver.models import Restaurateur
     rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix")
@@ -34,6 +37,19 @@ def install_with_data():
     db.session.add(r5)
 
     db.session.commit()
+
+def create_roles():
+
+    # Add roles
+    from webserver.models import Role
+    r1 = Role(name="Entrepreneur")
+    r2 = Role(name="Restaurateur")
+    r3 = Role(name="Client")
+    r4 = Role(name="Livreur")
+    db.session.add(r1)
+    db.session.add(r2)
+    db.session.add(r3)
+    db.session.add(r4)
 
 if __name__ == "__main__":
     manager.run()
