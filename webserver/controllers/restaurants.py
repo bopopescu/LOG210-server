@@ -75,13 +75,13 @@ def create():
     if 'phone' in datas:
         if not isinstance(datas['phone'], (str, unicode)):
             return make_response("Le numero de telephone doit etre une chaine de caractere.", 400)
-        restaurant.city = datas['phone']
+        restaurant.phone = datas['phone']
 
     # Check cooking type
     if 'cooking_type' in datas:
         if not isinstance(datas['cooking_type'], (str, unicode)):
             return make_response("Le type de cuisine doit etre une chaine de caractere.", 400)
-        restaurant.city = datas['cooking_type']
+        restaurant.cooking_type = datas['cooking_type']
 
     # Check address
     if 'address' in datas:
