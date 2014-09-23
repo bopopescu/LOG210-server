@@ -23,11 +23,11 @@ class Restaurant(Base):
         my_dict['id'] = self.id
         my_dict['name'] = self.name
         my_dict['phone'] = self.phone
-        my_dict['cooking_type'] = self.phone
+        my_dict['cooking_type'] = self.cooking_type
         my_dict['address'] = self.address
-        my_dict['zipcode'] = self.phone
+        my_dict['zipcode'] = self.zipcode
         my_dict['city'] = self.city
-        my_dict['country'] = self.phone
+        my_dict['country'] = self.country
 
         if self.restaurateur:
             my_dict['restaurateur_id'] = self.restaurateur.id

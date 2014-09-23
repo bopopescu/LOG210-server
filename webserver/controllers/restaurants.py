@@ -93,7 +93,7 @@ def create():
     if 'zipcode' in datas:
         if not isinstance(datas['zipcode'], (str, unicode)):
             return make_response("Le code postal doit etre une chaine de caractere.", 400)
-        restaurant.address = datas['zipcode']
+        restaurant.zipcode = datas['zipcode']
 
     # Check city
     if 'city' in datas:
@@ -105,7 +105,7 @@ def create():
     if 'country' in datas:
         if not isinstance(datas['country'], (str, unicode)):
             return make_response("Le pays doit etre une chaine de caractere.", 400)
-        restaurant.city = datas['country']
+        restaurant.country = datas['country']
 
     # Check restaurateur
     if 'restaurateur_id' in datas:
