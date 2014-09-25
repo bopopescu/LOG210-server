@@ -4,5 +4,7 @@ def add_routes(app):
     app.register_blueprint(restaurateurs, url_prefix='/restaurateurs')
     from webserver.controllers.restaurants import restaurants
     app.register_blueprint(restaurants, url_prefix='/restaurants')
-    from webserver.controllers.roles import roles
-    app.register_blueprint(roles, url_prefix='/roles')
+    from webserver.controllers.clients import clients
+    app.register_blueprint(clients, url_prefix='/clients')
+    from webserver.controllers.entrepreneurs import entrepreneurs
+    app.register_blueprint(entrepreneurs, url_prefix='/entrepreneurs')
