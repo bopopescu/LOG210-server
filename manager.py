@@ -9,12 +9,13 @@ def install():
     db.create_all()
     print("Database successfuly installed")
 
+    # Add roles
+    create_roles()
+
+
 @manager.command
 def install_with_data():
     install()
-
-    # Add roles
-    create_roles()
 
     # Add restaurateurs
     from webserver.models import Restaurateur

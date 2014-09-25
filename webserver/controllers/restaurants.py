@@ -248,6 +248,9 @@ def delete(id):
     if restaurant is None:
         return make_response("Le restaurant n'existe pas.", 404)
 
+    # Unlink restaurateur from restaurant
+    restaurant.restaurateur = None
+
     # Delete restaurant
     db.session.delete(restaurant)
 
