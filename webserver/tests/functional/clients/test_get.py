@@ -1,7 +1,7 @@
 from webserver import db
-from webserver.models import Role
-from webserver.tests import build_role
-from webserver.tests import delete_roles
+from webserver.models import Client
+from webserver.tests import build_client
+from webserver.tests import delete_clients
 from webserver.tests.functional import FunctionalTest
 
 
@@ -21,10 +21,10 @@ class Exists(FunctionalTest):
         pass
 
     def test_exists(self):
-        """ GET /roles/id: exists """
+        """ GET /clients/id: exists """
 
         # Check request
-        response = self.get('/roles/1')
+        response = self.get('/clients/1')
         assert response.status_code != 404
         assert response.status_code != 500
 
@@ -45,12 +45,12 @@ class UnknownParameters(FunctionalTest):
         pass
 
     def test_unknown_id(self):
-        """ GET /roles/id: with unknown id """
+        """ GET /clients/id: with unknown id """
 
         # Check request
-        response = self.get('/roles/666')
+        response = self.get('/clients/666')
         assert response.status_code == 400
-        assert response.data == 'Le role n\'existe pas.'
+        assert response.data == 'Le client n\'existe pas.'
 
 
 class Get(FunctionalTest):
@@ -60,21 +60,21 @@ class Get(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_role(id=1)
+        build_client(id=1)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_roles()
+        delete_clients()
         db.session.commit()
 
     def test_get(self):
-        """ GET /roles/id: with valid data """
+        """ GET /clients/id: with valid data """
 
         # Check request
-        response = self.get('/roles/1')
+        response = self.get('/clients/1')
         assert response.status_code == 200
 
         # Check result

@@ -9,9 +9,6 @@ def install():
     db.create_all()
     print("Database successfuly installed")
 
-    # Add roles
-    create_roles()
-
 
 @manager.command
 def install_with_data():
@@ -23,6 +20,19 @@ def install_with_data():
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie")
     db.session.add(rs1)
     db.session.add(rs2)
+    
+    # Add entrepreneurs
+    from webserver.models import Entrepreneur
+    e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd")
+    db.session.add(e1)
+
+    
+    # Add clients
+    from webserver.models import Client
+    c1 = Client(firstname="Yvon", lastname="Gagner", mail="gagner@ducati.it", password="passwdc1")
+    c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2")
+    db.session.add(c1)
+    db.session.add(c2)
 
     # Add restaurants
     from webserver.models import Restaurant
@@ -37,20 +47,9 @@ def install_with_data():
     db.session.add(r4)
     db.session.add(r5)
 
+
     db.session.commit()
 
-def create_roles():
-
-    # Add roles
-    from webserver.models import Role
-    r1 = Role(name="Entrepreneur")
-    r2 = Role(name="Restaurateur")
-    r3 = Role(name="Client")
-    r4 = Role(name="Livreur")
-    db.session.add(r1)
-    db.session.add(r2)
-    db.session.add(r3)
-    db.session.add(r4)
 
 if __name__ == "__main__":
     manager.run()
