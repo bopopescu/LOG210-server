@@ -15,7 +15,7 @@ class Restaurant(Base):
     country = Column(String(100))
     restaurateur = relationship("Restaurateur", uselist=False, backref="restaurant")
 
-    def to_dict(self):
+    def to_dict(self, restaurateur=True):
         my_dict = dict()
 
         my_dict['id'] = self.id
@@ -29,6 +29,7 @@ class Restaurant(Base):
 
         if self.restaurateur:
             my_dict['restaurateur_id'] = self.restaurateur.id
-            my_dict['restaurateur'] = self.restaurateur.to_dict()
+            if restaurateur:
+                my_dict['restaurateur'] = self.restaurateur.to_dict()
 
         return my_dict

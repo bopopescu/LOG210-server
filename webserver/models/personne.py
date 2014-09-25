@@ -18,7 +18,7 @@ class Personne(Base):
     password = Column(String(100))  # Required
 
     __mapper_args__ = {
-        'polymorphic_identity': 'personne',
+        'polymorphic_identity': 'personne'
     }
 
     def to_dict(self):

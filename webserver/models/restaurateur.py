@@ -17,6 +17,8 @@ class Restaurateur(Personne):
         my_dict = Personne.to_dict(self)
         my_dict['id'] = self.id
         my_dict['restaurant_id'] = self.restaurant_id
-        #my_dict['restaurant'] = self.restaurant.to_dict()
+
+        if self.restaurant:
+            my_dict['restaurant'] = self.restaurant.to_dict(False)
 
         return my_dict
