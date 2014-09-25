@@ -13,9 +13,7 @@ class Restaurant(Base):
     zipcode = Column(String(100))
     city = Column(String(100))
     country = Column(String(100))
-
-    restaurateur_id = Column(Integer, ForeignKey('restaurateur.id'))
-    restaurateur = relationship("Restaurateur", backref="restaurants")
+    restaurateur = relationship("Restaurateur", uselist=False, backref="restaurant")
 
     def to_dict(self):
         my_dict = dict()

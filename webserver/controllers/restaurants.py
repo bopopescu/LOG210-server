@@ -213,6 +213,10 @@ def update(id):
         if restaurateur is None:
             return make_response("Le restaurateur n\'existe pas.", 404)
 
+        if restaurateur.restaurant is not None:
+            if restaurateur.restaurant.id != restaurant.id:
+                return make_response("Le restaurateur est deja assignee a un restaurant.", 400)
+
         restaurant.restaurateur = restaurateur
     else:
         restaurant.restaurateur = None

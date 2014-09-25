@@ -279,5 +279,4 @@ class Create(FunctionalTest):
 
         # Check restaurant in restaurateur
         restaurateur = db.session.query(Restaurateur).get(33)
-        restaurants_id = [r.id for r in restaurateur.restaurants]
-        assert result['id'] in restaurants_id
+        assert restaurateur.restaurant.id == result['id']

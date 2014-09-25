@@ -143,8 +143,14 @@ class Update(FunctionalTest):
 
         r1 = build_restaurateur(id=10)
         r2 = build_restaurateur(id=15)
+        r3 = build_restaurateur(id=20)
+        r4 = build_restaurateur(id=25)
+
         build_restaurant(id=5, name="La banquise", restaurateur=r1)
-        build_restaurant(id=7, name="Le tigre rouge", restaurateur=r2)
+        build_restaurant(id=7, name="Le tigre rouge", restaurateur=r3)
+        build_restaurant(id=9, name="Le lion du sud", restaurateur=r4)
+        build_restaurant(id=11, name="Le lion du sud")
+
         db.session.commit()
 
     @classmethod
@@ -180,19 +186,18 @@ class Update(FunctionalTest):
         assert restaurant.phone == "514-555-5555"
         assert restaurant.address == '9000 Boulevard de Carrie'
         assert restaurant.city == 'Trois-Rivieres'
-        assert restaurant.restaurateur_id == 15
+        assert restaurant.restaurateur.id == 15
 
         # Check restaurant in restaurateur
         restaurateur = db.session.query(Restaurateur).get(15)
-        restaurants_id = [r.id for r in restaurateur.restaurants]
-        assert result['id'] in restaurants_id
+        assert restaurateur.restaurant.id == result['id']
 
     def test_update_without_restaurateur(self):
         """ PUT /restaurants/id: with valid data """
 
         # Prepare data
         data = dict()
-        data['name'] = "Le duc de Lorraine"
+        data['name'] = "La banquise"
         data['phone'] = "514-555-5555"
         data['address'] = "9000 Boulevard de Carrie"
         data['city'] = "Trois-Rivieres"
@@ -207,13 +212,25 @@ class Update(FunctionalTest):
 
         # Check in database
         restaurant = db.session.query(Restaurant).get(result['id'])
-        assert restaurant.name == 'Le duc de Lorraine'
+        assert restaurant.name == 'La banquise'
         assert restaurant.phone == "514-555-5555"
         assert restaurant.address == '9000 Boulevard de Carrie'
         assert restaurant.city == 'Trois-Rivieres'
-        assert restaurant.restaurateur_id == None
+        assert restaurant.restaurateur is None
 
         # Check restaurant in restaurateur
-        restaurateur = db.session.query(Restaurateur).get(15)
-        restaurants_id = [r.id for r in restaurateur.restaurants]
-        assert result['id'] not in restaurants_id
+        restaurateur = db.session.query(Restaurateur).get(20)
+        assert restaurateur.restaurant is None
+
+
+    def test_update_with_restaurateur_already_assigned(self):
+        """ PUT /restaurants/id: with valid data """
+
+        # Prepare data
+        data = dict()
+        data['restaurateur_id'] = 25
+
+        # Check request
+        response = self.put('/restaurants/11', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le restaurateur est deja assignee a un restaurant.'

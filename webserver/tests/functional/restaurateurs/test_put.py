@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurateur
-from webserver.tests import build_restaurateur
-from webserver.tests import delete_restaurateurs
+from webserver.tests import build_restaurateur, build_restaurant
+from webserver.tests import delete_restaurateurs, delete_restaurateurs
 from webserver.tests.functional import FunctionalTest
 
 
@@ -188,7 +188,18 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        # Test 1
         build_restaurateur(id=5)
+
+        # Test 2
+        build_restaurateur(id=6)
+        build_restaurant(id=2)
+
+        # Test
+        r7 = build_restaurateur(id=7)
+        r8 = build_restaurateur(id=8)
+        build_restaurant(id=3, restaurateur=r8)
+
         db.session.commit()
 
     @classmethod
@@ -232,3 +243,34 @@ class Update(FunctionalTest):
         assert restaurateur.country == "Canada"
         assert restaurateur.mail == "bob@gmail.com"
         assert restaurateur.password == "aze123"
+
+    def test_update_with_restaurant(self):
+        """ PUT /restaurateurs/id: with valid data """
+
+        # Prepare data
+        data = dict()
+        data['restaurant_id'] = 2
+
+        # Check request
+        response = self.put('/restaurateurs/6', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        restaurateur = db.session.query(Restaurateur).get(result['id'])
+        assert restaurateur.restaurant.id == 2
+
+    def test_update_with_restaurant_already_assigned(self):
+        """ PUT /restaurateurs/id: with valid data """
+
+        # Prepare data
+        data = dict()
+        data['restaurant_id'] = 3
+
+        # Check request
+        response = self.put('/restaurateurs/7', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le restaurant est deja assignee a un restaurateur.'

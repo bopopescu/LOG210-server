@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Restaurateur
+from webserver.models import Restaurateur, Restaurant
 
 # Define blueprint
 restaurateurs = Blueprint('restaurateurs', __name__)
@@ -206,6 +206,25 @@ def update(id):
         if not isinstance(datas['password'], (str, unicode)):
             return make_response("Le mot de passe du restaurateur doit etre une chaine de caractere.", 400)
         restaurateur.password = datas['password']
+
+    # Check restaurateur
+    if 'restaurant_id' in datas:
+        try:
+            restaurant_id = int(datas['restaurant_id'])
+        except Exception:  # pragma: no cover
+            return make_response("restaurant_id doit etre un identifiant.", 400)
+
+        restaurant = db.session.query(Restaurant).get(restaurant_id)
+        if restaurant is None:
+            return make_response("Le restaurant n\'existe pas.", 404)
+
+        if restaurant.restaurateur is not None:
+            if restaurant.restaurateur.id != restaurateur.id:
+                return make_response("Le restaurant est deja assignee a un restaurateur.", 400)
+
+        restaurateur.restaurant = restaurant
+    else:
+        restaurateur.restaurant = None
 
     # Commit
     try:
