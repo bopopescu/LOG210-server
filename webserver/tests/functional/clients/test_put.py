@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Client
-from webserver.tests import build_client
-from webserver.tests import delete_clients
+from webserver.tests import build_client, build_country
+from webserver.tests import delete_clients, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -38,13 +38,15 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_client(id=15)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_clients()
+        db.session.commit()
 
     def test_unkown_id(self):
         """ PUT /clients/id: with unkown id """
@@ -53,6 +55,18 @@ class UnknownParameters(FunctionalTest):
         response = self.put('/clients/5')
         assert response.status_code == 404
         assert response.data == 'Le client n\'existe pas.'
+
+    def test_unkown_country(self):
+        """ PUT /restaurateurs/id: with unkown id """
+
+        # Prepare data
+        data = dict()
+        data['country_id'] = 1111
+
+        # Check request
+        response = self.put('/clients/15', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le pays n\'existe pas.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -149,12 +163,12 @@ class InvalidParameters(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['country'] = 1111
+        data['country_id'] = "1111aaa"
 
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le pays du client doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit etre un identifiant.'
 
     def test_invalid_mail(self):
         """ PUT /clients/id: with invalid mail """
@@ -188,7 +202,9 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        c1 = build_country(id=1, name="Canada")
         build_client(id=5)
+        build_client(id=7, country=c1)
         db.session.commit()
 
     @classmethod
@@ -196,6 +212,7 @@ class Update(FunctionalTest):
         """ Clear database fixtures """
 
         delete_clients()
+        delete_countries()
         db.session.commit()
 
     def test_update(self):
@@ -209,7 +226,7 @@ class Update(FunctionalTest):
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "bob@gmail.com"
         data['password'] = "aze123"
 
@@ -229,6 +246,24 @@ class Update(FunctionalTest):
         assert client.address == "1000 Place Marcelle Ferron"
         assert client.zipcode == "T3R 1R1"
         assert client.city == "Trois-Rivieres"
-        assert client.country == "Canada"
+        assert client.country.name == "Canada"
         assert client.mail == "bob@gmail.com"
         assert client.password == "aze123"
+
+    def test_update_without_country(self):
+        """ PUT /clients/id: without country """
+
+        # Prepare data
+        data = dict()
+
+        # Check request
+        response = self.put('/clients/7', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        client = db.session.query(Client).get(result['id'])
+        assert client.country is None

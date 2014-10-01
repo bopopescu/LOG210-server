@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurateur
-from webserver.tests import build_restaurateur, build_restaurant
-from webserver.tests import delete_restaurateurs, delete_restaurateurs
+from webserver.tests import build_restaurateur, build_restaurant, build_country
+from webserver.tests import delete_restaurateurs, delete_restaurateurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -38,21 +38,48 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_restaurateur(id=15)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_restaurateurs()
+        db.session.commit()
 
-    def test_unkown_id(self):
+    def test_unknown_id(self):
         """ PUT /restaurateurs/id: with unkown id """
 
         # Check request
         response = self.put('/restaurateurs/5')
         assert response.status_code == 404
         assert response.data == 'Le restaurateur n\'existe pas.'
+
+    def test_unknown_country(self):
+        """ PUT /restaurateurs/id: with unkown country_id """
+
+        # Prepare data
+        data = dict()
+        data['country_id'] = 1111
+
+        # Check request
+        response = self.put('/restaurateurs/15', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le pays n\'existe pas.'
+
+
+    def test_unknown_restaurant(self):
+        """ PUT /restaurateurs/id: with unkown restaurant_id """
+
+        # Prepare data
+        data = dict()
+        data['restaurant_id'] = 1111
+
+        # Check request
+        response = self.put('/restaurateurs/15', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le restaurant n\'existe pas.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -149,12 +176,12 @@ class InvalidParameters(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['country'] = 1111
+        data['country_id'] = "1111aaaa"
 
         # Check request
         response = self.put('/restaurateurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le pays du restaurateur doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit etre un identifiant.'
 
     def test_invalid_mail(self):
         """ PUT /restaurateurs/id: with invalid mail """
@@ -188,6 +215,8 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        c1 = build_country(id=1, name="Canada")
+
         # Test 1
         build_restaurateur(id=5)
 
@@ -199,6 +228,9 @@ class Update(FunctionalTest):
         r7 = build_restaurateur(id=7)
         r8 = build_restaurateur(id=8)
         build_restaurant(id=3, restaurateur=r8)
+
+        # Test without country
+        r9 = build_restaurateur(id=9, country=c1)
 
         db.session.commit()
 
@@ -220,7 +252,7 @@ class Update(FunctionalTest):
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "bob@gmail.com"
         data['password'] = "aze123"
 
@@ -240,7 +272,7 @@ class Update(FunctionalTest):
         assert restaurateur.address == "1000 Place Marcelle Ferron"
         assert restaurateur.zipcode == "T3R 1R1"
         assert restaurateur.city == "Trois-Rivieres"
-        assert restaurateur.country == "Canada"
+        assert restaurateur.country.name == "Canada"
         assert restaurateur.mail == "bob@gmail.com"
         assert restaurateur.password == "aze123"
 
@@ -274,3 +306,21 @@ class Update(FunctionalTest):
         response = self.put('/restaurateurs/7', data=data)
         assert response.status_code == 400
         assert response.data == 'Le restaurant est deja assignee a un restaurateur.'
+
+    def test_update_without_country(self):
+        """ PUT /restaurateurs/id: without country """
+
+        # Prepare data
+        data = dict()
+
+        # Check request
+        response = self.put('/restaurateurs/9', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        restaurateur = db.session.query(Restaurateur).get(result['id'])
+        assert restaurateur.country is None

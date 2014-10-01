@@ -132,6 +132,18 @@ class InvalidParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'La ville doit etre une chaine de caractere.'
 
+    def test_invalid_zipcode(self):
+        """ PUT /restaurants/id: with invalid zipcode """
+
+        # Prepare data
+        data = dict()
+        data['zipcode'] = 1
+
+        # Check request
+        response = self.put('/restaurants/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le code postal doit etre une chaine de caractere.'
+
     def test_invalid_phone(self):
         """ PUT /restaurants/id: with invalid phone """
 
@@ -209,6 +221,7 @@ class Update(FunctionalTest):
         data['phone'] = "514-555-5555"
         data['address'] = "9000 Boulevard de Carrie"
         data['city'] = "Trois-Rivieres"
+        data['zipcode'] = "H1S1S1"
         data['restaurateur_id'] = 15
         data['country_id'] = 10
 

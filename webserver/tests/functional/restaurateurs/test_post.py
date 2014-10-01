@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurateur
-from webserver.tests import build_restaurateur
-from webserver.tests import delete_restaurateurs
+from webserver.tests import build_restaurateur, build_country
+from webserver.tests import delete_restaurateurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -50,11 +50,6 @@ class MissingParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -69,11 +64,6 @@ class MissingParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['firstname'] = "Toto"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -89,11 +79,6 @@ class MissingParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['password'] = "azerty"
 
         # Check request
@@ -108,11 +93,6 @@ class MissingParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
 
         # Check request
@@ -143,11 +123,6 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = 19090
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -164,11 +139,6 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = 30923
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -185,10 +155,6 @@ class InvalidParameters(FunctionalTest):
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
         data['phone'] = 948923
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -204,11 +170,7 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
         data['address'] = 1111
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -224,11 +186,7 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
         data['zipcode'] = 11111
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -244,11 +202,7 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
         data['city'] = 11111
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
@@ -264,18 +218,14 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = 11111
+        data['country_id'] = "11111aaa"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/restaurateurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le pays du restaurateur doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit etre un identifiant.'
 
     def test_invalid_mail(self):
         """ POST /restaurateurs: with invalid mail """
@@ -284,11 +234,6 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = 11111
         data['password'] = "azerty"
 
@@ -304,11 +249,6 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = "514-444-4444"
-        data['address'] = "1111 Rue des banquise"
-        data['zipcode'] = "H3A A1A"
-        data['city'] = "Montreal"
-        data['country'] = "Canada"
         data['mail'] = "titi@toto.ca"
         data['password'] = 1010101
 
@@ -318,38 +258,8 @@ class InvalidParameters(FunctionalTest):
         assert response.data == 'Le mot de passe du restaurateur doit etre une chaine de caractere.'
 
 
-# class UnknownParameters(FunctionalTest):
-#     """ Check with no datas """
-#
-#     @classmethod
-#     def setup_class(cls):
-#         """ Add database fixtures """
-#
-#         pass
-#
-#     @classmethod
-#     def teardown_class(cls):
-#         """ Clear database fixtures """
-#
-#         pass
-#
-#     def test_unknown_restaurateur(self):
-#         """ POST /restaurateurs: with invalid name """
-#
-#         # Prepare data
-#         data = dict()
-#         data['name'] = "La banquise"
-#         data['restaurateur_id'] = 999
-#
-#         # Check request
-#         response = self.post('/restaurateurs', data=data)
-#         print response.status_code
-#         assert response.status_code== 404
-#         assert response.data == 'Le restaurateur n\'existe pas.'
-#
-#
-class Create(FunctionalTest):
-    """ Check with valid data """
+class UnknownParameters(FunctionalTest):
+    """ Check with no datas """
 
     @classmethod
     def setup_class(cls):
@@ -361,7 +271,42 @@ class Create(FunctionalTest):
     def teardown_class(cls):
         """ Clear database fixtures """
 
+        pass
+
+    def test_unknown_country(self):
+        """ POST /restaurateurs: with invalid country """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Titi"
+        data['lastname'] = "Toto"
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
+        data['country_id'] = 999
+
+        # Check request
+        response = self.post('/restaurateurs', data=data)
+        print response.status_code
+        assert response.status_code== 404
+        assert response.data == 'Le pays n\'existe pas.'
+
+
+class Create(FunctionalTest):
+    """ Check with valid data """
+
+    @classmethod
+    def setup_class(cls):
+        """ Add database fixtures """
+
+        build_country(id=1, name="Canada")
+        db.session.commit()
+
+    @classmethod
+    def teardown_class(cls):
+        """ Clear database fixtures """
+
         delete_restaurateurs()
+        delete_countries()
         db.session.commit()
 
     def test_create(self):
@@ -375,7 +320,7 @@ class Create(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty123"
 

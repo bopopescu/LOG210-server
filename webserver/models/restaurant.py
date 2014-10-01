@@ -12,7 +12,6 @@ class Restaurant(Base):
     address = Column(String(100))
     zipcode = Column(String(100))
     city = Column(String(100))
-
     country_id = Column(Integer, ForeignKey('country.id'))
     country = relationship("Country")
 

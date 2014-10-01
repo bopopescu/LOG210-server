@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Entrepreneur
-from webserver.tests import build_entrepreneur
-from webserver.tests import delete_entrepreneurs
+from webserver.tests import build_entrepreneur, build_country
+from webserver.tests import delete_entrepreneurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -38,21 +38,35 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_entrepreneur(id=15)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_entrepreneurs()
+        db.session.commit()
 
-    def test_unkown_id(self):
+    def test_unknown_id(self):
         """ PUT /entrepreneurs/id: with unkown id """
 
         # Check request
         response = self.put('/entrepreneurs/5')
         assert response.status_code == 404
-        assert response.data == 'Le entrepreneur n\'existe pas.'
+        assert response.data == 'L\'entrepreneur n\'existe pas.'
+
+    def test_unknown_country(self):
+        """ PUT /entrepreneurs/id: with unkown country_id """
+
+        # Prepare data
+        data = dict()
+        data['country_id'] = 1111
+
+        # Check request
+        response = self.put('/entrepreneurs/15', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le pays n\'existe pas.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -149,12 +163,12 @@ class InvalidParameters(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['country'] = 1111
+        data['country_id'] = "aaa"
 
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le pays du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit etre un identifiant.'
 
     def test_invalid_mail(self):
         """ PUT /entrepreneurs/id: with invalid mail """
@@ -188,7 +202,10 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        c10 = build_country(id=10, name="Canada")
         build_entrepreneur(id=5)
+        build_entrepreneur(id=7, country=c10)
+
         db.session.commit()
 
     @classmethod
@@ -196,6 +213,8 @@ class Update(FunctionalTest):
         """ Clear database fixtures """
 
         delete_entrepreneurs()
+        delete_countries()
+
         db.session.commit()
 
     def test_update(self):
@@ -209,7 +228,7 @@ class Update(FunctionalTest):
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
-        data['country'] = "Canada"
+        data['country_id'] = 10
         data['mail'] = "bob@gmail.com"
         data['password'] = "aze123"
 
@@ -229,6 +248,24 @@ class Update(FunctionalTest):
         assert entrepreneur.address == "1000 Place Marcelle Ferron"
         assert entrepreneur.zipcode == "T3R 1R1"
         assert entrepreneur.city == "Trois-Rivieres"
-        assert entrepreneur.country == "Canada"
+        assert entrepreneur.country_id == 10
         assert entrepreneur.mail == "bob@gmail.com"
         assert entrepreneur.password == "aze123"
+
+    def test_update_without_country(self):
+        """ PUT /entrepreneurs/id: without country """
+
+        # Prepare data
+        data = dict()
+
+        # Check request
+        response = self.put('/entrepreneurs/7', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        entrepreneur = db.session.query(Entrepreneur).get(result['id'])
+        assert entrepreneur.country is None

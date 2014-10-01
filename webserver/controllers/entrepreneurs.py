@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Entrepreneur
+from webserver.models import Entrepreneur, Country
 
 # Define blueprint
 entrepreneurs = Blueprint('entrepreneurs', __name__)
@@ -114,10 +114,18 @@ def create():
         entrepreneur.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays du entrepreneur doit etre une chaine de caractere.", 400)
-        entrepreneur.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        entrepreneur.country = country
 
     # Add entrepreneur
     db.session.add(entrepreneur)
@@ -151,7 +159,7 @@ def update(id):
     # Check entrepreneur
     entrepreneur = db.session.query(Entrepreneur).get(id)
     if entrepreneur is None:
-        return make_response("Le entrepreneur n'existe pas.", 404)
+        return make_response("L\'entrepreneur n'existe pas.", 404)
 
     # Check firstname
     if 'firstname' in datas:
@@ -190,10 +198,20 @@ def update(id):
         entrepreneur.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays du entrepreneur doit etre une chaine de caractere.", 400)
-        entrepreneur.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        entrepreneur.country = country
+    else:
+        entrepreneur.country = None
 
     # Check mail
     if 'mail' in datas:

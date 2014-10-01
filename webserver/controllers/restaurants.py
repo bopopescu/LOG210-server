@@ -174,7 +174,6 @@ def update(id):
     if 'city' in datas:
         if not isinstance(datas['city'], (str, unicode)):
             return make_response("La ville doit etre une chaine de caractere.", 400)
-
         restaurant.city = datas['city']
 
     # Check address
@@ -196,12 +195,6 @@ def update(id):
         if not isinstance(datas['zipcode'], (str, unicode)):
             return make_response("Le code postal doit etre une chaine de caractere.", 400)
         restaurant.zipcode = datas['zipcode']
-
-    # Check city
-    if 'city' in datas:
-        if not isinstance(datas['city'], (str, unicode)):
-            return make_response("La ville doit etre une chaine de caractere.", 400)
-        restaurant.city = datas['city']
 
     # Check country
     if 'country_id' in datas:

@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Client
+from webserver.models import Client, Country
 
 # Define blueprint
 clients = Blueprint('clients', __name__)
@@ -114,10 +114,18 @@ def create():
         client.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays du client doit etre une chaine de caractere.", 400)
-        client.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        client.country = country
 
     # Add client
     db.session.add(client)
@@ -190,10 +198,20 @@ def update(id):
         client.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays du client doit etre une chaine de caractere.", 400)
-        client.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        client.country = country
+    else:
+        client.country = None
 
     # Check mail
     if 'mail' in datas:
