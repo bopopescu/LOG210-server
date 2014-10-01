@@ -19,8 +19,11 @@ class Personne(Base):
     mail = Column(String(100))      # Required
     password = Column(String(100))  # Required
 
+    type = Column(String(20))
+
     __mapper_args__ = {
-        'polymorphic_identity': 'personne'
+        'polymorphic_identity': 'personne',
+        'polymorphic_on': type
     }
 
     def to_dict(self):
