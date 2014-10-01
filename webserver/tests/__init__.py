@@ -9,12 +9,27 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Restaurant, Restaurateur, Entrepreneur, Client
+from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client
 
 # Import others
 from datetime import date
 
 # Builders and deleters
+
+# Country
+def build_country(id, name="Canada"):
+    """ Builder to create a country in database """
+
+    country = Country(id=id, name=name)
+    db.session.add(country)
+
+    return country
+
+def delete_countries():
+    """ Remove all country from database """
+
+    for country in db.session.query(Country).all():
+        db.session.delete(country)
 
 # Restaurateur
 def build_restaurateur(id, firstname="Toto", lastname="Bob", address="1010 Avenue de la banquise", city="Montreal", mail="boby@resto.ca", password="azerty"):
@@ -31,7 +46,7 @@ def delete_restaurateurs():
     for restaurateur in db.session.query(Restaurateur).all():
         db.session.delete(restaurateur)
 
-# Entrepreneur        
+# Entrepreneur
 def build_entrepreneur(id, firstname="Toto", lastname="Bob", address="1010 Avenue de la banquise", city="Montreal", mail="boby@resto.ca", password="azerty"):
     """ Builder to create a entrepreneur in database """
 
@@ -46,7 +61,7 @@ def delete_entrepreneurs():
     for entrepreneur in db.session.query(Entrepreneur).all():
         db.session.delete(entrepreneur)
 
-# Client        
+# Client
 def build_client(id, firstname="Toto", lastname="Bob", address="1010 Avenue de la banquise", city="Montreal", mail="boby@resto.ca", password="azerty"):
     """ Builder to create a client in database """
 
@@ -60,12 +75,12 @@ def delete_clients():
 
     for client in db.session.query(Client).all():
         db.session.delete(client)
-        
+
 # Restaurant
-def build_restaurant(id, name="Resto 1", phone="514-444-4444", address="1010 Ste-Catherie", city="Montreal", restaurateur=None):
+def build_restaurant(id, name="Resto 1", phone="514-444-4444", cooking_type="Asian cooking", address="1010 Ste-Catherie", zipcode="H1S1R1", city="Montreal", country=None, restaurateur=None):
     """ Builder to create a restaurant in database """
 
-    restaurant = Restaurant(id=id, name=name, phone=phone, address=address, city=city, restaurateur=restaurateur)
+    restaurant = Restaurant(id=id, name=name, phone=phone, cooking_type=cooking_type, address=address, zipcode=zipcode, city=city, country=country, restaurateur=restaurateur)
     db.session.add(restaurant)
 
     return restaurant

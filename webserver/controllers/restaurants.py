@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Restaurant, Restaurateur
+from webserver.models import Country, Restaurant, Restaurateur
 
 # Define blueprint
 restaurants = Blueprint('restaurants', __name__)
@@ -102,10 +102,18 @@ def create():
         restaurant.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays doit etre une chaine de caractere.", 400)
-        restaurant.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        restaurant.country = country
 
     # Check restaurateur
     if 'restaurateur_id' in datas:
@@ -196,10 +204,20 @@ def update(id):
         restaurant.city = datas['city']
 
     # Check country
-    if 'country' in datas:
-        if not isinstance(datas['country'], (str, unicode)):
-            return make_response("Le pays doit etre une chaine de caractere.", 400)
-        restaurant.country = datas['country']
+    if 'country_id' in datas:
+        try:
+            country_id = int(datas['country_id'])
+        except Exception:  # pragma: no cover
+            return make_response("country_id doit etre un identifiant.", 400)
+
+        country = db.session.query(Country).get(country_id)
+
+        if country is None:
+            return make_response("Le pays n\'existe pas.", 404)
+
+        restaurant.country = country
+    else:
+        restaurant.country = None
 
     # Check restaurateur
     if 'restaurateur_id' in datas:

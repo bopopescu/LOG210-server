@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurant, Restaurateur
-from webserver.tests import build_restaurant, build_restaurateur
-from webserver.tests import delete_restaurants, delete_restaurateurs
+from webserver.tests import build_restaurant, build_restaurateur, build_country
+from webserver.tests import delete_restaurants, delete_restaurateurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -157,12 +157,12 @@ class InvalidParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['name'] = "Restaurant 1"
-        data['country'] = 1
+        data['country_id'] = "salut"
 
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le pays doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit etre un identifiant.'
 
     def test_invalid_restaurateur(self):
         """ POST /restaurants: with invalid restaurateur_id """
@@ -194,7 +194,7 @@ class UnknownParameters(FunctionalTest):
         pass
 
     def test_unknown_restaurateur(self):
-        """ POST /restaurants: with invalid name """
+        """ POST /restaurants: with invalid restaurateur """
 
         # Prepare data
         data = dict()
@@ -207,6 +207,20 @@ class UnknownParameters(FunctionalTest):
         assert response.status_code== 404
         assert response.data == 'Le restaurateur n\'existe pas.'
 
+    def test_unknown_country(self):
+        """ POST /restaurants: with invalid country """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "La banquise"
+        data['country_id'] = 999
+
+        # Check request
+        response = self.post('/restaurants', data=data)
+        print response.status_code
+        assert response.status_code== 404
+        assert response.data == 'Le pays n\'existe pas.'
+
 
 class Create(FunctionalTest):
     """ Check with valid data """
@@ -215,6 +229,7 @@ class Create(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        build_country(id=1, name="Canada")
         build_restaurateur(id=33)
         db.session.commit()
 
@@ -224,6 +239,7 @@ class Create(FunctionalTest):
 
         delete_restaurants()
         delete_restaurateurs()
+        delete_countries()
         db.session.commit()
 
     def test_create(self):
@@ -237,7 +253,7 @@ class Create(FunctionalTest):
         data['address'] = "1100 Ste-Catherine"
         data['zipcode'] = "H1A 1A1"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
 
         # Check request
         response = self.post('/restaurants', data=data)
@@ -262,7 +278,7 @@ class Create(FunctionalTest):
         data['address'] = "1101 Ste-Catherine"
         data['zipcode'] = "H1A 1A1"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['restaurateur_id'] = 33
 
         # Check request

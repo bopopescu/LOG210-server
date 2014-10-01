@@ -1,7 +1,7 @@
 from webserver import db
 from webserver.models import Restaurant, Restaurateur
-from webserver.tests import build_restaurant, build_restaurateur
-from webserver.tests import delete_restaurants, delete_restaurateurs
+from webserver.tests import build_restaurant, build_restaurateur, build_country
+from webserver.tests import delete_restaurants, delete_restaurateurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -66,6 +66,17 @@ class UnknownParameters(FunctionalTest):
         response = self.put('/restaurants/1', data=data)
         assert response.status_code == 404
         assert response.data == 'Le restaurateur n\'existe pas.'
+
+    def test_unkown_country_id(self):
+        """ PUT /restaurants/id: with unkown country id """
+
+        data = dict()
+        data['country_id'] = 100
+
+        # Check request
+        response = self.put('/restaurants/1', data=data)
+        assert response.status_code == 404
+        assert response.data == 'Le pays n\'existe pas.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -133,6 +144,30 @@ class InvalidParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'Le numero de telephone doit etre une chaine de caractere.'
 
+    def test_invalid_country(self):
+        """ PUT /restaurants/id: with invalid country """
+
+        # Prepare data
+        data = dict()
+        data['country_id'] = "salut"
+
+        # Check request
+        response = self.put('/restaurants/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'country_id doit etre un identifiant.'
+
+    def test_invalid_restaurateur(self):
+        """ PUT /restaurants/id: with invalid restaurateur_id """
+
+        # Prepare data
+        data = dict()
+        data['restaurateur_id'] = "salut"
+
+        # Check request
+        response = self.put('/restaurants/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'restaurateur_id doit etre un identifiant.'
+
 
 class Update(FunctionalTest):
     """ Check with valid data """
@@ -140,6 +175,8 @@ class Update(FunctionalTest):
     @classmethod
     def setup_class(cls):
         """ Add database fixtures """
+
+        c10 = build_country(id=10, name="Canada")
 
         r1 = build_restaurateur(id=10)
         r2 = build_restaurateur(id=15)
@@ -150,6 +187,7 @@ class Update(FunctionalTest):
         build_restaurant(id=7, name="Le tigre rouge", restaurateur=r3)
         build_restaurant(id=9, name="Le lion du sud", restaurateur=r4)
         build_restaurant(id=11, name="Le lion du sud")
+        build_restaurant(id=12, name="Les rois mages", country=c10)
 
         db.session.commit()
 
@@ -159,6 +197,7 @@ class Update(FunctionalTest):
 
         delete_restaurants()
         delete_restaurateurs()
+        delete_countries()
         db.session.commit()
 
     def test_update(self):
@@ -171,6 +210,7 @@ class Update(FunctionalTest):
         data['address'] = "9000 Boulevard de Carrie"
         data['city'] = "Trois-Rivieres"
         data['restaurateur_id'] = 15
+        data['country_id'] = 10
 
         # Check request
         response = self.put('/restaurants/5', data=data)
@@ -187,6 +227,7 @@ class Update(FunctionalTest):
         assert restaurant.address == '9000 Boulevard de Carrie'
         assert restaurant.city == 'Trois-Rivieres'
         assert restaurant.restaurateur.id == 15
+        assert restaurant.country.id == 10
 
         # Check restaurant in restaurateur
         restaurateur = db.session.query(Restaurateur).get(15)
@@ -222,6 +263,23 @@ class Update(FunctionalTest):
         restaurateur = db.session.query(Restaurateur).get(20)
         assert restaurateur.restaurant is None
 
+    def test_update_without_country(self):
+        """ PUT /restaurants/id: with valid data """
+
+        # Prepare data
+        data = dict()
+
+        # Check request
+        response = self.put('/restaurants/12', data=data)
+        assert response.status_code == 200
+
+        # Check received data
+        result = self.parse(response.data)
+        assert 'id' in result
+
+        # Check in database
+        restaurant = db.session.query(Restaurant).get(result['id'])
+        assert restaurant.country is None
 
     def test_update_with_restaurateur_already_assigned(self):
         """ PUT /restaurants/id: with valid data """

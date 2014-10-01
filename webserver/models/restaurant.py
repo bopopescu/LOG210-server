@@ -12,7 +12,10 @@ class Restaurant(Base):
     address = Column(String(100))
     zipcode = Column(String(100))
     city = Column(String(100))
-    country = Column(String(100))
+
+    country_id = Column(Integer, ForeignKey('country.id'))
+    country = relationship("Country")
+
     restaurateur = relationship("Restaurateur", uselist=False, backref="restaurant")
 
     def to_dict(self, restaurateur=True):
@@ -25,7 +28,10 @@ class Restaurant(Base):
         my_dict['address'] = self.address
         my_dict['zipcode'] = self.zipcode
         my_dict['city'] = self.city
-        my_dict['country'] = self.country
+
+        if self.country:
+            my_dict['country_id'] = self.country_id
+            my_dict['country'] = self.country.to_dict()
 
         if self.restaurateur:
             my_dict['restaurateur_id'] = self.restaurateur.id

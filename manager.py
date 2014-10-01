@@ -13,6 +13,7 @@ def install():
 @manager.command
 def install_with_data():
     install()
+    add_country()
 
     # Add restaurateurs
     from webserver.models import Restaurateur
@@ -20,13 +21,12 @@ def install_with_data():
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie")
     db.session.add(rs1)
     db.session.add(rs2)
-    
+
     # Add entrepreneurs
     from webserver.models import Entrepreneur
     e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd")
     db.session.add(e1)
 
-    
     # Add clients
     from webserver.models import Client
     c1 = Client(firstname="Yvon", lastname="Gagner", mail="gagner@ducati.it", password="passwdc1")
@@ -47,9 +47,16 @@ def install_with_data():
     db.session.add(r4)
     db.session.add(r5)
 
-
     db.session.commit()
 
+def add_country():
+    """ Add country """
+
+    from webserver.models import Country
+    c1 = Country(name="Canada")
+    c2 = Country(name="United States")
+    db.session.add(c1)
+    db.session.add(c2)
 
 if __name__ == "__main__":
     manager.run()
