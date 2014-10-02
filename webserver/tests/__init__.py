@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client
+from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne
 
 # Import others
 from datetime import date
@@ -30,6 +30,21 @@ def delete_countries():
 
     for country in db.session.query(Country).all():
         db.session.delete(country)
+        
+# Personne
+def build_personne(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
+    """ Builder to create a personne in database """
+
+    personne = Personne(id=id, firstname=firstname, lastname=lastname, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    db.session.add(personne)
+
+    return personne
+
+def delete_personnes():
+    """ Remove all personnes from database """
+
+    for personne in db.session.query(Personne).all():
+        db.session.delete(personne)
 
 # Restaurateur
 def build_restaurateur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
