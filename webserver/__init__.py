@@ -6,10 +6,11 @@ app = Flask(__name__)
 from webserver.config import LocalConfig
 app.config.from_object(LocalConfig)
 
+# TODO: TO DELETE IF UNECESSARY
 # Initialize Auth extension
-from flask.ext.auth import Auth
-auth = Auth(app)
-app.secret_key = 'N4BUdSXUzHxNoO8g'
+# from flask.ext.auth import Auth
+# auth = Auth(app)
+# app.secret_key = 'N4BUdSXUzHxNoO8g'
 
 # Initialize DataBase
 from webserver.config import DataBase

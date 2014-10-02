@@ -26,7 +26,9 @@ def install_with_data():
     # Add entrepreneurs
     from webserver.models import Entrepreneur
     e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd")
+    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur")
     db.session.add(e1)
+    db.session.add(e2)
 
     # Add clients
     from webserver.models import Client
