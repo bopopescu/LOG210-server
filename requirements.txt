@@ -5,4 +5,3 @@ Flask-Auth==0.85
 SQLAlchemy==0.9.7
 
 blinker==1.3
--e ./LOG210-server/mysql-connector-python-1.2.3/
