@@ -1,7 +1,7 @@
 from flask import Blueprint, json, make_response, request
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Restaurateur, Restaurant, Country
+from webserver.models import Restaurateur, Restaurant, Country, Personne
 
 # Define blueprint
 restaurateurs = Blueprint('restaurateurs', __name__)
@@ -79,6 +79,8 @@ def create():
         return make_response("L'adresse mail du restaurateur est obligatoire.", 400)
     if not isinstance(datas['mail'], (str, unicode)):
         return make_response("L'adresse mail du restaurateur doit etre une chaine de caractere.", 400)
+    if len(db.session.query(Personne).filter(Personne.mail == datas['mail']).all()) > 0:
+        return make_response('L\'adresse mail est deja utilisee par un utilisateur.', 400)
 
     # Check password
     if 'password' not in datas:

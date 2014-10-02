@@ -108,13 +108,15 @@ class InvalidParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_client(id=10, mail="bob@bob.ti")
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_clients()
+        db.session.commit()
 
     def test_invalid_firstname(self):
         """ POST /clients: with invalid firstname """
@@ -256,6 +258,21 @@ class InvalidParameters(FunctionalTest):
         response = self.post('/clients', data=data)
         assert response.status_code == 400
         assert response.data == 'Le mot de passe du client doit etre une chaine de caractere.'
+
+    def test_invalid_mail_already_used(self):
+        """ POST /clients: with mail already used """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['mail'] = "bob@bob.ti"
+        data['password'] = "1010101"
+
+        # Check request
+        response = self.post('/clients', data=data)
+        assert response.status_code == 400
+        assert response.data == 'L\'adresse mail est deja utilisee par un utilisateur.'
 
 
 class UnknownParameters(FunctionalTest):
