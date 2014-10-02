@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from webserver import db
-from webserver.models import Restaurant
-from webserver.tests import build_restaurant
-from webserver.tests import delete_restaurants
+from webserver.models import Livreur
+from webserver.tests import build_livreur
+from webserver.tests import delete_livreurs
 from webserver.tests.functional import FunctionalTest
 
 
@@ -23,16 +23,16 @@ class Exists(FunctionalTest):
         pass
 
     def test_exists(self):
-        """ GET /restaurants/id: exists """
+        """ GET /livreurs: exists """
 
         # Check request
-        response = self.get('/restaurants/1')
+        response = self.get('/livreurs')
         assert response.status_code != 404
         assert response.status_code != 500
 
 
-class UnknownParameters(FunctionalTest):
-    """  Check unknown parameters """
+class Empty(FunctionalTest):
+    """ Check with no datas """
 
     @classmethod
     def setup_class(cls):
@@ -46,42 +46,48 @@ class UnknownParameters(FunctionalTest):
 
         pass
 
-    def test_unknown_id(self):
-        """ GET /restaurants/id: with unknown id """
+    def test_empty(self):
+        """ GET /livreurs: empty """
 
         # Check request
-        response = self.get('/restaurants/666')
-        assert response.status_code == 400
-        assert response.data == 'Le restaurant n\'existe pas.'
+        response = self.get('/livreurs')
+        assert response.status_code == 200
+
+        # Check length
+        result = self.parse(response.data)
+        assert len(result) == 0
 
 
-class Get(FunctionalTest):
+class List(FunctionalTest):
     """ Check with valid data """
 
     @classmethod
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_restaurant(id=1)
+        build_livreur(id=1)
+        build_livreur(id=2)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_restaurants()
+        delete_livreurs()
         db.session.commit()
 
-    def test_get(self):
-        """ GET /restaurants/id: with valid data """
+    def test_list(self):
+        """ GET /livreurs: list """
 
         # Check request
-        response = self.get('/restaurants/1')
+        response = self.get('/livreurs')
         assert response.status_code == 200
 
-        # Check result
+        # Check length
         result = self.parse(response.data)
-        assert result is not None
+        assert len(result) == 2
 
         # Check id
-        assert result['id'] == 1
+        result_id = [r['id'] for r in result]
+        assert 1 in result_id
+        assert 2 in result_id

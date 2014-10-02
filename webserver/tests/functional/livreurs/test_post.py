@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from webserver import db
-from webserver.models import Client
-from webserver.tests import build_client, build_country
-from webserver.tests import delete_clients, delete_countries
+from webserver.models import Livreur
+from webserver.tests import build_livreur, build_country
+from webserver.tests import delete_livreurs, delete_countries
 from webserver.tests.functional import FunctionalTest
 
 
@@ -23,10 +23,10 @@ class Exists(FunctionalTest):
         pass
 
     def test_exists(self):
-        """ POST /clients: exists """
+        """ POST /livreurs: exists """
 
         # Check request
-        response = self.post('/clients')
+        response = self.post('/livreurs')
         assert response.status_code != 404
         assert response.status_code != 500
 
@@ -49,7 +49,7 @@ class MissingParameters(FunctionalTest):
         db.session.commit()
 
     def test_missing_firstname(self):
-        """ POST /clients: with missing firstname """
+        """ POST /livreurs: with missing firstname """
 
         # Prepare data
         data = dict()
@@ -64,12 +64,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le nom est obligatoire.'
 
     def test_missing_lastname(self):
-        """ POST /clients: with missing lastname """
+        """ POST /livreurs: with missing lastname """
 
         # Prepare data
         data = dict()
@@ -83,12 +83,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le prénom est obligatoire.'
 
     def test_missing_phone(self):
-        """ POST /clients: with missing phone """
+        """ POST /livreurs: with missing phone """
 
         # Prepare data
         data = dict()
@@ -102,12 +102,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le numéro de téléphone est obligatoire.'
 
     def test_missing_address(self):
-        """ POST /clients: with missing address """
+        """ POST /livreurs: with missing address """
 
         # Prepare data
         data = dict()
@@ -121,12 +121,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'L\'adresse est obligatoire.'
 
     def test_missing_zipcode(self):
-        """ POST /clients: with missing zipcode """
+        """ POST /livreurs: with missing zipcode """
 
         # Prepare data
         data = dict()
@@ -140,12 +140,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le code postal est obligatoire.'
 
     def test_missing_city(self):
-        """ POST /clients: with missing city """
+        """ POST /livreurs: with missing city """
 
         # Prepare data
         data = dict()
@@ -159,12 +159,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'La ville est obligatoire.'
 
     def test_missing_country(self):
-        """ POST /clients: with missing country """
+        """ POST /livreurs: with missing country """
 
         # Prepare data
         data = dict()
@@ -178,12 +178,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le pays est obligatoire.'
 
     def test_missing_mail(self):
-        """ POST /clients: with missing mail """
+        """ POST /livreurs: with missing mail """
 
         # Prepare data
         data = dict()
@@ -197,12 +197,12 @@ class MissingParameters(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'L\'adresse mail est obligatoire.'
 
     def test_missing_password(self):
-        """ POST /clients: with missing password """
+        """ POST /livreurs: with missing password """
 
         # Prepare data
         data = dict()
@@ -216,7 +216,7 @@ class MissingParameters(FunctionalTest):
         data['mail'] = "titi@toto.ca"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le mot de passe est obligatoire.'
 
@@ -229,19 +229,19 @@ class InvalidParameters(FunctionalTest):
         """ Add database fixtures """
 
         build_country(id=1, name="Canada")
-        build_client(id=10, mail="bob@bob.ti")
+        build_livreur(id=10, mail="bob@bob.ti")
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_clients()
+        delete_livreurs()
         delete_countries()
         db.session.commit()
 
     def test_invalid_firstname(self):
-        """ POST /clients: with invalid firstname """
+        """ POST /livreurs: with invalid firstname """
 
         # Prepare data
         data = dict()
@@ -256,13 +256,13 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le nom doit être une chaine de caractère.'
 
 
     def test_invalid_lastname(self):
-        """ POST /clients: with invalid lastname """
+        """ POST /livreurs: with invalid lastname """
 
         # Prepare data
         data = dict()
@@ -277,12 +277,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le prénom doit être une chaine de caractère.'
 
     def test_invalid_birthdate(self):
-        """ POST /clients: with invalid birthdate """
+        """ POST /livreurs: with invalid birthdate """
 
         # Prepare data
         data = dict()
@@ -298,13 +298,13 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         print response.data
         assert response.data == 'Le format de la date est invalide.'
 
     def test_invalid_phone(self):
-        """ POST /clients: with invalid phone """
+        """ POST /livreurs: with invalid phone """
 
         # Prepare data
         data = dict()
@@ -319,12 +319,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_address(self):
-        """ POST /clients: with invalid address """
+        """ POST /livreurs: with invalid address """
 
         # Prepare data
         data = dict()
@@ -340,13 +340,13 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         print response.data
         assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
-        """ POST /clients: with invalid zipcode """
+        """ POST /livreurs: with invalid zipcode """
 
         # Prepare data
         data = dict()
@@ -361,12 +361,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_city(self):
-        """ POST /clients: with invalid city """
+        """ POST /livreurs: with invalid city """
 
         # Prepare data
         data = dict()
@@ -381,12 +381,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_country(self):
-        """ POST /clients: with invalid country """
+        """ POST /livreurs: with invalid country """
 
         # Prepare data
         data = dict()
@@ -401,12 +401,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_mail(self):
-        """ POST /clients: with invalid mail """
+        """ POST /livreurs: with invalid mail """
 
         # Prepare data
         data = dict()
@@ -421,12 +421,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'L\'adresse mail doit être une chaine de caractère.'
 
     def test_invalid_password(self):
-        """ POST /clients: with invalid password """
+        """ POST /livreurs: with invalid password """
 
         # Prepare data
         data = dict()
@@ -441,12 +441,12 @@ class InvalidParameters(FunctionalTest):
         data['password'] = 1010
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'Le mot de passe doit être une chaine de caractère.'
 
     def test_invalid_mail_already_used(self):
-        """ POST /clients: with mail already used """
+        """ POST /livreurs: with mail already used """
 
         # Prepare data
         data = dict()
@@ -461,7 +461,7 @@ class InvalidParameters(FunctionalTest):
         data['password'] = "1010101"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 400
         assert response.data == 'L\'adresse mail est deja utilisee par un utilisateur.'
 
@@ -482,7 +482,7 @@ class UnknownParameters(FunctionalTest):
         pass
 
     def test_unknown_country(self):
-        """ POST /clients: with invalid country """
+        """ POST /livreurs: with invalid country """
 
         # Prepare data
         data = dict()
@@ -497,7 +497,7 @@ class UnknownParameters(FunctionalTest):
         data['password'] = "azerty"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         print response.status_code
         assert response.status_code== 404
         assert response.data == 'Le pays n\'existe pas.'
@@ -517,12 +517,12 @@ class Create(FunctionalTest):
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_clients()
+        delete_livreurs()
         delete_countries()
         db.session.commit()
 
     def test_create(self):
-        """ POST /clients: with valid data """
+        """ POST /livreurs: with valid data """
 
         # Prepare data
         data = dict()
@@ -538,7 +538,7 @@ class Create(FunctionalTest):
         data['password'] = "azerty123"
 
         # Check request
-        response = self.post('/clients', data=data)
+        response = self.post('/livreurs', data=data)
         assert response.status_code == 201
 
         # Check received data
@@ -546,5 +546,5 @@ class Create(FunctionalTest):
         assert 'id' in result
 
         # Check in database
-        client = db.session.query(Client).get(result['id'])
-        assert client is not None
+        livreur = db.session.query(Livreur).get(result['id'])
+        assert livreur is not None

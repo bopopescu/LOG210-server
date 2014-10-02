@@ -3,12 +3,12 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 # Export Models
-__all__ = ['Country', 'Personne', 'Entrepreneur', 'Client', 'Restaurateur', 'Restaurant']
+__all__ = ['Country', 'Personne', 'Entrepreneur', 'Client', 'Livreur', 'Restaurateur', 'Restaurant']
 
-
-from webserver.models.country import Country
 from webserver.models.personne import Personne
-from webserver.models.entrepreneur import Entrepreneur
 from webserver.models.client import Client
+from webserver.models.country import Country
+from webserver.models.entrepreneur import Entrepreneur
+from webserver.models.livreur import Livreur
 from webserver.models.restaurant import Restaurant
 from webserver.models.restaurateur import Restaurateur

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Entrepreneur
 from webserver.tests import build_country

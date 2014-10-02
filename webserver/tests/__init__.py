@@ -9,12 +9,36 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne
+from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne, Livreur
 
 # Import others
-from datetime import date
+import datetime
 
 # Builders and deleters
+
+
+# Client
+def build_client(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
+    """ Builder to create a client in database """
+
+    if birthdate is None:
+        birthdate = datetime.datetime(2014, 4, 4)
+
+    if country is None:
+        country = build_country(id=id)
+
+    client = Client(id=id, firstname=firstname, lastname=lastname, birthdate=birthdate, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    db.session.add(client)
+
+    return client
+
+def delete_clients():
+    """ Remove all clients from database """
+
+    for client in db.session.query(Client).all():
+        db.session.delete(client)
+
+    delete_countries()
 
 # Country
 def build_country(id, name="Canada"):
@@ -30,42 +54,19 @@ def delete_countries():
 
     for country in db.session.query(Country).all():
         db.session.delete(country)
-        
-# Personne
-def build_personne(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
-    """ Builder to create a personne in database """
 
-    personne = Personne(id=id, firstname=firstname, lastname=lastname, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
-    db.session.add(personne)
-
-    return personne
-
-def delete_personnes():
-    """ Remove all personnes from database """
-
-    for personne in db.session.query(Personne).all():
-        db.session.delete(personne)
-
-# Restaurateur
-def build_restaurateur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
-    """ Builder to create a restaurateur in database """
-
-    restaurateur = Restaurateur(id=id, firstname=firstname, lastname=lastname, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
-    db.session.add(restaurateur)
-
-    return restaurateur
-
-def delete_restaurateurs():
-    """ Remove all restaurateurs from database """
-
-    for restaurateur in db.session.query(Restaurateur).all():
-        db.session.delete(restaurateur)
 
 # Entrepreneur
-def build_entrepreneur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
-    """ Builder to create a entrepreneur in database """
+def build_entrepreneur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
+    """ Builder to create an entrepreneur in database """
 
-    entrepreneur = Entrepreneur(id=id, firstname=firstname, lastname=lastname, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    if birthdate is None:
+        birthdate = datetime.datetime(2014, 4, 4)
+
+    if country is None:
+        country = build_country(id=id)
+
+    entrepreneur = Entrepreneur(id=id, firstname=firstname, lastname=lastname, birthdate=birthdate, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
     db.session.add(entrepreneur)
 
     return entrepreneur
@@ -76,20 +77,79 @@ def delete_entrepreneurs():
     for entrepreneur in db.session.query(Entrepreneur).all():
         db.session.delete(entrepreneur)
 
-# Client
-def build_client(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", country=None):
-    """ Builder to create a client in database """
+    delete_countries()
 
-    client = Client(id=id, firstname=firstname, lastname=lastname, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
-    db.session.add(client)
 
-    return client
+# Livreur
+def build_livreur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
+    """ Builder to create a livreur in database """
 
-def delete_clients():
-    """ Remove all clients from database """
+    if birthdate is None:
+        birthdate = datetime.datetime(2014, 4, 4)
 
-    for client in db.session.query(Client).all():
-        db.session.delete(client)
+    if country is None:
+        country = build_country(id=id)
+
+    livreur = Livreur(id=id, firstname=firstname, lastname=lastname, birthdate=birthdate, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    db.session.add(livreur)
+
+    return livreur
+
+def delete_livreurs():
+    """ Remove all livreurs from database """
+
+    for livreur in db.session.query(Livreur).all():
+        db.session.delete(livreur)
+
+    delete_countries()
+
+
+# Personne
+def build_personne(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
+    """ Builder to create a personne in database """
+
+    if birthdate is None:
+        birthdate = datetime.datetime(2014, 4, 4)
+
+    if country is None:
+        country = Country(name="Canada")
+
+    personne = Personne(id=id, firstname=firstname, lastname=lastname, birthdate=birthdate, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    db.session.add(personne)
+
+    return personne
+
+def delete_personnes():
+    """ Remove all personnes from database """
+
+    for personne in db.session.query(Personne).all():
+        db.session.delete(personne)
+
+    delete_countries()
+
+# Restaurateur
+def build_restaurateur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
+    """ Builder to create a personne in database """
+
+    if birthdate is None:
+        birthdate = datetime.datetime(2014, 4, 4)
+
+    if country is None:
+        country = Country(name="Canada")
+
+    restaurateur = Restaurateur(id=id, firstname=firstname, lastname=lastname, birthdate=birthdate, phone=phone, address=address, zipcode=zipcode, city=city, country=country, mail=mail, password=password)
+    db.session.add(restaurateur)
+
+    return restaurateur
+
+def delete_restaurateurs():
+    """ Remove all personnes from database """
+
+    for restaurateur in db.session.query(Restaurateur).all():
+        db.session.delete(restaurateur)
+
+    delete_countries()
+
 
 # Restaurant
 def build_restaurant(id, name="Resto 1", phone="514-444-4444", cooking_type="Asian cooking", address="1010 Ste-Catherie", zipcode="H1S1R1", city="Montreal", country=None, restaurateur=None):

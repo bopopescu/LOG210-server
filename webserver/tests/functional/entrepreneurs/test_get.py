@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Entrepreneur
 from webserver.tests import build_entrepreneur
@@ -50,7 +52,7 @@ class UnknownParameters(FunctionalTest):
         # Check request
         response = self.get('/entrepreneurs/666')
         assert response.status_code == 400
-        assert response.data == 'Le entrepreneur n\'existe pas.'
+        assert response.data == 'L\'entrepreneur n\'existe pas.'
 
 
 class Get(FunctionalTest):

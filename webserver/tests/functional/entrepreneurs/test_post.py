@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Entrepreneur
 from webserver.tests import build_entrepreneur, build_country
@@ -36,13 +38,15 @@ class MissingParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_country(id=1)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_countries()
+        db.session.commit()
 
     def test_missing_firstname(self):
         """ POST /entrepreneurs: with missing firstname """
@@ -50,18 +54,19 @@ class MissingParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['lastname'] = "Titi"
+        data['birthdate'] = None
         data['phone'] = "514-444-4444"
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
-        data['password'] = "azerty"
+        data['password'] = "azerty123"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du entrepreneur est obligatoire.'
+        assert response.data == 'Le nom est obligatoire.'
 
     def test_missing_lastname(self):
         """ POST /entrepreneurs: with missing lastname """
@@ -73,17 +78,93 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
-        data['password'] = "azerty"
+        data['password'] = "azerty123"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le prenom du entrepreneur est obligatoire.'
+        assert response.data == 'Le prénom est obligatoire.'
 
-    def test_missing_mail(self):
-        """ POST /entrepreneurs: with missing firstname """
+    def test_missing_phone(self):
+        """ POST /entrepreneurs: with missing phone """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le numéro de téléphone est obligatoire.'
+
+    def test_missing_address(self):
+        """ POST /entrepreneurs: with missing address """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        assert response.data == 'L\'adresse est obligatoire.'
+
+    def test_missing_zipcode(self):
+        """ POST /entrepreneurs: with missing zipcode """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le code postal est obligatoire.'
+
+    def test_missing_city(self):
+        """ POST /entrepreneurs: with missing city """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['country_id'] = 1
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        assert response.data == 'La ville est obligatoire.'
+
+    def test_missing_country(self):
+        """ POST /entrepreneurs: with missing country """
 
         # Prepare data
         data = dict()
@@ -93,13 +174,32 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
-        data['password'] = "azerty"
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty123"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse mail du entrepreneur est obligatoire.'
+        assert response.data == 'Le pays est obligatoire.'
+
+    def test_missing_mail(self):
+        """ POST /entrepreneurs: with missing mail """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+        data['password'] = "azerty123"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        assert response.data == 'L\'adresse mail est obligatoire.'
 
     def test_missing_password(self):
         """ POST /entrepreneurs: with missing password """
@@ -112,13 +212,13 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le mot de passe du entrepreneur est obligatoire.'
+        assert response.data == 'Le mot de passe est obligatoire.'
 
 
 class InvalidParameters(FunctionalTest):
@@ -128,6 +228,7 @@ class InvalidParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
+        build_country(id=1, name="Canada")
         build_entrepreneur(id=10, mail="bob@bob.ti")
         db.session.commit()
 
@@ -136,6 +237,7 @@ class InvalidParameters(FunctionalTest):
         """ Clear database fixtures """
 
         delete_entrepreneurs()
+        delete_countries()
         db.session.commit()
 
     def test_invalid_firstname(self):
@@ -143,15 +245,20 @@ class InvalidParameters(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['firstname'] = 19090
+        data['firstname'] = 12121
         data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le nom doit être une chaine de caractère.'
 
 
     def test_invalid_lastname(self):
@@ -160,14 +267,41 @@ class InvalidParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['firstname'] = "Toto"
-        data['lastname'] = 30923
+        data['lastname'] = 89382
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le prenom du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le prénom doit être une chaine de caractère.'
+
+    def test_invalid_birthdate(self):
+        """ POST /entrepreneurs: with invalid birthdate """
+
+        # Prepare data
+        data = dict()
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['birthdate'] = 89382
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty"
+
+        # Check request
+        response = self.post('/entrepreneurs', data=data)
+        assert response.status_code == 400
+        print response.data
+        assert response.data == 'Le format de la date est invalide.'
 
     def test_invalid_phone(self):
         """ POST /entrepreneurs: with invalid phone """
@@ -176,14 +310,18 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['phone'] = 948923
+        data['phone'] = 309032
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le numero de telephone du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_address(self):
         """ POST /entrepreneurs: with invalid address """
@@ -192,14 +330,20 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['address'] = 1111
+        data['birthdate'] = "2012-09-03T00:00:00.000Z"
+        data['phone'] = "514-444-4444"
+        data['address'] = 11
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse du entrepreneur doit etre une chaine de caractere.'
+        print response.data
+        assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
         """ POST /entrepreneurs: with invalid zipcode """
@@ -208,14 +352,18 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['zipcode'] = 11111
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = 11
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le code postal du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_city(self):
         """ POST /entrepreneurs: with invalid city """
@@ -224,14 +372,18 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
-        data['city'] = 11111
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = 2192901
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'La ville du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_country(self):
         """ POST /entrepreneurs: with invalid country """
@@ -244,14 +396,14 @@ class InvalidParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country_id'] = "1111aaa1"
+        data['country_id'] = "ae1"
         data['mail'] = "titi@toto.ca"
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'country_id doit etre un identifiant.'
+        assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_mail(self):
         """ POST /entrepreneurs: with invalid mail """
@@ -264,14 +416,14 @@ class InvalidParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
-        data['mail'] = 11111
+        data['country_id'] = 1
+        data['mail'] = 1111
         data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse mail du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse mail doit être une chaine de caractère.'
 
     def test_invalid_password(self):
         """ POST /entrepreneurs: with invalid password """
@@ -284,14 +436,14 @@ class InvalidParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
-        data['country'] = "Canada"
+        data['country_id'] = 1
         data['mail'] = "titi@toto.ca"
-        data['password'] = 1010101
+        data['password'] = 1010
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le mot de passe du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le mot de passe doit être une chaine de caractère.'
 
     def test_invalid_mail_already_used(self):
         """ POST /entrepreneurs: with mail already used """
@@ -300,6 +452,11 @@ class InvalidParameters(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
         data['mail'] = "bob@bob.ti"
         data['password'] = "1010101"
 
@@ -329,11 +486,15 @@ class UnknownParameters(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['firstname'] = "Titi"
-        data['lastname'] = "Toto"
-        data['mail'] = "titi@toto.ca"
-        data['password'] = "azerty123"
+        data['firstname'] = "Toto"
+        data['lastname'] = "Titi"
+        data['phone'] = "514-444-4444"
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
         data['country_id'] = 999
+        data['mail'] = "titi@toto.ca"
+        data['password'] = "azerty"
 
         # Check request
         response = self.post('/entrepreneurs', data=data)
@@ -367,6 +528,7 @@ class Create(FunctionalTest):
         data = dict()
         data['firstname'] = "Toto"
         data['lastname'] = "Titi"
+        data['birthdate'] = "2012-09-03T00:00:00.000Z"
         data['phone'] = "514-444-4444"
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"

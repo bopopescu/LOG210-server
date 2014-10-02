@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Restaurant, Restaurateur
 from webserver.tests import build_restaurant, build_restaurateur, build_country

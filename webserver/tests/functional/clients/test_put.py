@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Client
 from webserver.tests import build_client, build_country
 from webserver.tests import delete_clients, delete_countries
 from webserver.tests.functional import FunctionalTest
+
+import datetime
 
 
 class Exists(FunctionalTest):
@@ -57,7 +61,7 @@ class UnknownParameters(FunctionalTest):
         assert response.data == 'Le client n\'existe pas.'
 
     def test_unkown_country(self):
-        """ PUT /restaurateurs/id: with unkown id """
+        """ PUT /clients/id: with unkown country_id """
 
         # Prepare data
         data = dict()
@@ -96,7 +100,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du client doit etre une chaine de caractere.'
+        assert response.data == 'Le nom doit être une chaine de caractère.'
 
     def test_invalid_lastname(self):
         """ PUT /clients/id: with invalid lastname """
@@ -108,7 +112,19 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le prenom du client doit etre une chaine de caractere.'
+        assert response.data == 'Le prénom doit être une chaine de caractère.'
+
+    def test_invalid_birthdate(self):
+        """ PUT /clients/id: with invalid birthdate """
+
+        # Prepare data
+        data = dict()
+        data['birthdate'] = 89382
+
+        # Check request
+        response = self.put('/clients/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le format de la date est invalide.'
 
     def test_invalid_phone(self):
         """ PUT /clients/id: with invalid phone """
@@ -120,7 +136,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le numero de telephone du client doit etre une chaine de caractere.'
+        assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_address(self):
         """ PUT /clients/id: with invalid address """
@@ -132,7 +148,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse du client doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
         """ PUT /clients/id: with invalid zipcode """
@@ -144,7 +160,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le code postal du client doit etre une chaine de caractere.'
+        assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_city(self):
         """ PUT /clients/id: with invalid city """
@@ -156,7 +172,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'La ville du client doit etre une chaine de caractere.'
+        assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_country(self):
         """ PUT /clients/id: with invalid country """
@@ -168,19 +184,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'country_id doit etre un identifiant.'
-
-    def test_invalid_mail(self):
-        """ PUT /clients/id: with invalid mail """
-
-        # Prepare data
-        data = dict()
-        data['mail'] = 1111
-
-        # Check request
-        response = self.put('/clients/5', data=data)
-        assert response.status_code == 400
-        assert response.data == 'L\'adresse mail du client doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_password(self):
         """ PUT /clients/id: with invalid password """
@@ -192,7 +196,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/clients/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le mot de passe du client doit etre une chaine de caractere.'
+        assert response.data == 'Le mot de passe doit être une chaine de caractère.'
 
 
 class Update(FunctionalTest):
@@ -204,7 +208,6 @@ class Update(FunctionalTest):
 
         c1 = build_country(id=1, name="Canada")
         build_client(id=5)
-        build_client(id=7, country=c1)
         db.session.commit()
 
     @classmethod
@@ -222,12 +225,12 @@ class Update(FunctionalTest):
         data = dict()
         data['firstname'] = "Bob"
         data['lastname'] = "Toto"
+        data['birthdate'] = "2012-09-03T00:00:00.000Z"
         data['phone'] = "438-333-3333"
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
         data['country_id'] = 1
-        data['mail'] = "bob@gmail.com"
         data['password'] = "aze123"
 
         # Check request
@@ -242,28 +245,10 @@ class Update(FunctionalTest):
         client = db.session.query(Client).get(result['id'])
         assert client.firstname == "Bob"
         assert client.lastname == "Toto"
+        assert client.birthdate == datetime.date(2012, 9, 3)
         assert client.phone == "438-333-3333"
         assert client.address == "1000 Place Marcelle Ferron"
         assert client.zipcode == "T3R 1R1"
         assert client.city == "Trois-Rivieres"
         assert client.country.name == "Canada"
-        assert client.mail == "bob@gmail.com"
         assert client.password == "aze123"
-
-    def test_update_without_country(self):
-        """ PUT /clients/id: without country """
-
-        # Prepare data
-        data = dict()
-
-        # Check request
-        response = self.put('/clients/7', data=data)
-        assert response.status_code == 200
-
-        # Check received data
-        result = self.parse(response.data)
-        assert 'id' in result
-
-        # Check in database
-        client = db.session.query(Client).get(result['id'])
-        assert client.country is None

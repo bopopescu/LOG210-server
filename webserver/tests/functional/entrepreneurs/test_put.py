@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Entrepreneur
 from webserver.tests import build_entrepreneur, build_country
 from webserver.tests import delete_entrepreneurs, delete_countries
 from webserver.tests.functional import FunctionalTest
+
+import datetime
 
 
 class Exists(FunctionalTest):
@@ -48,7 +52,7 @@ class UnknownParameters(FunctionalTest):
         delete_entrepreneurs()
         db.session.commit()
 
-    def test_unknown_id(self):
+    def test_unkown_id(self):
         """ PUT /entrepreneurs/id: with unkown id """
 
         # Check request
@@ -56,7 +60,7 @@ class UnknownParameters(FunctionalTest):
         assert response.status_code == 404
         assert response.data == 'L\'entrepreneur n\'existe pas.'
 
-    def test_unknown_country(self):
+    def test_unkown_country(self):
         """ PUT /entrepreneurs/id: with unkown country_id """
 
         # Prepare data
@@ -96,7 +100,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le nom doit être une chaine de caractère.'
 
     def test_invalid_lastname(self):
         """ PUT /entrepreneurs/id: with invalid lastname """
@@ -108,7 +112,19 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le prenom du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le prénom doit être une chaine de caractère.'
+
+    def test_invalid_birthdate(self):
+        """ PUT /entrepreneurs/id: with invalid birthdate """
+
+        # Prepare data
+        data = dict()
+        data['birthdate'] = 89382
+
+        # Check request
+        response = self.put('/entrepreneurs/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le format de la date est invalide.'
 
     def test_invalid_phone(self):
         """ PUT /entrepreneurs/id: with invalid phone """
@@ -120,7 +136,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le numero de telephone du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_address(self):
         """ PUT /entrepreneurs/id: with invalid address """
@@ -132,7 +148,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
         """ PUT /entrepreneurs/id: with invalid zipcode """
@@ -144,7 +160,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le code postal du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_city(self):
         """ PUT /entrepreneurs/id: with invalid city """
@@ -156,31 +172,19 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'La ville du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_country(self):
         """ PUT /entrepreneurs/id: with invalid country """
 
         # Prepare data
         data = dict()
-        data['country_id'] = "aaa"
+        data['country_id'] = "1111aaa"
 
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'country_id doit etre un identifiant.'
-
-    def test_invalid_mail(self):
-        """ PUT /entrepreneurs/id: with invalid mail """
-
-        # Prepare data
-        data = dict()
-        data['mail'] = 1111
-
-        # Check request
-        response = self.put('/entrepreneurs/5', data=data)
-        assert response.status_code == 400
-        assert response.data == 'L\'adresse mail du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_password(self):
         """ PUT /entrepreneurs/id: with invalid password """
@@ -192,7 +196,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/entrepreneurs/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le mot de passe du entrepreneur doit etre une chaine de caractere.'
+        assert response.data == 'Le mot de passe doit être une chaine de caractère.'
 
 
 class Update(FunctionalTest):
@@ -202,10 +206,8 @@ class Update(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        c10 = build_country(id=10, name="Canada")
+        c1 = build_country(id=1, name="Canada")
         build_entrepreneur(id=5)
-        build_entrepreneur(id=7, country=c10)
-
         db.session.commit()
 
     @classmethod
@@ -214,7 +216,6 @@ class Update(FunctionalTest):
 
         delete_entrepreneurs()
         delete_countries()
-
         db.session.commit()
 
     def test_update(self):
@@ -224,12 +225,12 @@ class Update(FunctionalTest):
         data = dict()
         data['firstname'] = "Bob"
         data['lastname'] = "Toto"
+        data['birthdate'] = "2012-09-03T00:00:00.000Z"
         data['phone'] = "438-333-3333"
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
-        data['country_id'] = 10
-        data['mail'] = "bob@gmail.com"
+        data['country_id'] = 1
         data['password'] = "aze123"
 
         # Check request
@@ -244,28 +245,10 @@ class Update(FunctionalTest):
         entrepreneur = db.session.query(Entrepreneur).get(result['id'])
         assert entrepreneur.firstname == "Bob"
         assert entrepreneur.lastname == "Toto"
+        assert entrepreneur.birthdate == datetime.date(2012, 9, 3)
         assert entrepreneur.phone == "438-333-3333"
         assert entrepreneur.address == "1000 Place Marcelle Ferron"
         assert entrepreneur.zipcode == "T3R 1R1"
         assert entrepreneur.city == "Trois-Rivieres"
-        assert entrepreneur.country_id == 10
-        assert entrepreneur.mail == "bob@gmail.com"
+        assert entrepreneur.country.name == "Canada"
         assert entrepreneur.password == "aze123"
-
-    def test_update_without_country(self):
-        """ PUT /entrepreneurs/id: without country """
-
-        # Prepare data
-        data = dict()
-
-        # Check request
-        response = self.put('/entrepreneurs/7', data=data)
-        assert response.status_code == 200
-
-        # Check received data
-        result = self.parse(response.data)
-        assert 'id' in result
-
-        # Check in database
-        entrepreneur = db.session.query(Entrepreneur).get(result['id'])
-        assert entrepreneur.country is None

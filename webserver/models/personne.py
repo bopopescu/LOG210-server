@@ -1,5 +1,5 @@
 from webserver.models import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from flaskext.auth.auth import AuthUser
 
@@ -8,17 +8,18 @@ class Personne(Base):
 
     id = Column(Integer, primary_key=True)
 
-    firstname = Column(String(100)) # Required
-    lastname = Column(String(100))  # Required
-    phone = Column(String(100))
-    address = Column(String(100))
-    zipcode = Column(String(100))
-    city = Column(String(100))
+    firstname = Column(String(100), nullable=False)
+    lastname = Column(String(100), nullable=False)
+    birthdate = Column(Date)
+    phone = Column(String(100), nullable=False)
+    address = Column(String(100), nullable=False)
+    zipcode = Column(String(100), nullable=False)
+    city = Column(String(100), nullable=False)
     country_id = Column(Integer, ForeignKey('country.id'))
     country = relationship("Country")
 
-    mail = Column(String(100))      # Required
-    password = Column(String(100))  # Required
+    mail = Column(String(100), nullable=False)
+    password = Column(String(100), nullable=False)
 
     type = Column(String(20))
 
