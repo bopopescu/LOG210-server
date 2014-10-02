@@ -3,6 +3,7 @@ from webserver import app, db
 
 manager = Manager(app)
 
+
 @manager.command
 def install():
     db.drop_all()

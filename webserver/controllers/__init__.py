@@ -1,5 +1,7 @@
 # Function which register routes to the application
 def add_routes(app):
+    from webserver.controllers.accesstokens import accesstokens
+    app.register_blueprint(accesstokens, url_prefix='/accesstokens')
     from webserver.controllers.countries import countries
     app.register_blueprint(countries, url_prefix='/countries')
     from webserver.controllers.restaurateurs import restaurateurs

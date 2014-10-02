@@ -1,6 +1,7 @@
 from webserver.models import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
+from flaskext.auth.auth import AuthUser
 
 class Personne(Base):
     __tablename__ = 'personne'
@@ -44,7 +45,6 @@ class Personne(Base):
         my_dict['mail'] = self.mail
         my_dict['password'] = self.password
 
-        return my_dict
+        my_dict['type'] = self.type
 
-    def check_datas(self):
-        pass
+        return my_dict
