@@ -1,5 +1,5 @@
 from webserver.models import Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from flaskext.auth.auth import AuthUser
 
@@ -10,7 +10,7 @@ class Personne(Base):
 
     firstname = Column(String(100), nullable=False)
     lastname = Column(String(100), nullable=False)
-    birthdate = Column(Date)
+    birthdate = Column(DateTime)
     phone = Column(String(100), nullable=False)
     address = Column(String(100), nullable=False)
     zipcode = Column(String(100), nullable=False)
@@ -34,6 +34,7 @@ class Personne(Base):
         my_dict['id'] = self.id
         my_dict['firstname'] = self.firstname
         my_dict['lastname'] = self.lastname
+        my_dict['birthdate'] = unicode(self.birthdate)
         my_dict['phone'] = self.phone
         my_dict['address'] = self.address
         my_dict['zipcode'] = self.zipcode

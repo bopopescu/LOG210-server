@@ -17,23 +17,24 @@ def install_with_data():
     add_country()
 
     # Add restaurateurs
-    from webserver.models import Restaurateur
-    rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix")
-    rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie")
+    from webserver.models import Restaurateur, Country
+    ct1 = db.session.query(Country).filter(Country.name=="Canada").one()
+    rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(rs1)
     db.session.add(rs2)
 
     # Add entrepreneurs
     from webserver.models import Entrepreneur
-    e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd")
-    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur")
+    e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(e1)
     db.session.add(e2)
 
     # Add clients
     from webserver.models import Client
-    c1 = Client(firstname="Yvon", lastname="Gagner", mail="gagner@ducati.it", password="passwdc1")
-    c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2")
+    c1 = Client(firstname="Yvon", lastname="Gagner", mail="gagner@ducati.it", password="passwdc1", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(c1)
     db.session.add(c2)
 
@@ -60,6 +61,7 @@ def add_country():
     c2 = Country(name="United States")
     db.session.add(c1)
     db.session.add(c2)
+    db.session.flush()
 
 if __name__ == "__main__":
     manager.run()

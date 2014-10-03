@@ -245,7 +245,7 @@ class Update(FunctionalTest):
         entrepreneur = db.session.query(Entrepreneur).get(result['id'])
         assert entrepreneur.firstname == "Bob"
         assert entrepreneur.lastname == "Toto"
-        assert entrepreneur.birthdate == datetime.date(2012, 9, 3)
+        assert entrepreneur.birthdate == datetime.datetime(2012, 9, 3)
         assert entrepreneur.phone == "438-333-3333"
         assert entrepreneur.address == "1000 Place Marcelle Ferron"
         assert entrepreneur.zipcode == "T3R 1R1"

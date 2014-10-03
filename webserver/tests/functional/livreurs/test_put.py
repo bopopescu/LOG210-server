@@ -245,7 +245,7 @@ class Update(FunctionalTest):
         livreur = db.session.query(Livreur).get(result['id'])
         assert livreur.firstname == "Bob"
         assert livreur.lastname == "Toto"
-        assert livreur.birthdate == datetime.date(2012, 9, 3)
+        assert livreur.birthdate == datetime.datetime(2012, 9, 3)
         assert livreur.phone == "438-333-3333"
         assert livreur.address == "1000 Place Marcelle Ferron"
         assert livreur.zipcode == "T3R 1R1"
