@@ -34,7 +34,7 @@ class Personne(Base):
         my_dict['id'] = self.id
         my_dict['firstname'] = self.firstname
         my_dict['lastname'] = self.lastname
-        my_dict['birthdate'] = unicode(self.birthdate)
+        my_dict['birthdate'] = unicode(self.birthdate) if self.birthdate else None
         my_dict['phone'] = self.phone
         my_dict['address'] = self.address
         my_dict['zipcode'] = self.zipcode

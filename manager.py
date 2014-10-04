@@ -27,7 +27,8 @@ def install_with_data():
     # Add entrepreneurs
     from webserver.models import Entrepreneur
     e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
-    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    import datetime
+    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1, birthdate=datetime.datetime(2010, 10, 10))
     db.session.add(e1)
     db.session.add(e2)
 
