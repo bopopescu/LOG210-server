@@ -5,6 +5,7 @@ from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Client, Country, Personne
 import datetime
+import gettext
 
 # Define blueprint
 clients = Blueprint('clients', __name__)

@@ -108,7 +108,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom doit etre une chaine de caractere.'
+        assert response.data == 'Le nom doit être une chaine de caractère.'
 
     def test_invalid_address(self):
         """ PUT /restaurants/id: with invalid address """
@@ -120,7 +120,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_city(self):
         """ PUT /restaurants/id: with invalid city """
@@ -132,7 +132,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'La ville doit etre une chaine de caractere.'
+        assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
         """ PUT /restaurants/id: with invalid zipcode """
@@ -144,7 +144,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le code postal doit etre une chaine de caractere.'
+        assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_phone(self):
         """ PUT /restaurants/id: with invalid phone """
@@ -156,7 +156,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le numero de telephone doit etre une chaine de caractere.'
+        assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_country(self):
         """ PUT /restaurants/id: with invalid country """
@@ -168,7 +168,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'country_id doit etre un identifiant.'
+        assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_restaurateur(self):
         """ PUT /restaurants/id: with invalid restaurateur_id """
@@ -180,7 +180,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/restaurants/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'restaurateur_id doit etre un identifiant.'
+        assert response.data == 'restaurateur_id doit être un identifiant.'
 
 
 class Update(FunctionalTest):
@@ -306,4 +306,4 @@ class Update(FunctionalTest):
         # Check request
         response = self.put('/restaurants/11', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le restaurateur est deja assignee a un restaurant.'
+        assert response.data == 'Le restaurateur est deja assigné a un restaurant.'

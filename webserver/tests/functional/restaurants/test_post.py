@@ -86,7 +86,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom doit etre une chaine de caractere.'
+        assert response.data == 'Le nom doit être une chaine de caractère.'
 
     def test_invalid_phone(self):
         """ POST /restaurants: with invalid phone """
@@ -99,7 +99,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le numero de telephone doit etre une chaine de caractere.'
+        assert response.data == 'Le numéro de téléphone doit être une chaine de caractère.'
 
     def test_invalid_cooking_type(self):
         """ POST /restaurants: with invalid cooking type """
@@ -112,7 +112,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le type de cuisine doit etre une chaine de caractere.'
+        assert response.data == 'Le type de cuisine doit être une chaine de caractère.'
 
     def test_invalid_address(self):
         """ POST /restaurants: with invalid address """
@@ -125,7 +125,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse doit être une chaine de caractère.'
 
     def test_invalid_zipcode(self):
         """ POST /restaurants: with invalid zipcode """
@@ -138,7 +138,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le code postal doit etre une chaine de caractere.'
+        assert response.data == 'Le code postal doit être une chaine de caractère.'
 
     def test_invalid_city(self):
         """ POST /restaurants: with invalid city """
@@ -151,7 +151,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'La ville doit etre une chaine de caractere.'
+        assert response.data == 'La ville doit être une chaine de caractère.'
 
     def test_invalid_country(self):
         """ POST /restaurants: with invalid country """
@@ -164,7 +164,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'country_id doit etre un identifiant.'
+        assert response.data == 'country_id doit être un identifiant.'
 
     def test_invalid_restaurateur(self):
         """ POST /restaurants: with invalid restaurateur_id """
@@ -177,7 +177,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/restaurants', data=data)
         assert response.status_code == 400
-        assert response.data == 'restaurateur_id doit etre un identifiant.'
+        assert response.data == 'restaurateur_id doit être un identifiant.'
 
 
 class UnknownParameters(FunctionalTest):

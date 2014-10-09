@@ -6,6 +6,15 @@ app = Flask(__name__)
 from webserver.config import LocalConfig
 app.config.from_object(LocalConfig)
 
+# Configuration of Flask-Babel (i18n translation)
+from flask.ext.babel import Babel
+babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale():
+    return 'fr'
+
 # TODO: TO DELETE IF UNECESSARY
 # Initialize Auth extension
 # from flask.ext.auth import Auth

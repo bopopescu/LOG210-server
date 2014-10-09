@@ -37,9 +37,30 @@ Se placer dans le dossier "LOG210-server" et >python manager.py runserver
 
 
 ### Tests
+https://nose.readthedocs.org/en/latest/
 
-Installer les requirements (>pip install -r requirements-test.txt)
-Depuis l'environnement virtuel lancer la commande >nosetests
-(-v: visualiser le noms des tests)
-(-x: stopper la série de tests lorsqu'un test échoue)
-(-s -d: visualiser les print pour débugger)
+* Installer les requirements (>pip install -r requirements-test.txt)
+* Depuis l'environnement virtuel lancer la commande >nosetests
+	* (-v: visualiser le noms des tests)
+	* (-x: stopper la série de tests lorsqu'un test échoue)
+	* (-s -d: visualiser les print pour débugger)
+
+
+### Traduction
+https://pythonhosted.org/Flask-Babel/
+http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiv-i18n-and-l10n
+
+1. Installer Flask-Babel
+pip install -r requirements.txt
+
+2. Marquer les chaines à traduire avec gettext("chaine")
+3. Extraire les chaines en fichier pot
+pybabel extract -F babel.cfg -o translations/en/LC_MESSAGES/messages.pot controllers
+	* Commande à lancer depuis le dossier webserver (lieu où se trouve le dossier translations)
+	* babel.cfg est un fichier de configuration qui permet d'indiquer où chercher les chaines à traduire
+	* Le paramètres "controllers" indique le dossiers où chercher les chaines à traduire
+
+4. Réaliser la traduction avec poedit
+5. Compiler
+pybabel compile -d translations
+	* Commande à lancer depuis le dossier webserver (lieu où se trouve le dossier translations)
