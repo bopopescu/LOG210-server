@@ -30,13 +30,13 @@ def authentication():
     if 'mail' not in datas:
         return make_response("L'adresse mail est obligatoire.", 400)
     if not isinstance(datas['mail'], (str, unicode)):
-        return make_response("L'adresse mail doit etre une chaine de caractere.", 400)
+        return make_response("L'adresse mail doit être une chaine de caractère.", 400)
 
     # Check lastname
     if 'password' not in datas:
         return make_response("Le mot de passe est obligatoire.", 400)
     if not isinstance(datas['password'], (str, unicode)):
-        return make_response("Le mot de passe doit etre une chaine de caractere.", 400)
+        return make_response("Le mot de passe doit être une chaine de caractère.", 400)
 
     try:
         user = db.session.query(Personne).filter(Personne.mail==datas['mail']).filter(Personne.password==datas['password']).one()

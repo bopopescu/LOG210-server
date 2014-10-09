@@ -97,7 +97,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/accesstokens', data=data)
         assert response.status_code == 400
-        assert response.data == 'L\'adresse mail doit etre une chaine de caractere.'
+        assert response.data == 'L\'adresse mail doit être une chaine de caractère.'
 
     def test_invalid_password(self):
         """ POST /accesstokens: with invalid password """
@@ -110,7 +110,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/accesstokens', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le mot de passe doit etre une chaine de caractere.'
+        assert response.data == 'Le mot de passe doit être une chaine de caractère.'
 
 
 class UnknownParameters(FunctionalTest):

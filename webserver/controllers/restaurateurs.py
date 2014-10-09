@@ -45,7 +45,7 @@ def index(id):
 
     # Check restaurateur
     if restaurateur is None:
-        return make_response(gettext("Le restaurateur n'existe pas."), 400)
+        return make_response(gettext(u"Le restaurateur n'existe pas."), 400)
 
     # Build the response
     response = make_response(jsonify(restaurateur.to_dict()))
@@ -163,7 +163,7 @@ def create():
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response(gettext("Dûe à une erreur inconnu, le restaurateur ne peut pas être créé."), 500)
+        return make_response(gettext(u"Dûe à une erreur inconnu, le restaurateur ne peut pas être créé."), 500)
 
     # Build the response
     response = make_response(jsonify(restaurateur.to_dict()))
@@ -312,7 +312,7 @@ def delete(id):
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response(gettext(u"Dûe à une erreur inconnu, le restaurateur ne peut pas etre supprimé."), 500)
+        return make_response(gettext(u"Dûe à une erreur inconnu, le restaurateur ne peut pas être supprimé."), 500)
 
     # Build the response
     response = make_response(jsonify(restaurateur.to_dict()))

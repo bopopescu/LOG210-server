@@ -210,7 +210,7 @@ def update(id):
         country = db.session.query(Country).get(country_id)
 
         if country is None:
-            return make_response(gettext("Le pays n'existe pas."), 404)
+            return make_response(gettext(u"Le pays n'existe pas."), 404)
 
         restaurant.country = country
     else:
