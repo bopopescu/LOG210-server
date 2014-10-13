@@ -48,6 +48,7 @@ class DataBase(object):
 class LocalConfig(object):
     DEBUG = True
     TESTING = False
+    SECRET_KEY = 'foobarbaz'
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost:8889/restaurants'
 
 

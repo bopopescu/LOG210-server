@@ -1,12 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, json, make_response, request, g
+from flask import Blueprint, json, make_response, request
+from flask.ext.login import login_user
 from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Personne
 
 # Define blueprint
 accesstokens = Blueprint('accesstokens', __name__)
+
+
+# @accesstokens.route('/login', methods=['GET', 'OPTIONS'])
+# def login():
+#     user = db.session.query(Personne).get(4)
+#     from flask.ext.login import login_user
+#     login_user(user)
+#     return "Logged !"
+#
+# @accesstokens.route('/logout', methods=['GET', 'OPTIONS'])
+# def logout():
+#     from flask.ext.login import logout_user
+#     logout_user()
+#     return "Loggout !"
+
 
 # Create client
 @accesstokens.route('', methods=['POST', 'OPTIONS'])
@@ -16,12 +32,6 @@ def authentication():
         Method: *POST*
         URI: */accesstokens*
     """
-
-    # TODO: TO DELETE IF UNECESSARY
-    # from flask.ext.auth import AuthUser
-    # admin = AuthUser(username='bob')
-    # admin.set_and_encrypt_password('lol')
-    # g.user = {'bob': admin}
 
     # Get request values
     datas = request.values
@@ -43,15 +53,29 @@ def authentication():
     except:
         return make_response("Echec d'authentification, l'adresse mail ou le mot de passe ne correspondent a aucun utilisateur.", 404)
 
-    # TODO: TO DELETE IF UNECESSARY
-    # g.user = user
-    #
-    # if datas['username'] in g.user:
-    #     if g.user[datas['username']].authenticate(datas['password']):
-    #         return make_response("Authentification reussi", 200)
+    if not login_user(user):
+        return make_response("Dûe à une erreur inconnu, il est impossible de vous connecter.", 404)
 
     # Build the response
     response = make_response(jsonify(user.to_dict()))
+    response.status_code = 200
+    response.mimetype = 'application/json'
+
+    return response
+
+
+@accesstokens.route('', methods=['DELETE', 'OPTIONS'])
+def deauthentication():
+    """ Delete accesstoken
+
+        Method: *DELETE*
+        URI: */accesstokens*
+    """
+
+    logout_user()
+
+    # Build the response
+    response = make_response()
     response.status_code = 200
     response.mimetype = 'application/json'
 

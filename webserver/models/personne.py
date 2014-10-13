@@ -2,6 +2,7 @@ from webserver.models import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from flaskext.auth.auth import AuthUser
+from flask.ext.login import UserMixin
 
 class Personne(Base):
     __tablename__ = 'personne'
@@ -27,6 +28,19 @@ class Personne(Base):
         'polymorphic_identity': 'personne',
         'polymorphic_on': type
     }
+
+    # Flask-Login integration
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
 
     def to_dict(self):
         my_dict = dict()

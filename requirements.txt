@@ -1,6 +1,6 @@
 Flask==0.10.1
 Flask-Script==2.0.5
-Flask-Auth==0.85
+Flask-Login==0.2.11
 Flask-Babel==0.9
 
 SQLAlchemy==0.9.7

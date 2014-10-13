@@ -1,6 +1,9 @@
 # Create Flask application
-from flask import Flask, request, request_started
+from flask import Flask, request, request_started, g
 app = Flask(__name__)
+
+# from flask.ext.cors import CORS
+# cors = CORS(app, headers="Content-Type")
 
 # Configuration of Flask application
 from webserver.config import LocalConfig
@@ -10,21 +13,24 @@ app.config.from_object(LocalConfig)
 from flask.ext.babel import Babel
 babel = Babel(app)
 
-
 @babel.localeselector
 def get_locale():
     return 'fr'
 
-# TODO: TO DELETE IF UNECESSARY
-# Initialize Auth extension
-# from flask.ext.auth import Auth
-# auth = Auth(app)
-# app.secret_key = 'N4BUdSXUzHxNoO8g'
+# Configuration of Flask-Login
+from flask.ext.login import LoginManager # pip install Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # Initialize DataBase
 from webserver.config import DataBase
 db = DataBase()
 db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
+
+from webserver.models import Personne
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(Personne).get(4)
 
 # Add Flask route
 from webserver.controllers import add_routes
@@ -46,6 +52,7 @@ def option_autoreply():
         h['Access-Control-Allow-Origin'] = request.headers['Origin']
         h['Access-Control-Allow-Methods'] = request.headers['Access-Control-Request-Method']
         h['Access-Control-Max-Age'] = "10"
+        h['Access-Control-Allow-Credentials'] = "true"
 
         if headers is not None:
             h['Access-Control-Allow-Headers'] = headers
@@ -60,6 +67,7 @@ def set_allow_origin(resp):
 
     if request.method != 'OPTIONS' and 'Origin' in request.headers:
         h['Access-Control-Allow-Origin'] = request.headers['Origin']
+        h['Access-Control-Allow-Credentials'] = "true"
 
     return resp
 

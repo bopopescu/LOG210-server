@@ -2,6 +2,7 @@
 
 from flask import Blueprint, json, make_response, request
 from flask.ext.babel import gettext
+from flask.ext.login import login_required
 from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Country, Restaurant, Restaurateur
@@ -11,6 +12,7 @@ restaurants = Blueprint('restaurants', __name__)
 
 # Get list
 @restaurants.route('', methods=['GET', 'OPTIONS'])
+# @login_required
 def list():
     """ Return all restaurants.
 
