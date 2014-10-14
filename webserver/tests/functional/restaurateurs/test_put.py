@@ -287,7 +287,7 @@ class Update(FunctionalTest):
         assert restaurateur.address == "1000 Place Marcelle Ferron"
         assert restaurateur.zipcode == "T3R 1R1"
         assert restaurateur.city == "Trois-Rivieres"
-        assert restaurateur.city == "en"
+        assert restaurateur.language == "en"
         assert restaurateur.country.name == "Canada"
         assert restaurateur.password == "aze123"
 
