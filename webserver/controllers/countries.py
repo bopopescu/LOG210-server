@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, json, make_response, request
+from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Country
@@ -43,7 +44,7 @@ def index(id):
 
     # Check country
     if country is None:
-        return make_response("Le pays n'existe pas.", 400)
+        return make_response(gettext(u"Le pays n'existe pas."), 400)
 
     # Build the response
     response = make_response(jsonify(country.to_dict()))
