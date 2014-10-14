@@ -231,6 +231,12 @@ def update(id):
             return make_response(gettext(u"La ville doit être une chaine de caractère."), 400)
         restaurateur.city = datas['city']
 
+    # Check language
+    if 'language' in datas:
+        if not isinstance(datas['language'], (str, unicode)):
+            return make_response("La langue doit être une chaine de caractère.", 400)
+        restaurateur.language = datas['language']
+
     # Check country
     if 'country_id' in datas:
         try:

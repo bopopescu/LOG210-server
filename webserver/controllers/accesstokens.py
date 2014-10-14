@@ -1,28 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, json, make_response, request
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Personne
 
 # Define blueprint
 accesstokens = Blueprint('accesstokens', __name__)
-
-
-# @accesstokens.route('/login', methods=['GET', 'OPTIONS'])
-# def login():
-#     user = db.session.query(Personne).get(4)
-#     from flask.ext.login import login_user
-#     login_user(user)
-#     return "Logged !"
-#
-# @accesstokens.route('/logout', methods=['GET', 'OPTIONS'])
-# def logout():
-#     from flask.ext.login import logout_user
-#     logout_user()
-#     return "Loggout !"
-
 
 # Create client
 @accesstokens.route('', methods=['POST', 'OPTIONS'])

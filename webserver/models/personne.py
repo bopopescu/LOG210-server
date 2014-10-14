@@ -18,6 +18,7 @@ class Personne(Base):
     city = Column(String(100), nullable=False)
     country_id = Column(Integer, ForeignKey('country.id'))
     country = relationship("Country")
+    language = Column(String(100), nullable=False, default="fr")
 
     mail = Column(String(100), nullable=False)
     password = Column(String(100), nullable=False)
@@ -53,6 +54,7 @@ class Personne(Base):
         my_dict['address'] = self.address
         my_dict['zipcode'] = self.zipcode
         my_dict['city'] = self.city
+        my_dict['language'] = self.language
 
         if self.country:
             my_dict['country_id'] = self.country_id

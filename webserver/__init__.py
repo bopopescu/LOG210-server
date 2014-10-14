@@ -2,9 +2,6 @@
 from flask import Flask, request, request_started, g
 app = Flask(__name__)
 
-# from flask.ext.cors import CORS
-# cors = CORS(app, headers="Content-Type")
-
 # Configuration of Flask application
 from webserver.config import LocalConfig
 app.config.from_object(LocalConfig)
@@ -13,24 +10,30 @@ app.config.from_object(LocalConfig)
 from flask.ext.babel import Babel
 babel = Babel(app)
 
+# Select language according to current_user
 @babel.localeselector
 def get_locale():
-    return 'fr'
-
-# Configuration of Flask-Login
-from flask.ext.login import LoginManager # pip install Flask-Login
-login_manager = LoginManager()
-login_manager.init_app(app)
+    from flask.ext.login import current_user
+    if current_user:
+        return current_user.language
+    else:
+        return 'fr'
 
 # Initialize DataBase
 from webserver.config import DataBase
 db = DataBase()
 db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 
+# Configuration of Flask-Login
+from flask.ext.login import LoginManager # pip install Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# Set load_user
 from webserver.models import Personne
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.query(Personne).get(4)
+    return db.session.query(Personne).get(int(user_id))
 
 # Add Flask route
 from webserver.controllers import add_routes
