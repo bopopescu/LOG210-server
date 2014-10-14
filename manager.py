@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask.ext.script import Manager
 from webserver import app, db
 
@@ -41,11 +43,11 @@ def install_with_data():
 
     # Add restaurants
     from webserver.models import Restaurant
-    r1 = Restaurant(name="Subway", phone="514-444-4444", address="Ste-Catherine", city="Montreal")
-    r2 = Restaurant(name="McDonalds", phone="514-444-4444", address="St-Denis", city="Montreal")
-    r3 = Restaurant(name="La Banquise", phone="514-444-4444", address="St-Denis", city="Montreal")
-    r4 = Restaurant(name="Le Duc de Lorraine", phone="514-444-4444", address="St-Denis", city="Montreal")
-    r5 = Restaurant(name="La Plazza", phone="514-444-4444", address="St-Denis", city="Montreal", restaurateur=rs2)
+    r1 = Restaurant(name="Subway", phone="514-444-4444", address="1001 Ste-Catherine", city="Montreal", zipcode="H3K 3P2", cooking_type="Fastfood")
+    r2 = Restaurant(name="McDonalds", phone="514-444-4444", address="4301 St-Denis", city="Montreal", zipcode="H2S 1R4", cooking_type="Fastfood")
+    r3 = Restaurant(name="La Banquise", phone="514-444-4444", address="2167 St-Denis", city="Montreal", zipcode="H4P 2R2", cooking_type="Poutine")
+    r4 = Restaurant(name="Le Duc de Lorraine", phone="514-444-4444", address="2983 St-Denis", city="Montreal", zipcode="H1S 1R2", cooking_type="Gastronomie française")
+    r5 = Restaurant(name="La Plazza", phone="514-444-4444", address="1893 St-Denis", city="Montreal", zipcode="H4C 2R1", restaurateur=rs2, cooking_type="Plats italiens")
     db.session.add(r1)
     db.session.add(r2)
     db.session.add(r3)
