@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-09 13:06-0400\n"
-"PO-Revision-Date: 2014-10-09 13:19-0500\n"
+"POT-Creation-Date: 2014-10-14 13:43-0400\n"
+"PO-Revision-Date: 2014-10-14 13:52-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -19,172 +19,284 @@ msgstr ""
 "X-Generator: Poedit 1.6.9\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: controllers/restaurants.py:48 controllers/restaurants.py:168
-#: controllers/restaurants.py:268 controllers/restaurateurs.py:152
-#: controllers/restaurateurs.py:263
-msgid "Le restaurant n'existe pas."
-msgstr "The restaurant doesn't exist."
-
-#: controllers/restaurants.py:71
-#, fuzzy
-msgid "Le nom du restaurant est obligatoire."
-msgstr "The restaurant doesn't exist."
-
-#: controllers/restaurants.py:73 controllers/restaurants.py:173
-msgid "Le nom doit etre une chaine de caractere."
-msgstr "The name must be a string."
-
-#: controllers/restaurants.py:81 controllers/restaurants.py:193
-msgid "Le numero de telephone doit etre une chaine de caractere."
-msgstr "The phone number must be a string."
-
-#: controllers/restaurants.py:87
-msgid "Le type de cuisine doit etre une chaine de caractere."
-msgstr "The cooking type must be a string."
-
-#: controllers/restaurants.py:93 controllers/restaurants.py:186
-msgid "L'adresse doit etre une chaine de caractere."
-msgstr "The address must be a string."
-
-#: controllers/restaurants.py:99 controllers/restaurants.py:200
-msgid "Le code postal doit etre une chaine de caractere."
-msgstr "The zip code must be a string."
-
-#: controllers/restaurants.py:105 controllers/restaurants.py:180
-msgid "La ville doit etre une chaine de caractere."
-msgstr "The city must be a string."
-
-#: controllers/restaurants.py:113 controllers/restaurants.py:208
-msgid "country_id doit etre un identifiant."
-msgstr "country_id must be an identifier."
-
-#: controllers/restaurants.py:118 controllers/restaurants.py:213
-#: controllers/restaurateurs.py:130 controllers/restaurateurs.py:243
-msgid "Le pays n'existe pas."
-msgstr "The country doesn't exist."
-
-#: controllers/restaurants.py:127 controllers/restaurants.py:224
-msgid "restaurateur_id doit etre un identifiant."
-msgstr "restaurateur_id must be an identifier."
-
-#: controllers/restaurants.py:132 controllers/restaurants.py:229
-#: controllers/restaurateurs.py:48 controllers/restaurateurs.py:190
-#: controllers/restaurateurs.py:302
-msgid "Le restaurateur n'existe pas."
-msgstr "The restaurant owner doesn't exist."
-
-#: controllers/restaurants.py:144
-msgid "Due a une erreur inconnu, le restaurateur ne peut pas etre cree."
-msgstr ""
-
-#: controllers/restaurants.py:233
-msgid "Le restaurateur est deja assignee a un restaurant."
-msgstr ""
-
-#: controllers/restaurants.py:244
-msgid "Due a une erreur inconnu, le restaurant ne peut pas etre modifie."
-msgstr ""
-
-#: controllers/restaurants.py:281
-msgid "Due a une erreur inconnu, le restaurant ne peut pas etre supprime."
-msgstr ""
-
-#: controllers/restaurateurs.py:72
-msgid "Le nom est obligatoire."
-msgstr ""
-
-#: controllers/restaurateurs.py:74 controllers/restaurateurs.py:195
-msgid "Le nom doit être une chaine de caractère."
-msgstr "The last name must be a string."
-
-#: controllers/restaurateurs.py:78
-msgid "Le prénom est obligatoire."
-msgstr ""
-
-#: controllers/restaurateurs.py:80 controllers/restaurateurs.py:201
-msgid "Le prénom doit être une chaine de caractère."
-msgstr "The first name must be a string."
-
+#: controllers/accesstokens.py:27 controllers/clients.py:84
+#: controllers/entrepreneurs.py:84 controllers/livreurs.py:84
 #: controllers/restaurateurs.py:84
 msgid "L'adresse mail est obligatoire."
-msgstr ""
+msgstr "The email is a mandatory information."
 
+#: controllers/accesstokens.py:29 controllers/clients.py:86
+#: controllers/entrepreneurs.py:86 controllers/livreurs.py:86
 #: controllers/restaurateurs.py:86
 msgid "L'adresse mail doit être une chaine de caractère."
-msgstr ""
+msgstr "The email must be a string."
 
-#: controllers/restaurateurs.py:88
-msgid "L'adresse mail est deja utilisee par un utilisateur."
-msgstr ""
-
+#: controllers/accesstokens.py:33 controllers/clients.py:92
+#: controllers/entrepreneurs.py:92 controllers/livreurs.py:92
 #: controllers/restaurateurs.py:92
 msgid "Le mot de passe est obligatoire."
-msgstr ""
+msgstr "The password is a mandatory information."
 
-#: controllers/restaurateurs.py:94 controllers/restaurateurs.py:207
+#: controllers/accesstokens.py:35 controllers/clients.py:94
+#: controllers/clients.py:191 controllers/entrepreneurs.py:94
+#: controllers/entrepreneurs.py:191 controllers/livreurs.py:94
+#: controllers/livreurs.py:191 controllers/restaurateurs.py:94
+#: controllers/restaurateurs.py:207
 msgid "Le mot de passe doit être une chaine de caractère."
 msgstr "The password must be a string."
 
-#: controllers/restaurateurs.py:98
-msgid "Le numéro de téléphone est obligatoire."
+#: controllers/accesstokens.py:40
+msgid ""
+"Echec d'authentification, l'adresse mail ou le mot de passe ne correspondent "
+"a aucun utilisateur."
 msgstr ""
+"Authentication failure, the email or password don't match with no users."
 
+#: controllers/accesstokens.py:43
+msgid "Dûe à une erreur inconnu, il est impossible de vous connecter."
+msgstr "Due to an unexpected error, we cannot connect you."
+
+#: controllers/clients.py:49 controllers/clients.py:174
+#: controllers/clients.py:272
+msgid "Le client n'existe pas."
+msgstr "The client doesn't exist."
+
+#: controllers/clients.py:72 controllers/entrepreneurs.py:72
+#: controllers/livreurs.py:72 controllers/restaurateurs.py:72
+msgid "Le nom est obligatoire."
+msgstr "The lastname is a mandatory information."
+
+#: controllers/clients.py:74 controllers/clients.py:179
+#: controllers/entrepreneurs.py:74 controllers/entrepreneurs.py:179
+#: controllers/livreurs.py:74 controllers/livreurs.py:179
+#: controllers/restaurants.py:73 controllers/restaurants.py:173
+#: controllers/restaurateurs.py:74 controllers/restaurateurs.py:195
+msgid "Le nom doit être une chaine de caractère."
+msgstr "The lastname must be a string."
+
+#: controllers/clients.py:78 controllers/entrepreneurs.py:78
+#: controllers/livreurs.py:78 controllers/restaurateurs.py:78
+msgid "Le prénom est obligatoire."
+msgstr "The firstname is a mandatory information."
+
+#: controllers/clients.py:80 controllers/clients.py:185
+#: controllers/entrepreneurs.py:80 controllers/entrepreneurs.py:185
+#: controllers/livreurs.py:80 controllers/livreurs.py:185
+#: controllers/restaurateurs.py:80 controllers/restaurateurs.py:201
+msgid "Le prénom doit être une chaine de caractère."
+msgstr "The firstname must be a string."
+
+#: controllers/clients.py:88 controllers/entrepreneurs.py:88
+#: controllers/livreurs.py:88 controllers/restaurateurs.py:88
+msgid "L'adresse mail est deja utilisee par un utilisateur."
+msgstr "This email is already used."
+
+#: controllers/clients.py:98 controllers/entrepreneurs.py:98
+#: controllers/livreurs.py:98 controllers/restaurateurs.py:98
+msgid "Le numéro de téléphone est obligatoire."
+msgstr "The phone number is a mandatory information."
+
+#: controllers/clients.py:100 controllers/clients.py:197
+#: controllers/entrepreneurs.py:100 controllers/entrepreneurs.py:197
+#: controllers/livreurs.py:100 controllers/livreurs.py:197
+#: controllers/restaurants.py:81 controllers/restaurants.py:193
 #: controllers/restaurateurs.py:100 controllers/restaurateurs.py:213
 msgid "Le numéro de téléphone doit être une chaine de caractère."
 msgstr "The phone number must be a string."
 
-#: controllers/restaurateurs.py:104
+#: controllers/clients.py:104 controllers/entrepreneurs.py:104
+#: controllers/livreurs.py:104 controllers/restaurateurs.py:104
 msgid "L'adresse est obligatoire."
-msgstr ""
+msgstr "The address is a mandatory information."
 
+#: controllers/clients.py:106 controllers/clients.py:203
+#: controllers/entrepreneurs.py:106 controllers/entrepreneurs.py:203
+#: controllers/livreurs.py:106 controllers/livreurs.py:203
+#: controllers/restaurants.py:93 controllers/restaurants.py:186
 #: controllers/restaurateurs.py:106 controllers/restaurateurs.py:219
 msgid "L'adresse doit être une chaine de caractère."
 msgstr "The address must be a string."
 
-#: controllers/restaurateurs.py:110
+#: controllers/clients.py:110 controllers/entrepreneurs.py:110
+#: controllers/livreurs.py:110 controllers/restaurateurs.py:110
 msgid "Le code postal est obligatoire."
-msgstr ""
+msgstr "The zipcode is a mandatory information."
 
+#: controllers/clients.py:112 controllers/clients.py:209
+#: controllers/entrepreneurs.py:112 controllers/entrepreneurs.py:209
+#: controllers/livreurs.py:112 controllers/livreurs.py:209
+#: controllers/restaurants.py:99 controllers/restaurants.py:200
 #: controllers/restaurateurs.py:112 controllers/restaurateurs.py:225
 msgid "Le code postal doit être une chaine de caractère."
 msgstr "The zip code must be a string."
 
-#: controllers/restaurateurs.py:116
+#: controllers/clients.py:116 controllers/entrepreneurs.py:116
+#: controllers/livreurs.py:116 controllers/restaurateurs.py:116
 msgid "La ville est obligatoire."
-msgstr ""
+msgstr "The city is a mandatory information."
 
+#: controllers/clients.py:118 controllers/clients.py:215
+#: controllers/entrepreneurs.py:118 controllers/entrepreneurs.py:215
+#: controllers/livreurs.py:118 controllers/livreurs.py:215
+#: controllers/restaurants.py:105 controllers/restaurants.py:180
 #: controllers/restaurateurs.py:118 controllers/restaurateurs.py:231
 msgid "La ville doit être une chaine de caractère."
 msgstr "The city must be a string."
 
-#: controllers/restaurateurs.py:122
+#: controllers/clients.py:122 controllers/entrepreneurs.py:122
+#: controllers/livreurs.py:122 controllers/restaurateurs.py:122
 msgid "Le pays est obligatoire."
-msgstr ""
+msgstr "The country is a mandatory information."
 
-#: controllers/restaurateurs.py:126 controllers/restaurateurs.py:239
+#: controllers/clients.py:126 controllers/clients.py:229
+#: controllers/entrepreneurs.py:126 controllers/entrepreneurs.py:229
+#: controllers/livreurs.py:126 controllers/livreurs.py:229
+#: controllers/restaurants.py:113 controllers/restaurants.py:208
+#: controllers/restaurateurs.py:126 controllers/restaurateurs.py:245
 msgid "country_id doit être un identifiant."
 msgstr "country_id must be an identifier."
 
-#: controllers/restaurateurs.py:140 controllers/restaurateurs.py:251
-msgid "Le format de la date est invalide."
-msgstr ""
+#: controllers/clients.py:130 controllers/clients.py:233
+#: controllers/countries.py:47 controllers/entrepreneurs.py:130
+#: controllers/entrepreneurs.py:233 controllers/livreurs.py:130
+#: controllers/livreurs.py:233 controllers/restaurants.py:118
+#: controllers/restaurants.py:213 controllers/restaurateurs.py:130
+#: controllers/restaurateurs.py:249
+msgid "Le pays n'existe pas."
+msgstr "The country doesn't exist."
 
-#: controllers/restaurateurs.py:148 controllers/restaurateurs.py:259
+#: controllers/clients.py:140 controllers/clients.py:241
+#: controllers/entrepreneurs.py:140 controllers/entrepreneurs.py:241
+#: controllers/livreurs.py:140 controllers/livreurs.py:241
+#: controllers/restaurateurs.py:140 controllers/restaurateurs.py:257
+msgid "Le format de la date est invalide."
+msgstr "The date format is invalid."
+
+#: controllers/clients.py:151
+msgid "Dûe à une erreur inconnu, le client ne peut pas être créé."
+msgstr "Due to an unexpected error, the client cannot be created."
+
+#: controllers/clients.py:221 controllers/entrepreneurs.py:221
+#: controllers/livreurs.py:221 controllers/restaurateurs.py:237
+msgid "La langue doit être une chaine de caractère."
+msgstr "The language must be a string."
+
+#: controllers/clients.py:249
+msgid "Dûe à une erreur inconnu, le client ne peut pas être modifié."
+msgstr "Due to an unexpected error, the client cannot be updated."
+
+#: controllers/clients.py:285
+msgid "Dûe à une erreur inconnu, le client ne peut pas être supprimé."
+msgstr "Due to an unexpected error, the client cannot be deleted."
+
+#: controllers/entrepreneurs.py:49 controllers/entrepreneurs.py:174
+#: controllers/entrepreneurs.py:272
+msgid "L'entrepreneur n'existe pas."
+msgstr "The contractor doesn't exist."
+
+#: controllers/entrepreneurs.py:151
+msgid "Dûe à une erreur inconnu, l'entrepreneur ne peut pas être créé."
+msgstr "Due to an unexpected error, the contractor cannot be created."
+
+#: controllers/entrepreneurs.py:249
+msgid "Dûe à une erreur inconnu, l'entrepreneur ne peut pas être modifié."
+msgstr "Due to an unexpected error, the contractor cannot be updated."
+
+#: controllers/entrepreneurs.py:285
+msgid "Dûe à une erreur inconnu, l'entrepreneur ne peut pas être supprimé."
+msgstr "Due to an unexpected error, the contractor cannot be deleted."
+
+#: controllers/livreurs.py:49 controllers/livreurs.py:174
+#: controllers/livreurs.py:272
+msgid "Le livreur n'existe pas."
+msgstr "The delivery man doesn't exist."
+
+#: controllers/livreurs.py:151
+msgid "Dûe à une erreur inconnu, le livreur ne peut pas être créé."
+msgstr "Due to an unexpected error, the delivery man cannot be created."
+
+#: controllers/livreurs.py:249
+msgid "Dûe à une erreur inconnu, le livreur ne peut pas être modifié."
+msgstr "Due to an unexpected error, the delivery man cannot be updated."
+
+#: controllers/livreurs.py:285
+msgid "Dûe à une erreur inconnu, le livreur ne peut pas être supprimé."
+msgstr "Due to an unexpected error, the delivery man cannot be deleted."
+
+#: controllers/restaurants.py:48 controllers/restaurants.py:168
+#: controllers/restaurants.py:268 controllers/restaurateurs.py:152
+#: controllers/restaurateurs.py:269
+msgid "Le restaurant n'existe pas."
+msgstr "The restaurant doesn't exist."
+
+#: controllers/restaurants.py:71
+msgid "Le nom du restaurant est obligatoire."
+msgstr "The name is a mandatory information."
+
+#: controllers/restaurants.py:87
+msgid "Le type de cuisine doit être une chaine de caractère."
+msgstr "The cooking type must be a string."
+
+#: controllers/restaurants.py:127 controllers/restaurants.py:224
+msgid "restaurateur_id doit être un identifiant."
+msgstr "restaurateur_id must be an identifier."
+
+#: controllers/restaurants.py:132 controllers/restaurants.py:229
+#: controllers/restaurateurs.py:48 controllers/restaurateurs.py:190
+#: controllers/restaurateurs.py:308
+msgid "Le restaurateur n'existe pas."
+msgstr "The restaurant owner doesn't exist."
+
+#: controllers/restaurants.py:144
+msgid "Dûe a une erreur inconnu, le restaurateur ne peut pas être créé."
+msgstr "Due to an unexpected error, the restaurant owner cannot be created."
+
+#: controllers/restaurants.py:233
+msgid "Le restaurateur est deja assigné a un restaurant."
+msgstr "This restaurant owner is already assigned to a restaurant."
+
+#: controllers/restaurants.py:244
+msgid "Dûe a une erreur inconnu, le restaurant ne peut pas être modifie."
+msgstr "Due to an unexpected error, the restaurant cannot be updated."
+
+#: controllers/restaurants.py:281
+msgid "Dûe a une erreur inconnu, le restaurant ne peut pas être supprime."
+msgstr "Due to an unexpected error, the restaurant cannot be deleted."
+
+#: controllers/restaurateurs.py:148 controllers/restaurateurs.py:265
 msgid "restaurant_id doit être un identifiant."
 msgstr "restaurant_id must be an identifier."
 
-#: controllers/restaurateurs.py:154 controllers/restaurateurs.py:267
+#: controllers/restaurateurs.py:154 controllers/restaurateurs.py:273
 msgid "Le restaurant est déjà assigné à un restaurateur."
-msgstr ""
+msgstr "This restaurant is already assigned to a restaurant owner."
 
 #: controllers/restaurateurs.py:166
 msgid "Dûe à une erreur inconnu, le restaurateur ne peut pas être créé."
-msgstr ""
+msgstr "Due to an unexpected error, the restaurant owner cannot be created."
 
-#: controllers/restaurateurs.py:278
+#: controllers/restaurateurs.py:284
 msgid "Dûe à une erreur inconnu, le restaurateur ne peut pas être modifié."
-msgstr ""
+msgstr "Due to an unexpected error, the restaurant owner cannot be updated."
 
-#: controllers/restaurateurs.py:315
-msgid "Dûe à une erreur inconnu, le restaurateur ne peut pas etre supprimé."
-msgstr ""
+#: controllers/restaurateurs.py:321
+msgid "Dûe à une erreur inconnu, le restaurateur ne peut pas être supprimé."
+msgstr "Due to an unexpected error, the restaurant owner cannot be deleted."
+
+#~ msgid "Le nom doit etre une chaine de caractere."
+#~ msgstr "The name must be a string."
+
+#~ msgid "Le numero de telephone doit etre une chaine de caractere."
+#~ msgstr "The phone number must be a string."
+
+#~ msgid "L'adresse doit etre une chaine de caractere."
+#~ msgstr "The address must be a string."
+
+#~ msgid "Le code postal doit etre une chaine de caractere."
+#~ msgstr "The zip code must be a string."
+
+#~ msgid "La ville doit etre une chaine de caractere."
+#~ msgstr "The city must be a string."
+
+#~ msgid "country_id doit etre un identifiant."
+#~ msgstr "country_id must be an identifier."
