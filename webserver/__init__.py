@@ -14,7 +14,8 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     from flask.ext.login import current_user
-    if current_user:
+
+    if current_user and hasattr(current_user, 'language'):
         return current_user.language
     else:
         return 'fr'

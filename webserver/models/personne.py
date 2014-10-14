@@ -1,8 +1,6 @@
 from webserver.models import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from flaskext.auth.auth import AuthUser
-from flask.ext.login import UserMixin
 
 class Personne(Base):
     __tablename__ = 'personne'

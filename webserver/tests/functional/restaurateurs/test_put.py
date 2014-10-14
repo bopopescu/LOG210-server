@@ -185,6 +185,18 @@ class InvalidParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'La ville doit être une chaine de caractère.'
 
+    def test_invalid_language(self):
+        """ PUT /restaurateurs/id: with invalid language """
+
+        # Prepare data
+        data = dict()
+        data['language'] = 1111
+
+        # Check request
+        response = self.put('/restaurateurs/5', data=data)
+        assert response.status_code == 400
+        assert response.data == 'La langue doit être une chaine de caractère.'
+
     def test_invalid_country(self):
         """ PUT /restaurateurs/id: with invalid country """
 
@@ -255,6 +267,7 @@ class Update(FunctionalTest):
         data['address'] = "1000 Place Marcelle Ferron"
         data['zipcode'] = "T3R 1R1"
         data['city'] = "Trois-Rivieres"
+        data['language'] = "en"
         data['country_id'] = 1
         data['password'] = "aze123"
 
@@ -274,6 +287,7 @@ class Update(FunctionalTest):
         assert restaurateur.address == "1000 Place Marcelle Ferron"
         assert restaurateur.zipcode == "T3R 1R1"
         assert restaurateur.city == "Trois-Rivieres"
+        assert restaurateur.city == "en"
         assert restaurateur.country.name == "Canada"
         assert restaurateur.password == "aze123"
 
