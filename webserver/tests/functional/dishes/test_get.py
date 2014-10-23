@@ -50,7 +50,7 @@ class UnknownParameters(FunctionalTest):
         # Check request
         response = self.get('/dishes/666')
         assert response.status_code == 400
-        assert response.data == 'Le dish n\'existe pas.'
+        assert response.data == 'Le plat n\'existe pas.'
 
 
 class Get(FunctionalTest):

@@ -55,7 +55,7 @@ class MissingParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du dish est obligatoire.'
+        assert response.data == 'Le nom du plat est obligatoire.'
 
     def test_missing_description(self):
         """ POST /dishes: with missing description """
@@ -68,7 +68,7 @@ class MissingParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du dish est obligatoire.'
+        assert response.data == 'La description du plat est obligatoire.'
 
     def test_missing_price(self):
         """ POST /dishes: with missing price """
@@ -82,7 +82,7 @@ class MissingParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le price du dish est obligatoire.'
+        assert response.data == 'Le price du plat est obligatoire.'
 
     
 class InvalidParameters(FunctionalTest):
@@ -114,7 +114,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du dish doit etre une chaine de caractere.'
+        assert response.data == 'Le nom du plat doit etre une chaine de caractere.'
 
 
     def test_invalid_description(self):
@@ -129,7 +129,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'La description du dish doit etre une chaine de caractere.'
+        assert response.data == 'La description du plat doit etre une chaine de caractere.'
 
     
     def test_invalid_price(self):
@@ -144,7 +144,21 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le price du dish doit etre un reel.'
+        assert response.data == 'Le price du plat doit etre numerique.'
+
+    def test_negative_price(self):
+        """ POST /dishes: with negative price """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Toto"
+        data['description'] = "Titi"
+        data['price'] = (-30)
+
+        # Check request
+        response = self.post('/dishes', data=data)
+        assert response.status_code == 400
+        assert response.data == 'Le price du plat doit etre positif.'
 
 
 class UnknownParameters(FunctionalTest):

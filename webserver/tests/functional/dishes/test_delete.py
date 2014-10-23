@@ -52,7 +52,7 @@ class UnknownParameters(FunctionalTest):
         # Check request
         response = self.delete('/dishes/5')
         assert response.status_code == 404
-        assert response.data == 'Le dish n\'existe pas.'
+        assert response.data == 'Le plat n\'existe pas.'
 
 
 class Delete(FunctionalTest):

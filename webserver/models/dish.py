@@ -15,6 +15,7 @@ class Dish(Base):
         my_dict = dict()
 
         my_dict['id'] = self.id
+        my_dict['name'] = self.name
         my_dict['description'] = self.description
         my_dict['price'] = self.price
 

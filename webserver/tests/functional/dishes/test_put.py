@@ -12,7 +12,7 @@ class Exists(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_dishes(id=5)
+        build_dish(id=5)
         db.session.commit()
 
     @classmethod
@@ -38,14 +38,14 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_dishes(id=15)
+        build_dish(id=15)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_clients()
+        delete_dishes()
         db.session.commit()
 
     def test_unkown_id(self):
@@ -74,7 +74,7 @@ class InvalidParameters(FunctionalTest):
         delete_dishes()
         db.session.commit()
 
-    def test_invalid_firstname(self):
+    def test_invalid_name(self):
         """ PUT /dishes/id: with invalid name """
 
         # Prepare data
@@ -82,7 +82,7 @@ class InvalidParameters(FunctionalTest):
         data['name'] = 1111
 
         # Check request
-        response = self.put('/clients/5', data=data)
+        response = self.put('/dishes/5', data=data)
         assert response.status_code == 400
         assert response.data == 'Le nom du plat doit etre une chaine de caractere.'
 
@@ -108,7 +108,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.put('/dishes/5', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le prix doit être un reel.'
+        assert response.data == 'Le price du plat doit etre numerique.'
 
 
 
@@ -135,8 +135,8 @@ class Update(FunctionalTest):
 
         # Prepare data
         data = dict()
-        data['name'] = "Pizza végé"
-        data['description'] = "Une bonne grosse pizze"
+        data['name'] = "Pizza vege"
+        data['description'] = "Une bonne grosse pizza"
         data['price'] = 12.34
    
 
@@ -150,7 +150,7 @@ class Update(FunctionalTest):
 
         # Check in database
         dish = db.session.query(Dish).get(result['id'])
-        assert dish.name == "Pizza végé"
-        assert dish.description == "Une bonne grosse pizze"
+        assert dish.name == "Pizza vege"
+        assert dish.description == "Une bonne grosse pizza"
         assert dish.price == 12.34
 

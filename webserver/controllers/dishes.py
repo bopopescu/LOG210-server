@@ -66,22 +66,26 @@ def create():
     if 'name' not in datas:
         return make_response("Le nom du plat est obligatoire.", 400)
     if not isinstance(datas['name'], (str, unicode)):
-        return make_response("Le nom doit etre une chaine de caractere.", 400)
+        return make_response("Le nom du plat doit etre une chaine de caractere.", 400)
 
     # Create dish
     dish = Dish(name=datas['name'])
 
     # Check description
-    if 'description' in datas:
-        if not isinstance(datas['description'], (str, unicode)):
-            return make_response("La description doit etre une chaine de caractere.", 400)
-        dish.description = datas['description']
+    if 'description' not in datas:
+        return make_response("La description du plat est obligatoire.", 400)
+    if not isinstance(datas['description'], (str, unicode)):
+        return make_response("La description du plat doit etre une chaine de caractere.", 400)
+    dish.description = datas['description']
 
     # Check price
-    if 'price' in datas:
-        if not isinstance(datas['price'], (float, unicode)):
-            return make_response("Le prix doit etre numerique", 400)
-        dish.price = datas['price']
+    if 'price' not in datas:
+        return make_response("Le price du plat est obligatoire.", 400)
+    if not isinstance(datas['price'], (float, int)):
+        return make_response("Le price du plat doit etre numerique.", 400)
+    if not datas['price'] >= 0:
+        return make_response("Le price du plat doit etre positif.", 400)
+    dish.price = datas['price']
 
     # Add dish
     db.session.add(dish)
@@ -115,26 +119,26 @@ def update(id):
     # Check dish
     dish = db.session.query(Dish).get(id)
     if dish is None:
-        return make_response("Le dish n'existe pas.", 400)
+        return make_response("Le plat n'existe pas.", 404)
 
-    # Check name
+   # Check name
     if 'name' in datas:
         if not isinstance(datas['name'], (str, unicode)):
-            return make_response("Le nom doit etre une chaine de caractere.", 400)
-
+            return make_response("Le nom du plat doit etre une chaine de caractere.", 400)
         dish.name = datas['name']
 
     # Check description
     if 'description' in datas:
         if not isinstance(datas['description'], (str, unicode)):
-            return make_response("La description doit etre une chaine de caractere.", 400)
+            return make_response("La description du plat doit etre une chaine de caractere.", 400)
         dish.description = datas['description']
 
     # Check price
     if 'price' in datas:
-        if not isinstance(datas['price'], (float, unicode)):
-            return make_response("Le prix doit etre numerique.", 400)
-
+        if not isinstance(datas['price'], (float, int)):
+            return make_response("Le price du plat doit etre numerique.", 400)
+        if not datas['price'] >= 0:
+            return make_response("Le price du plat doit etre positif.", 400)
         dish.price = datas['price']
 
 
