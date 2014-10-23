@@ -9,7 +9,8 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne, Livreur
+from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne, Dish, Livreur
+
 
 # Import others
 import datetime
@@ -166,3 +167,18 @@ def delete_restaurants():
     for restaurant in db.session.query(Restaurant).all():
         restaurant.restaurateur = None
         db.session.delete(restaurant)
+
+# Dish
+def build_dish(id, name="Mega Burger", description="Un burger", price=14.32):
+    """ Builder to create a client in database """
+
+    dish = Dish(id=id, name=name, description=description, price=price)
+    db.session.add(dish)
+
+    return dish
+
+def delete_dishes():
+    """ Remove all dishes from database """
+
+    for dish in db.session.query(Dish).all():
+        db.session.delete(dish)
