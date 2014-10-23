@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webserver import db
 from webserver.models import Dish
 from webserver.tests import build_dish
@@ -82,7 +84,7 @@ class MissingParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le price du plat est obligatoire.'
+        assert response.data == 'Le prix du plat est obligatoire.'
 
     
 class InvalidParameters(FunctionalTest):
@@ -114,7 +116,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le nom du plat doit etre une chaine de caractere.'
+        assert response.data == 'Le nom du plat doit être une chaine de caractère.'
 
 
     def test_invalid_description(self):
@@ -129,7 +131,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'La description du plat doit etre une chaine de caractere.'
+        assert response.data == 'La description du plat doit être une chaine de caractère.'
 
     
     def test_invalid_price(self):
@@ -144,7 +146,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le price du plat doit etre numerique.'
+        assert response.data == 'Le prix du plat doit être numerique.'
 
     def test_negative_price(self):
         """ POST /dishes: with negative price """
@@ -158,7 +160,7 @@ class InvalidParameters(FunctionalTest):
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
-        assert response.data == 'Le price du plat doit etre positif.'
+        assert response.data == 'Le prix du plat doit être positif.'
 
 
 class UnknownParameters(FunctionalTest):

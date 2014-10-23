@@ -6,9 +6,9 @@ class Dish(Base):
     __tablename__ = 'dish'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100)) # !! Required !!
-    description = Column(String(255)) # !! Required !!
-    price = Column(Float) # !! Required !!
+    name = Column(String(100), nullable=False) # !! Required !!
+    description = Column(String(255), nullable=False) # !! Required !!
+    price = Column(Float, nullable=False) # !! Required !!
 
 
     def to_dict(self):
