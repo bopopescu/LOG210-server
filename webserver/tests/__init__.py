@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Country, Restaurant, Restaurateur, Entrepreneur, Client, Personne, Dish, Livreur
+from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Personne, Restaurant, Restaurateur
 
 
 # Import others
@@ -57,6 +57,22 @@ def delete_countries():
         db.session.delete(country)
 
 
+# Dish
+def build_dish(id, name="Mega Burger", description="Un burger", price=14.32, menu_id=None):
+    """ Builder to create a client in database """
+
+    dish = Dish(id=id, name=name, description=description, price=price, menu_id=menu_id)
+    db.session.add(dish)
+
+    return dish
+
+def delete_dishes():
+    """ Remove all dishes from database """
+
+    for dish in db.session.query(Dish).all():
+        db.session.delete(dish)
+        
+        
 # Entrepreneur
 def build_entrepreneur(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
     """ Builder to create an entrepreneur in database """
@@ -105,6 +121,22 @@ def delete_livreurs():
     delete_countries()
 
 
+# Menu
+def build_menu(id, name="Menu de printemps"):
+    """ Builder to create a menu in database """
+
+    menu = Menu(id=id, name=name)
+    db.session.add(menu)
+
+    return menu
+
+def delete_menus():
+    """ Remove all menus from database """
+
+    for menu in db.session.query(Menu).all():
+        db.session.delete(menu)
+        
+        
 # Personne
 def build_personne(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
     """ Builder to create a personne in database """
@@ -167,18 +199,3 @@ def delete_restaurants():
     for restaurant in db.session.query(Restaurant).all():
         restaurant.restaurateur = None
         db.session.delete(restaurant)
-
-# Dish
-def build_dish(id, name="Mega Burger", description="Un burger", price=14.32):
-    """ Builder to create a client in database """
-
-    dish = Dish(id=id, name=name, description=description, price=price)
-    db.session.add(dish)
-
-    return dish
-
-def delete_dishes():
-    """ Remove all dishes from database """
-
-    for dish in db.session.query(Dish).all():
-        db.session.delete(dish)

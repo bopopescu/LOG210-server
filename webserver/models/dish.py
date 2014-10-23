@@ -9,7 +9,7 @@ class Dish(Base):
     name = Column(String(100), nullable=False) # !! Required !!
     description = Column(String(255), nullable=False) # !! Required !!
     price = Column(Float, nullable=False) # !! Required !!
-
+    menu_id = Column(Integer, ForeignKey('menu.id'))
 
     def to_dict(self):
         my_dict = dict()

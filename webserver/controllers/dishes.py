@@ -174,9 +174,6 @@ def delete(id):
     if dish is None:
         return make_response(gettext(u"Le plat n'existe pas."), 404)
 
-    # Unlink menu from dish
-    #dish.menu = None
-
     # Delete dish
     db.session.delete(dish)
 
