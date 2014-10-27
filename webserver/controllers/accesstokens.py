@@ -39,7 +39,7 @@ def authentication():
     except:
         return make_response(gettext(u"Echec d'authentification, l'adresse mail ou le mot de passe ne correspondent a aucun utilisateur."), 404)
 
-    if not login_user(user):
+    if not login_user(user):  # pragma no cover
         return make_response(gettext(u"Dûe à une erreur inconnu, il est impossible de vous connecter."), 404)
 
     # Build the response
@@ -51,7 +51,7 @@ def authentication():
 
 
 @accesstokens.route('', methods=['DELETE', 'OPTIONS'])
-def deauthentication():
+def deauthentication(): # pragma no cover
     """ Delete accesstoken
 
         Method: *DELETE*
