@@ -2,8 +2,8 @@
 
 from webserver import db
 from webserver.models import Dish
-from webserver.tests import build_dish
-from webserver.tests import delete_dishes
+from webserver.tests import build_dish, build_menu
+from webserver.tests import delete_dishes, delete_menus
 from webserver.tests.functional import FunctionalTest
 
 
@@ -38,13 +38,15 @@ class MissingParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_menu(id=10)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_menus()
+        db.session.commit()
 
     def test_missing_name(self):
         """ POST /dishes: with missing name """
@@ -53,6 +55,7 @@ class MissingParameters(FunctionalTest):
         data = dict()
         data['description'] = "un bon burger"
         data['price'] = 111.11
+        data['menu_id'] = 10
 
         # Check request
         response = self.post('/dishes', data=data)
@@ -66,6 +69,7 @@ class MissingParameters(FunctionalTest):
         data = dict()
         data['name'] = "Burger"
         data['price'] = 111.11
+        data['menu_id'] = 10
 
         # Check request
         response = self.post('/dishes', data=data)
@@ -79,11 +83,26 @@ class MissingParameters(FunctionalTest):
         data = dict()
         data['name'] = "Toto"
         data['description'] = "Titi"
+        data['menu_id'] = 10
        
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
         assert response.data == 'Le prix du plat est obligatoire.'
+        
+    def test_missing_menu(self):
+        """ POST /dishes: with missing menu """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Toto"
+        data['description'] = "Titi"
+        data['price'] = 10
+       
+        # Check request
+        response = self.post('/dishes', data=data)
+        assert response.status_code == 400
+        assert response.data == 'menu_id est obligatoire.'
 
     
 class InvalidParameters(FunctionalTest):
@@ -93,14 +112,14 @@ class InvalidParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_dish(id=10, price=222.22)
+        build_menu(id=11)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_dishes()
+        delete_menus()
         db.session.commit()
 
     def test_invalid_name(self):
@@ -111,6 +130,7 @@ class InvalidParameters(FunctionalTest):
         data['name'] = 19090
         data['description'] = "Titi"
         data['price'] = 12.43
+        data['menu_id'] = 11
 
         # Check request
         response = self.post('/dishes', data=data)
@@ -126,6 +146,7 @@ class InvalidParameters(FunctionalTest):
         data['name'] = "Toto"
         data['description'] = 30923
         data['price'] = 12.43
+        data['menu_id'] = 11
 
         # Check request
         response = self.post('/dishes', data=data)
@@ -141,6 +162,7 @@ class InvalidParameters(FunctionalTest):
         data['name'] = "Toto"
         data['description'] = "Titi"
         data['price'] = "azerty"
+        data['menu_id'] = 11
 
         # Check request
         response = self.post('/dishes', data=data)
@@ -155,11 +177,27 @@ class InvalidParameters(FunctionalTest):
         data['name'] = "Toto"
         data['description'] = "Titi"
         data['price'] = (-30)
+        data['menu_id'] = 11
 
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400
         assert response.data == 'Le prix du plat doit être positif.'
+        
+    def test_invalid_menu(self):
+        """ POST /dishes: with negative price """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Toto"
+        data['description'] = "Titi"
+        data['price'] = 45
+        data['menu_id'] = "ahah"
+
+        # Check request
+        response = self.post('/dishes', data=data)
+        assert response.status_code == 400
+        assert response.data == 'menu_id doit être un identifiant.'
 
 
 class UnknownParameters(FunctionalTest):
@@ -176,6 +214,21 @@ class UnknownParameters(FunctionalTest):
         """ Clear database fixtures """
 
         pass
+        
+    def test_unknown_menu(self):
+        """ POST /dishes: with unknown menu """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Toto"
+        data['description'] = "Titi"
+        data['price'] = 12
+        data['menu_id'] = 11
+
+        # Check request
+        response = self.post('/dishes', data=data)
+        assert response.status_code == 404
+        assert response.data == "Le menu n'existe pas."
 
 
 class Create(FunctionalTest):
@@ -185,13 +238,15 @@ class Create(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_menu(id=12)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
         delete_dishes()
+        delete_menus()
         db.session.commit()
 
     def test_create(self):
@@ -202,6 +257,7 @@ class Create(FunctionalTest):
         data['name'] = "Toto"
         data['description'] = "Titi description"
         data['price'] = 23.33
+        data['menu_id'] = 12
 
         # Check request
         response = self.post('/dishes', data=data)
