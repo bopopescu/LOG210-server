@@ -111,8 +111,18 @@ class InvalidParameters(FunctionalTest):
         response = self.put('/dishes/5', data=data)
         assert response.status_code == 400
         assert response.data == 'Le prix du plat doit être numerique.'
+        
+    def test_negative_price(self):
+        """ PUT /dishes/id: with invalid price """
 
+        # Prepare data
+        data = dict()
+        data['price'] = -12
 
+        # Check request
+        response = self.put('/dishes/5', data=data)
+        assert response.status_code == 400
+        assert response.data == "Le prix du plat doit être positif."
 
 
 class Update(FunctionalTest):

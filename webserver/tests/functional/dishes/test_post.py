@@ -80,7 +80,6 @@ class MissingParameters(FunctionalTest):
         data['name'] = "Toto"
         data['description'] = "Titi"
        
-
         # Check request
         response = self.post('/dishes', data=data)
         assert response.status_code == 400

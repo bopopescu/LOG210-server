@@ -16,6 +16,9 @@ def add_routes(app):
     app.register_blueprint(livreurs, url_prefix='/livreurs')
     from webserver.controllers.dishes import dishes
     app.register_blueprint(dishes, url_prefix='/dishes')
+    from webserver.controllers.menus_dishes import menus_dishes
+    app.register_blueprint(menus_dishes, url_prefix='/menus')
     from webserver.controllers.menus import menus
     app.register_blueprint(menus, url_prefix='/menus')
+    
 
