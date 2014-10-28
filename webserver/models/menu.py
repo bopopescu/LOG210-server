@@ -8,6 +8,7 @@ class Menu(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     dishes = relationship("Dish", cascade="save-update, merge, delete")
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     
     def to_dict(self):
         my_dict = dict()

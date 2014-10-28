@@ -16,7 +16,8 @@ class Restaurant(Base):
     country = relationship("Country")
 
     restaurateur = relationship("Restaurateur", uselist=False, backref="restaurant")
-
+    menus = relationship("Menu", cascade="save-update, merge, delete")
+    
     def to_dict(self, restaurateur=True):
         my_dict = dict()
 

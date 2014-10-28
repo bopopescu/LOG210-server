@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from webserver import db
-from webserver.models import Dish
-from webserver.tests import build_dish, build_menu
-from webserver.tests import delete_dishes, delete_menus
+from webserver.models import Menu
+from webserver.tests import build_menu, build_restaurant
+from webserver.tests import delete_menus, delete_restaurants
 from webserver.tests.functional import FunctionalTest
 
 
@@ -14,21 +14,21 @@ class Exists(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_menu(id=1)
+        build_restaurant(id=1)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_menus()
+        delete_restaurants()
         db.session.commit()
 
     def test_exists(self):
-        """ GET /menus/id/dishes: exists """
+        """ GET /restaurants/id/menus: exists """
 
         # Check request
-        response = self.get('/menus/1/dishes')
+        response = self.get('/restaurants/1/menus')
         assert response.status_code != 404
         assert response.status_code != 500
 
@@ -49,12 +49,12 @@ class UnknownParameters(FunctionalTest):
         pass
 
     def test_unkown_id(self):
-        """ PUT /menus/id/dishes: with unkown id """
+        """ PUT /restaurants/id/menus: with unkown id """
 
         # Check request
-        response = self.get('/menus/5/dishes')
+        response = self.get('/restaurants/5/menus')
         assert response.status_code == 404
-        assert response.data == "Le menu n'existe pas."
+        assert response.data == "Le restaurant n'existe pas."
         
         
 class Empty(FunctionalTest):
@@ -64,21 +64,21 @@ class Empty(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_menu(id=12)
+        build_restaurant(id=2)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_menus()
+        delete_restaurants()
         db.session.commit()
 
     def test_empty(self):
-        """ GET /menus/id/dishes: empty """
+        """ GET /restaurants/id/menus: empty """
 
         # Check request
-        response = self.get('/menus/12/dishes')
+        response = self.get('/restaurants/2/menus')
         assert response.status_code == 200
 
         # Check length
@@ -93,11 +93,11 @@ class List(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_menu(id=34)
-        build_dish(id=1, menu_id=34)
-        build_dish(id=2, menu_id=34)
-        build_dish(id=3, menu_id=34)
-        build_dish(id=4)    
+        build_restaurant(id=10)
+        build_menu(id=1, restaurant_id=10)
+        build_menu(id=2, restaurant_id=10)
+        build_menu(id=4)
+        build_menu(id=8, restaurant_id=10)
         
         db.session.commit()
 
@@ -105,14 +105,16 @@ class List(FunctionalTest):
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_dishes()
+        delete_menus()
+        delete_restaurants()
+        
         db.session.commit()
 
     def test_list(self):
-        """ GET /menus/id/dishes: list """
+        """ GET /restaurants/id/menus: list """
 
         # Check request
-        response = self.get('/menus/34/dishes')
+        response = self.get('/restaurants/10/menus')
         assert response.status_code == 200
 
         # Check length
@@ -123,4 +125,4 @@ class List(FunctionalTest):
         result_id = [r['id'] for r in result]
         assert 1 in result_id
         assert 2 in result_id
-        assert 3 in result_id
+        assert 8 in result_id

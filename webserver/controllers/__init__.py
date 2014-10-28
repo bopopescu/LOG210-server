@@ -24,5 +24,7 @@ def add_routes(app):
     app.register_blueprint(orders, url_prefix='/orders')
     from webserver.controllers.states_orders import states_orders
     app.register_blueprint(states_orders, url_prefix='/orders/states')
+    from webserver.controllers.restaurants_menus import restaurants_menus
+    app.register_blueprint(restaurants_menus, url_prefix='/restaurants')
     
 

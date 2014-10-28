@@ -123,10 +123,10 @@ def delete_livreurs():
 
 
 # Menu
-def build_menu(id, name="Menu de printemps"):
+def build_menu(id, name="Menu de printemps", restaurant_id=None):
     """ Builder to create a menu in database """
 
-    menu = Menu(id=id, name=name)
+    menu = Menu(id=id, name=name, restaurant_id=restaurant_id)
     db.session.add(menu)
 
     return menu

@@ -4,7 +4,7 @@ from flask import Blueprint, json, make_response, request
 from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Dish
+from webserver.models import Dish, Menu
 
 # Define blueprint
 menus_dishes = Blueprint('menus_dishes', __name__)
@@ -18,6 +18,10 @@ def list(id):
         URI: */menus/id/dishes*
     """
 
+    # Check menu id
+    if db.session.query(Menu).get(id) is None:
+        return make_response(gettext(u"Le menu n'existe pas."), 404)
+        
     # Query
     query = db.session.query(Dish).filter(Dish.menu_id==id)
     dishes = query.all()
