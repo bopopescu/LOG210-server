@@ -31,6 +31,30 @@ class Exists(FunctionalTest):
         assert response.status_code != 500
 
 
+class UnknownParameters(FunctionalTest):
+    """ Check with no datas """
+
+    @classmethod
+    def setup_class(cls):
+        """ Add database fixtures """
+
+        pass
+
+    @classmethod
+    def teardown_class(cls):
+        """ Clear database fixtures """
+
+        pass
+
+    def test_invalid_state(self):
+        """ PUT /orders?state=1: with invalid state """
+
+        # Check request
+        response = self.get('/orders?state=aaa')
+        assert response.status_code == 400
+        assert response.data == "L'état doit être 0, 1, 2 ou 3."
+        
+        
 class Empty(FunctionalTest):
     """ Check with no datas """
 
