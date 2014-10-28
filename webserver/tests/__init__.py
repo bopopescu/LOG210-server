@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Personne, Restaurant, Restaurateur, StateOrder
+from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
 
 
 # Import others
@@ -136,7 +136,29 @@ def delete_menus():
 
     for menu in db.session.query(Menu).all():
         db.session.delete(menu)
-        
+
+
+# Order
+def build_order(id, number=1, date=None, client_id=None, state=None):
+    """ Builder to create a menu in database """
+
+    date = datetime.datetime(2014, 4, 4) if date is None else date
+    state = StateOrder(name="En attente") if state is None else state
+    db.session.add(state)
+    
+    order = Order(id=id, number=number, date=date, client_id=client_id, state=state)
+    db.session.add(order)
+
+    return order
+
+def delete_orders():
+    """ Remove all menus from database """
+
+    for order in db.session.query(Order).all():
+        db.session.delete(order)
+    
+    delete_states_orders()  
+             
         
 # Personne
 def build_personne(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):

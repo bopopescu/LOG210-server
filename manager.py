@@ -61,6 +61,7 @@ def install_with_data():
     from webserver.models import Menu
     m1 = Menu(name="Menu Bigmac", restaurant_id=r5.id)
     db.session.add(m1)
+    db.session.flush()
     
     # Add dishes
     from webserver.models import Dish
