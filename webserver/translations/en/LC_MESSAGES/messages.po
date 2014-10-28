@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-14 13:43-0400\n"
-"PO-Revision-Date: 2014-10-14 13:52-0500\n"
+"POT-Creation-Date: 2014-10-28 08:43-0400\n"
+"PO-Revision-Date: 2014-10-28 08:53-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.6.10\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: controllers/accesstokens.py:27 controllers/clients.py:84
@@ -189,6 +189,64 @@ msgstr "Due to an unexpected error, the client cannot be updated."
 msgid "Dûe à une erreur inconnu, le client ne peut pas être supprimé."
 msgstr "Due to an unexpected error, the client cannot be deleted."
 
+#: controllers/dishes.py:47 controllers/dishes.py:134
+#: controllers/dishes.py:186
+msgid "Le plat n'existe pas."
+msgstr "The dish doesn't exist."
+
+#: controllers/dishes.py:70
+msgid "Le nom du plat est obligatoire."
+msgstr "The name is a mandatory information."
+
+#: controllers/dishes.py:72 controllers/dishes.py:139
+msgid "Le nom du plat doit être une chaine de caractère."
+msgstr "The name must be a string."
+
+#: controllers/dishes.py:76
+msgid "menu_id est obligatoire."
+msgstr "menu_id is a mandatory information."
+
+#: controllers/dishes.py:81 controllers/menus.py:47 controllers/menus.py:109
+#: controllers/menus.py:146
+msgid "Le menu n'existe pas."
+msgstr "The menu doesn't exist."
+
+#: controllers/dishes.py:83
+msgid "menu_id doit être un identifiant."
+msgstr "menu_id must be an identifier."
+
+#: controllers/dishes.py:87
+msgid "La description du plat est obligatoire."
+msgstr "The description is a mandatory information."
+
+#: controllers/dishes.py:89 controllers/dishes.py:145
+msgid "La description du plat doit être une chaine de caractère."
+msgstr "The description must be a string."
+
+#: controllers/dishes.py:93
+msgid "Le prix du plat est obligatoire."
+msgstr "The price is a mandatory information."
+
+#: controllers/dishes.py:95 controllers/dishes.py:151
+msgid "Le prix du plat doit être numerique."
+msgstr "The price must be a numerical value."
+
+#: controllers/dishes.py:97 controllers/dishes.py:153
+msgid "Le prix du plat doit être positif."
+msgstr "The price must be positive."
+
+#: controllers/dishes.py:110
+msgid "Dûe a une erreur inconnu, le plat ne peut pas être cree."
+msgstr "Due to an unexpected error, the dish cannot be created."
+
+#: controllers/dishes.py:162
+msgid "Dûe a une erreur inconnu, le plat ne peut pas être modifie."
+msgstr "Due to an unexpected error, the dish cannot be updated."
+
+#: controllers/dishes.py:196
+msgid "Dûe a une erreur inconnu, le plat ne peut pas être supprime."
+msgstr "Due to an unexpected error, the dish cannot be deleted."
+
 #: controllers/entrepreneurs.py:49 controllers/entrepreneurs.py:174
 #: controllers/entrepreneurs.py:272
 msgid "L'entrepreneur n'existe pas."
@@ -222,6 +280,26 @@ msgstr "Due to an unexpected error, the delivery man cannot be updated."
 #: controllers/livreurs.py:285
 msgid "Dûe à une erreur inconnu, le livreur ne peut pas être supprimé."
 msgstr "Due to an unexpected error, the delivery man cannot be deleted."
+
+#: controllers/menus.py:70
+msgid "Le nom du menu est obligatoire."
+msgstr "The name is a mandatory information."
+
+#: controllers/menus.py:72 controllers/menus.py:114
+msgid "Le nom du menu doit être une chaine de caractère."
+msgstr "The name must be a string."
+
+#: controllers/menus.py:85
+msgid "Dûe a une erreur inconnu, le menu ne peut pas être cree."
+msgstr "Due to an unexpected error, the menu cannot be created."
+
+#: controllers/menus.py:122
+msgid "Dûe a une erreur inconnu, le menu ne peut pas être modifie."
+msgstr "Due to an unexpected error, the menu cannot be updated."
+
+#: controllers/menus.py:156
+msgid "Dûe a une erreur inconnu, le menu ne peut pas être supprime."
+msgstr "Due to an unexpected error, the menu cannot be deleted."
 
 #: controllers/restaurants.py:48 controllers/restaurants.py:168
 #: controllers/restaurants.py:268 controllers/restaurateurs.py:152
