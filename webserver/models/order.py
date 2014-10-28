@@ -13,6 +13,9 @@ class Order(Base):
     client_id = Column(Integer, ForeignKey('client.id'))
     client = relationship("Client")
     
+    state_id = Column(Integer, ForeignKey('state_order.id'))
+    state = relationship("StateOrder")
+    
     lines_order = relationship("LineOrder", cascade="save-update, merge, delete")
     
     def to_dict(self):

@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Personne, Restaurant, Restaurateur
+from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Personne, Restaurant, Restaurateur, StateOrder
 
 
 # Import others
@@ -40,6 +40,7 @@ def delete_clients():
         db.session.delete(client)
 
     delete_countries()
+
 
 # Country
 def build_country(id, name="Canada"):
@@ -199,3 +200,18 @@ def delete_restaurants():
     for restaurant in db.session.query(Restaurant).all():
         restaurant.restaurateur = None
         db.session.delete(restaurant)
+        
+# StateOrder
+def build_state_order(id, name="Ready"):
+    """ Builder to create a StateOrder in database """
+
+    so = StateOrder(id=id, name=name)
+    db.session.add(so)
+
+    return so
+
+def delete_states_orders():
+    """ Remove all StateOrder from database """
+
+    for so in db.session.query(StateOrder).all():
+        db.session.delete(so)

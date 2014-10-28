@@ -20,9 +20,17 @@ def list():
         URI: */orders*
         Parameters: state=?
     """
-
-    # Query
+    
+    # Prepare query
     query = db.session.query(Order)
+    
+    # State
+    if 'state' in request.values:
+        # Check if the state exist
+        pass
+        state = request.values['state']
+        #query = query.filter()
+        
     orders = query.all()
 
     # Build the response
