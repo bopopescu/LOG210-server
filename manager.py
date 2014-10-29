@@ -8,19 +8,22 @@ manager = Manager(app)
 
 @manager.command
 def install():
+    
+    # Create database
     db.drop_all()
     db.create_all()
-    print("Database successfuly installed")
-
-
-@manager.command
-def install_with_data():
-    install()
+    print("...Database successfuly installed")
     
     # Add fixtures
     add_country()
     add_state_order()
-
+    
+@manager.command
+def install_with_data():
+    
+    # Create database with fixtures
+    install()
+    
     # Add restaurateurs
     from webserver.models import Restaurateur, Country
     ct1 = db.session.query(Country).filter(Country.name=="Canada").one()
@@ -75,6 +78,7 @@ def install_with_data():
     db.session.add(d4)
 
     db.session.commit()
+    print("...Datas test successfully added")
 
 
 def add_country():
@@ -85,7 +89,8 @@ def add_country():
     c2 = Country(name="United States")
     db.session.add(c1)
     db.session.add(c2)
-    db.session.flush()
+    db.session.commit()
+    print("...Countries successfully added")
 
 
 def add_state_order():
@@ -100,8 +105,8 @@ def add_state_order():
     db.session.add(so2)
     db.session.add(so3)
     db.session.add(so4)
-    db.session.flush()
-
+    db.session.commit()
+    print("...States order successfully added")
 
 if __name__ == "__main__":
     manager.run()
