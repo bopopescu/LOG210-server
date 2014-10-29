@@ -11,7 +11,7 @@ Partie serveur pour le projet de laboratoire du cours LOG210 ETS
 3. Installer virtualenv (>pip install virtualenv -- http://virtualenv.readthedocs.org/en/latest/)
 4. Créer les environnements virtuels pour le serveur et pour le client (>virtualenv nom_dossier)
 5. Activer l’environnement (>source bin/activate – depuis le dossier de l’environnement)
-6. Installer les librairies (>pip install -r requirements.txt)
+6. Installer les librairies (>pip install -r requirements.txt et aussi > pip install mysql-connector-python-1.2.3 (depuis le dossier LOG210-server)
 
 ###### Installation base de données
 1. Installer Mamp (http://www.mamp.info/en/)
