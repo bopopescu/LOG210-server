@@ -2,8 +2,8 @@
 
 from webserver import db
 from webserver.models import Menu
-from webserver.tests import build_menu
-from webserver.tests import delete_menus
+from webserver.tests import build_menu, build_restaurant
+from webserver.tests import delete_menus, delete_restaurants
 from webserver.tests.functional import FunctionalTest
 
 
@@ -44,14 +44,14 @@ class InvalidParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_menu(id=10)
+        build_restaurant(id=10)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        delete_menus()
+        delete_restaurants()
         db.session.commit()
 
     def test_invalid_name(self):
@@ -60,6 +60,7 @@ class InvalidParameters(FunctionalTest):
         # Prepare data
         data = dict()
         data['name'] = 19090
+        data['restaurant_id'] = 10
 
         # Check request
         response = self.post('/menus', data=data)
@@ -90,13 +91,16 @@ class Create(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_restaurant(id=12)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
         delete_menus()
+        delete_restaurants()
+        
         db.session.commit()
 
     def test_create(self):
@@ -105,6 +109,7 @@ class Create(FunctionalTest):
         # Prepare data
         data = dict()
         data['name'] = "Menu du printemps"
+        data['restaurant_id'] = 12
 
         # Check request
         response = self.post('/menus', data=data)

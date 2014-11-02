@@ -4,7 +4,7 @@ from flask import Blueprint, json, make_response, request
 from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Menu
+from webserver.models import Menu, Restaurant
 
 # Define blueprint
 menus = Blueprint('menus', __name__)
@@ -71,8 +71,19 @@ def create():
     if not isinstance(datas['name'], (str, unicode)):
         return make_response(gettext(u"Le nom du menu doit être une chaine de caractère."), 400)
 
+    # Check restaurant
+    if 'restaurant_id' not in datas:
+        return make_response(gettext(u"restaurant_id est obligatoire."), 400)
+    try:
+        restaurant_id = int(datas['restaurant_id'])
+        restaurant = db.session.query(Restaurant).get(restaurant_id)
+        if restaurant is None:
+            return make_response(gettext(u"Le restaurant n'existe pas."), 404)
+    except:
+        return make_response(gettext(u"restaurant_id doit être un identifiant."), 400)
+        
     # Create menu
-    menu = Menu(name=datas['name'])
+    menu = Menu(name=datas['name'], restaurant_id=restaurant_id)
     
     # Add menu
     db.session.add(menu)
