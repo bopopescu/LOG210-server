@@ -23,7 +23,7 @@ def list(id):
         return make_response(gettext(u"Le restaurant n'existe pas."), 404)
         
     # Query
-    query = db.session.query(Menu).filter(Menu.restaurant_id==id)
+    query = db.session.query(Menu).filter(Menu.restaurant_id == id)
     menus = query.all()
 
     # Build the response
