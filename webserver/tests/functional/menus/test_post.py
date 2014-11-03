@@ -34,7 +34,29 @@ class Exists(FunctionalTest):
 class MissingParameters(FunctionalTest):
     """ Check with no datas """
 
-    pass
+    @classmethod
+    def setup_class(cls):
+        """ Add database fixtures """
+
+        pass
+
+    @classmethod
+    def teardown_class(cls):
+        """ Clear database fixtures """
+        
+        pass
+
+    def test_missing_restaurant_id(self):
+        """ POST /menus: with missing restaurant_id """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Menu du pecheur"
+
+        # Check request
+        response = self.post('/menus', data=data)
+        assert response.status_code == 400
+        assert response.data == "restaurant_id est obligatoire."
 
     
 class InvalidParameters(FunctionalTest):
@@ -66,6 +88,19 @@ class InvalidParameters(FunctionalTest):
         response = self.post('/menus', data=data)
         assert response.status_code == 400
         assert response.data == 'Le nom du menu doit être une chaine de caractère.'
+        
+    def test_invalid_restaurant_id(self):
+        """ POST /menus: with invalid restaurant_id """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Menu du pecheur"
+        data['restaurant_id'] = "ahahah"
+
+        # Check request
+        response = self.post('/menus', data=data)
+        assert response.status_code == 400
+        assert response.data == "restaurant_id doit être un identifiant."
 
 
 class UnknownParameters(FunctionalTest):
@@ -82,6 +117,19 @@ class UnknownParameters(FunctionalTest):
         """ Clear database fixtures """
 
         pass
+        
+    def test_unknown_restaurant_id(self):
+        """ POST /menus: with unkown restaurant_id """
+
+        # Prepare data
+        data = dict()
+        data['name'] = "Menu du pecheur"
+        data['restaurant_id'] = 293
+
+        # Check request
+        response = self.post('/menus', data=data)
+        assert response.status_code == 404
+        assert response.data == "Le restaurant n'existe pas."
 
 
 class Create(FunctionalTest):
