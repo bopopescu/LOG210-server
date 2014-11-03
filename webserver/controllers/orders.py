@@ -6,6 +6,10 @@ from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
 from webserver.models import Order, StateOrder, Client
+
+from twilio.rest import TwilioRestClient 
+from webserver.config import TwilioConfig
+
 import datetime
 import werkzeug
 
@@ -25,6 +29,7 @@ def list():
         1: En préparation
         2: Prête
         3: En cours de livraison
+        4: Livrée
     """
     
     # Prepare query
@@ -37,7 +42,7 @@ def list():
         except:
             return make_response(gettext(u"L'état doit être 0, 1, 2 ou 3."), 400)
             
-        states = {0: u"En attente", 1: u"En préparation", 2: u"Prête", 3: u"En cours de livraison"}
+        states = {0: u"En attente", 1: u"En préparation", 2: u"Prête", 3: u"En cours de livraison", 4: u"Livrée"}
         state = states[state_int]
         
         query = query.join(StateOrder).filter(StateOrder.name == state)
@@ -108,6 +113,7 @@ def create():
         return make_response(gettext(u"L'état 'En attente' est inexistant."), 400)
         
     # Create menu
+    # TODO: generate order number !
     order = Order(number=1, date=date, client_id=current_user.id, state_id=state.id)
     
     # Add menu
@@ -123,6 +129,69 @@ def create():
     # Build the response
     response = make_response(jsonify(order.to_dict()))
     response.status_code = 201
+    response.mimetype = 'application/json'
+
+    return response
+    
+    
+# Update menu
+@orders.route('/<int:id>', methods=['PUT', 'OPTIONS'])
+def update(id):
+    """ Update order
+
+        Method: *PUT*
+        URI: */orders/id*
+    """
+    
+    # Get request values
+    datas = request.values
+
+    # Query
+    order = db.session.query(Order).get(id)
+
+    # Check menu
+    if order is None:
+        return make_response(gettext(u"La commande n'existe pas."), 400)
+        
+    # Check date
+    if 'date' in datas:
+        try:
+            date = datetime.datetime.strptime(datas['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        except:
+            return make_response(gettext(u"Le format de la date est invalide."), 400)
+            
+        order.date = date
+        
+    # Check state
+    if 'state_id' in datas:
+        state = db.session.query(StateOrder).get(datas["state_id"])
+        if state is None:
+            return make_response(gettext(u"L'état est inexistant."), 400)
+            
+        order.state_id = state.id
+        
+        # TODO: Get TestingConfig from current config
+        TestingConfig = True
+        
+        # SMS Notification
+        if TestingConfig is False:  # pragma: no cover
+            client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN) 
+            client.messages.create(
+                to="+15142902316",
+                from_="+14387932148",
+                body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.number, state.name),
+            )
+        
+    # Commit
+    try:
+        db.session.commit()
+    except Exception:  # pragma: no cover
+        db.session.rollback()
+        return make_response(gettext(u"Dûe a une erreur inconnu, la commande ne peut pas être modifiée."), 500)
+
+    # Build the response
+    response = make_response(jsonify(order.to_dict()))
+    response.status_code = 200
     response.mimetype = 'application/json'
 
     return response

@@ -101,10 +101,12 @@ def add_state_order():
     so2 = StateOrder(name="En préparation")
     so3 = StateOrder(name="Prête")
     so4 = StateOrder(name="En cours de livraison")
+    so5 = StateOrder(name="Livrée")
     db.session.add(so1)
     db.session.add(so2)
     db.session.add(so3)
     db.session.add(so4)
+    db.session.add(so5)
     db.session.commit()
     print("...States order successfully added")
 

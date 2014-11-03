@@ -56,3 +56,7 @@ class TestingConfig(object):
     DEBUG = True
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    
+class TwilioConfig(object):
+    ACCOUNT_SID = "AC46b7911c51e43edf923538fa46829be8" 
+    AUTH_TOKEN = "742c842bb3002878ba2d374b2baf54ea"

@@ -11,12 +11,13 @@ db.create_all()
 # Import models
 from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
 
-
 # Import others
 import datetime
 
-# Builders and deleters
 
+
+# Builders and deleters
+################################################
 
 # Client
 def build_client(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
