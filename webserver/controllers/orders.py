@@ -3,7 +3,7 @@
 from flask import Blueprint, json, make_response, request
 from flask.ext.login import AnonymousUserMixin
 from flask.ext.babel import gettext
-from webserver import db
+from webserver import db, app
 from webserver.lib.base import jsonify
 from webserver.models import Order, StateOrder, Client
 
@@ -170,11 +170,8 @@ def update(id):
             
         order.state_id = state.id
         
-        # TODO: Get TestingConfig from current config
-        TestingConfig = True
-        
         # SMS Notification
-        if TestingConfig is False:  # pragma: no cover
+        if app.config['TESTING'] is False:  # pragma: no cover
             client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN) 
             client.messages.create(
                 to="+15142902316",
