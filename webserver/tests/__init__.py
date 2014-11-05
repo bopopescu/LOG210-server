@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
+from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, LineOrder, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
 
 # Import others
 import datetime
@@ -121,6 +121,28 @@ def delete_livreurs():
         db.session.delete(livreur)
 
     delete_countries()
+
+
+# LineOrder
+def build_line_order(id, order_id, dish_id=None, quantity=1):
+    """ Builder to create a livreur in database """
+
+    if dish_id is None:
+        build_dish(id=id)
+        dish_id=id
+
+    line_order = LineOrder(id=id, dish_id=dish_id, quantity=quantity, order_id=order_id)
+    db.session.add(line_order)
+
+    return line_order
+
+def delete_lines_order():
+    """ Remove all line order from database """
+
+    for lo in db.session.query(LineOrder).all():
+        db.session.delete(lo)
+        
+    delete_dishes()
 
 
 # Menu

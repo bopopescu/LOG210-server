@@ -5,10 +5,12 @@ from flask.ext.login import AnonymousUserMixin
 from flask.ext.babel import gettext
 from webserver import db, app
 from webserver.lib.base import jsonify
-from webserver.models import Order, StateOrder, Client
+from webserver.models import Order, StateOrder, Client, LineOrder
 
 from twilio.rest import TwilioRestClient 
 from webserver.config import TwilioConfig
+
+from sqlalchemy.orm import lazyload
 
 import datetime
 import werkzeug
@@ -115,7 +117,30 @@ def create():
     # Create menu
     # TODO: generate order number !
     order = Order(number=1, date=date, client_id=current_user.id, state_id=state.id)
+    #db.session.flush()
     
+    # Create line order
+    if 'dishes' not in datas:
+        return make_response(gettext(u"Une commande doit comporté au moins un plat."), 400)
+        
+    for dish in datas['dishes']:
+        
+        if 'dish_id' not in dish or 'quantity' not in dish:
+            return make_response(gettext(u"Une erreur s'est produite."), 400)
+            
+        try:
+            quantity = int(dish['quantity'])
+        except:
+            return make_response(gettext(u"La quantité doit être un nombre entier."), 400)
+            
+        try:
+            dish_id = int(dish['dish_id'])
+        except:
+            return make_response(gettext(u"dish_id doit être un identifiant."), 400)
+        
+        order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
+        
+        
     # Add menu
     db.session.add(order)
 
@@ -188,6 +213,40 @@ def update(id):
 
     # Build the response
     response = make_response(jsonify(order.to_dict()))
+    response.status_code = 200
+    response.mimetype = 'application/json'
+
+    return response
+    
+# Delete a menu
+@orders.route('/<int:id>', methods=['DELETE', 'OPTIONS'])
+def delete(id):
+    """ Delete one order by id.
+
+        Method: *DELETE*
+        URI: */orders/id*
+    """
+
+    # Query
+    query = db.session.query(Order).options(lazyload('*'))
+    order = query.get(id)
+
+    # Check menu
+    if order is None:
+        return make_response(gettext(u"La commande n'existe pas."), 404)
+        
+    # Delete menu
+    db.session.delete(order)
+
+    # Commit
+    try:
+        db.session.commit()
+    except Exception:  # pragma: no cover
+        db.session.rollback()
+        return make_response(gettext(u"Dûe a une erreur inconnu, la commande ne peut pas être supprimée."), 500)
+
+    # Build the response
+    response = make_response(jsonify(order.to_dict(lines_order=False)))
     response.status_code = 200
     response.mimetype = 'application/json'
 

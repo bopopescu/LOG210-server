@@ -12,3 +12,10 @@ class LineOrder(Base):
     dish = relationship("Dish") 
     
     order_id = Column(Integer, ForeignKey('order.id'))
+    
+    def to_dict(self, dishes=True):
+        my_dict = dict()
+
+        my_dict['id'] = self.id
+        my_dict['dish'] = self.dish.to_dict()
+        my_dict['quantity'] = self.quantity
