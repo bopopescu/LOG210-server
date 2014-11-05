@@ -29,8 +29,10 @@ def install_with_data():
     ct1 = db.session.query(Country).filter(Country.name=="Canada").one()
     rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    rs3 = Restaurateur(firstname="Marcel", lastname="Proust", mail="restau", password="rateur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(rs1)
     db.session.add(rs2)
+    db.session.add(rs3)
 
     # Add entrepreneurs
     from webserver.models import Entrepreneur
@@ -53,7 +55,7 @@ def install_with_data():
     r2 = Restaurant(name="McDonalds", phone="514-444-4444", address="4301 St-Denis", city="Montreal", zipcode="H2S 1R4", cooking_type="Fastfood")
     r3 = Restaurant(name="La Banquise", phone="514-444-4444", address="2167 St-Denis", city="Montreal", zipcode="H4P 2R2", cooking_type="Poutine")
     r4 = Restaurant(name="Le Duc de Lorraine", phone="514-444-4444", address="2983 St-Denis", city="Montreal", zipcode="H1S 1R2", cooking_type="Gastronomie française")
-    r5 = Restaurant(name="La Plazza", phone="514-444-4444", address="1893 St-Denis", city="Montreal", zipcode="H4C 2R1", restaurateur=rs2, cooking_type="Plats italiens")
+    r5 = Restaurant(name="La Plazza", phone="514-444-4444", address="1893 St-Denis", city="Montreal", zipcode="H4C 2R1", restaurateur=rs3, cooking_type="Plats italiens")
     db.session.add(r1)
     db.session.add(r2)
     db.session.add(r3)
@@ -62,16 +64,16 @@ def install_with_data():
     
     # Add menus
     from webserver.models import Menu
-    m1 = Menu(name="Menu Bigmac", restaurant_id=r5.id)
+    m1 = Menu(name="Lunch", restaurant_id=1)
     db.session.add(m1)
     db.session.flush()
     
     # Add dishes
     from webserver.models import Dish
-    d1 = Dish(name="Frites", description="Avec des pomme de terre fraiche", price=4.99, menu_id=m1.id)
-    d2 = Dish(name="Bigmac", description="Avec du boeuf tué la veille", price=6.99, menu_id=m1.id)
-    d3 = Dish(name="Coca-Cola", description="Du vrai", price=1.99, menu_id=m1.id)
-    d4 = Dish(name="Fanta", description="Du vrai", price=1.99, menu_id=m1.id)
+    d1 = Dish(name="Frites", description="Avec des pomme de terre fraiche", price=4.99, menu_id=1)
+    d2 = Dish(name="Bigmac", description="Avec du boeuf tué la veille", price=6.99, menu_id=1)
+    d3 = Dish(name="Coca-Cola", description="Du vrai", price=1.99, menu_id=1)
+    d4 = Dish(name="Fanta", description="Du vrai", price=1.99, menu_id=1)
     db.session.add(d1)
     db.session.add(d2)
     db.session.add(d3)

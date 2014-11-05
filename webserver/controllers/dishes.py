@@ -83,8 +83,6 @@ def create():
         return make_response(gettext(u"menu_id doit être un identifiant."), 400)
         
     # Check description
-    if 'description' not in datas:
-        return make_response(gettext(u"La description du plat est obligatoire."), 400)
     if not isinstance(datas['description'], (str, unicode)):
         return make_response(gettext(u"La description du plat doit être une chaine de caractère."), 400)
 
@@ -107,7 +105,7 @@ def create():
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response(gettext(u"Dûe a une erreur inconnu, le plat ne peut pas être cree."), 500)
+        return make_response(gettext(u"Dû a une erreur inconnue, le plat ne peut pas être crée."), 500)
 
     # Build the response
     response = make_response(jsonify(dish.to_dict()))
@@ -159,7 +157,7 @@ def update(id):
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response(gettext(u"Dûe a une erreur inconnu, le plat ne peut pas être modifie."), 500)
+        return make_response(gettext(u"Dû a une erreur inconnue, le plat ne peut pas être modifie."), 500)
 
     # Build the response
     response = make_response(jsonify(dish.to_dict()))
@@ -193,7 +191,7 @@ def delete(id):
         db.session.commit()
     except Exception:  # pragma: no cover
         db.session.rollback()
-        return make_response(gettext(u"Dûe a une erreur inconnu, le plat ne peut pas être supprime."), 500)
+        return make_response(gettext(u"Dû a une erreur inconnue, le plat ne peut pas être supprimé."), 500)
 
     # Build the response
     response = make_response(jsonify(dish.to_dict()))
