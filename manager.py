@@ -62,16 +62,16 @@ def install_with_data():
     
     # Add menus
     from webserver.models import Menu
-    m1 = Menu(name="Menu Bigmac", restaurant_id=r5.id)
+    m1 = Menu(name="Lunch", restaurant_id=1)
     db.session.add(m1)
     db.session.flush()
     
     # Add dishes
     from webserver.models import Dish
-    d1 = Dish(name="Frites", description="Avec des pomme de terre fraiche", price=4.99, menu_id=m1.id)
-    d2 = Dish(name="Bigmac", description="Avec du boeuf tué la veille", price=6.99, menu_id=m1.id)
-    d3 = Dish(name="Coca-Cola", description="Du vrai", price=1.99, menu_id=m1.id)
-    d4 = Dish(name="Fanta", description="Du vrai", price=1.99, menu_id=m1.id)
+    d1 = Dish(name="Frites", description="Avec des pomme de terre fraiche", price=4.99, menu_id=1)
+    d2 = Dish(name="Bigmac", description="Avec du boeuf tué la veille", price=6.99, menu_id=1)
+    d3 = Dish(name="Coca-Cola", description="Du vrai", price=1.99, menu_id=1)
+    d4 = Dish(name="Fanta", description="Du vrai", price=1.99, menu_id=1)
     db.session.add(d1)
     db.session.add(d2)
     db.session.add(d3)
