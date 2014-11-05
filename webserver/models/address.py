@@ -1,5 +1,5 @@
 from webserver.models import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 class Address(Base):
@@ -15,6 +15,7 @@ class Address(Base):
     def to_dict(self):
         my_dict = dict()
         
+        my_dict['id'] = self.id
         my_dict['address'] = self.address
         my_dict['zipcode'] = self.zipcode
         my_dict['city'] = self.city

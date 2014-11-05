@@ -9,7 +9,7 @@ db.initialize(app.config['SQLALCHEMY_DATABASE_URI'])
 db.create_all()
 
 # Import models
-from webserver.models import Client, Country, Dish, Entrepreneur, Livreur, LineOrder, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
+from webserver.models import Address, Client, Country, Dish, Entrepreneur, Livreur, LineOrder, Menu, Order, Personne, Restaurant, Restaurateur, StateOrder
 
 # Import others
 import datetime
@@ -19,6 +19,28 @@ import datetime
 # Builders and deleters
 ################################################
 
+
+# Address
+def build_address(id, address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", country=None):
+    """ Builder to create an address in database """
+
+    if country is None:
+        country = build_country(id=id)
+
+    address = Address(id=id, address=address, zipcode=zipcode, city=city, country=country)
+    db.session.add(address)
+
+    return address
+
+def delete_addresses():
+    """ Remove all clients from database """
+
+    for address in db.session.query(Address).all():
+        db.session.delete(address)
+
+    delete_countries()
+    
+    
 # Client
 def build_client(id, firstname="Toto", lastname="Bob", phone="444-444-4444", address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", mail="boby@resto.ca", password="azerty", birthdate=None, country=None):
     """ Builder to create a client in database """
