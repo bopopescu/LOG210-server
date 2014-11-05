@@ -6,6 +6,7 @@ class Address(Base):
     __tablename__ = 'address'
 
     id = Column(Integer, primary_key=True)
+    
     address = Column(String(100), nullable=False)
     zipcode = Column(String(100), nullable=False)
     city = Column(String(100), nullable=False)
