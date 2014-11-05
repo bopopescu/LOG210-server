@@ -62,20 +62,6 @@ class MissingParameters(FunctionalTest):
         assert response.status_code == 400
         assert response.data == 'Le nom du plat est obligatoire.'
 
-    def test_missing_description(self):
-        """ POST /dishes: with missing description """
-
-        # Prepare data
-        data = dict()
-        data['name'] = "Burger"
-        data['price'] = 111.11
-        data['menu_id'] = 10
-
-        # Check request
-        response = self.post('/dishes', data=data)
-        assert response.status_code == 400
-        assert response.data == 'La description du plat est obligatoire.'
-
     def test_missing_price(self):
         """ POST /dishes: with missing price """
 
