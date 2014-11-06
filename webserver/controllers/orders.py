@@ -121,7 +121,6 @@ def create():
     # Create menu
     # TODO: generate order number !
     order = Order(number=1, date=date, client_id=current_user.id, state_id=state.id)
-    #db.session.flush()
     
     # Create line order
     if 'dishes' not in datas:
@@ -142,7 +141,7 @@ def create():
         except:
             return make_response(gettext(u"dish_id doit être un identifiant."), 400)
         
-        order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
+        #order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
         
         
     # Add menu
