@@ -1,6 +1,7 @@
 from webserver.models import Base
 from sqlalchemy import Column, Integer, DateTime, ForeignKey, String
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 class Order(Base):
     __tablename__ = 'order'
@@ -9,6 +10,7 @@ class Order(Base):
     
     number = Column(Integer, nullable=False)
     date = Column(DateTime, nullable=False)
+    created = Column(DateTime, default=datetime.now)
     
     client_id = Column(Integer, ForeignKey('client.id'))
     client = relationship("Client")
@@ -24,6 +26,7 @@ class Order(Base):
         my_dict['id'] = self.id
         my_dict['number'] = self.number
         my_dict['date'] = unicode(self.date)
+        my_dict['created'] = unicode(self.created)
         my_dict['client'] = self.client.to_dict() if self.client else None
 
         if lines_order:

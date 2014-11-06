@@ -26,7 +26,8 @@ def list():
 
         Method: *GET*
         URI: */orders*
-        Parameters: state=?
+        Parameters: ?state=id
+                    ?client_id=id
         0: En attente
         1: En préparation
         2: Prête
