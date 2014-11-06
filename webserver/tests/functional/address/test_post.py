@@ -2,8 +2,8 @@
 
 from webserver import db
 from webserver.models import Address
-from webserver.tests import build_address, build_country
-from webserver.tests import delete_addresses, delete_countries
+from webserver.tests import build_address, build_country, build_client
+from webserver.tests import delete_addresses, delete_countries, delete_clients
 from webserver.tests.functional import FunctionalTest
 
 
@@ -38,13 +38,15 @@ class MissingParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_country(id=1)
+        country = build_country(id=1)
+        build_client(id=1, country=country)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
+        delete_clients()
         delete_countries()
         db.session.commit()
 
@@ -56,6 +58,7 @@ class MissingParameters(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
         data['country_id'] = 1
+        data['personne_id'] = 1
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -70,6 +73,7 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['city'] = "Montreal"
         data['country_id'] = 1
+        data['personne_id'] = 1
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -84,6 +88,7 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['country_id'] = 1
+        data['personne_id'] = 1
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -98,11 +103,27 @@ class MissingParameters(FunctionalTest):
         data['address'] = "1111 Rue des banquise"
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
+        data['personne_id'] = 1
 
         # Check request
         response = self.post('/addresses', data=data)
         assert response.status_code == 400
         assert response.data == "Le pays est obligatoire."
+        
+    def test_missing_personne(self):
+        """ POST /addresses: with missing personne """
+
+        # Prepare data
+        data = dict()
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 1
+
+        # Check request
+        response = self.post('/addresses', data=data)
+        assert response.status_code == 400
+        assert response.data == "L'identifiant d'une personne est obligatoire."
 
 
 class InvalidParameters(FunctionalTest):
@@ -112,13 +133,15 @@ class InvalidParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        build_country(id=1, name="Canada")
+        country = build_country(id=1, name="Canada")
+        build_client(id=12, country=country)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
+        delete_clients()
         delete_countries()
         db.session.commit()
 
@@ -131,6 +154,7 @@ class InvalidParameters(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
         data['country_id'] = 1
+        data['personne_id'] = 12
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -147,6 +171,7 @@ class InvalidParameters(FunctionalTest):
         data['zipcode'] = 11
         data['city'] = "Montreal"
         data['country_id'] = 1
+        data['personne_id'] = 12
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -162,6 +187,7 @@ class InvalidParameters(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = 2192901
         data['country_id'] = 1
+        data['personne_id'] = 12
 
         # Check request
         response = self.post('/addresses', data=data)
@@ -177,11 +203,28 @@ class InvalidParameters(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
         data['country_id'] = "ae1"
+        data['personne_id'] = 12
 
         # Check request
         response = self.post('/addresses', data=data)
         assert response.status_code == 400
         assert response.data == "country_id doit être un identifiant."
+        
+    def test_invalid_personne(self):
+        """ POST /addresses: with invalid personne """
+
+        # Prepare data
+        data = dict()
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = "ae1"
+        data['personne_id'] = "ahaha"
+
+        # Check request
+        response = self.post('/addresses', data=data)
+        assert response.status_code == 400
+        assert response.data == "personne_id doit être un identifiant."
 
 
 class UnknownParameters(FunctionalTest):
@@ -191,13 +234,17 @@ class UnknownParameters(FunctionalTest):
     def setup_class(cls):
         """ Add database fixtures """
 
-        pass
+        build_country(id=3)
+        build_client(id=15)
+        db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
-        pass
+        delete_clients()
+        delete_countries()
+        db.session.commit()
 
     def test_unknown_country(self):
         """ POST /addresses: with invalid country """
@@ -208,12 +255,30 @@ class UnknownParameters(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
         data['country_id'] = 999
+        data['personne_id'] = 15
 
         # Check request
         response = self.post('/addresses', data=data)
         print response.status_code
         assert response.status_code== 404
         assert response.data == "Le pays n'existe pas."
+        
+    def test_unknown_personne(self):
+        """ POST /addresses: with invalid personne """
+
+        # Prepare data
+        data = dict()
+        data['address'] = "1111 Rue des banquise"
+        data['zipcode'] = "H3A A1A"
+        data['city'] = "Montreal"
+        data['country_id'] = 3
+        data['personne_id'] = 666
+
+        # Check request
+        response = self.post('/addresses', data=data)
+        print response.status_code
+        assert response.status_code== 404
+        assert response.data == "La personne n'existe pas."
 
 
 class Create(FunctionalTest):
@@ -224,12 +289,14 @@ class Create(FunctionalTest):
         """ Add database fixtures """
 
         build_country(id=1, name="Canada")
+        build_client(id=20)
         db.session.commit()
 
     @classmethod
     def teardown_class(cls):
         """ Clear database fixtures """
 
+        delete_clients()
         delete_addresses()
         delete_countries()
         db.session.commit()
@@ -243,6 +310,7 @@ class Create(FunctionalTest):
         data['zipcode'] = "H3A A1A"
         data['city'] = "Montreal"
         data['country_id'] = 1
+        data['personne_id'] = 20
 
         # Check request
         response = self.post('/addresses', data=data)

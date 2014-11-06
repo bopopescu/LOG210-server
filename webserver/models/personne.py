@@ -20,6 +20,8 @@ class Personne(Base):
 
     mail = Column(String(100), nullable=False)
     password = Column(String(100), nullable=False)
+    
+    order_addresses = relationship("Address", cascade="save-update, merge, delete")
 
     type = Column(String(20))
 

@@ -4,7 +4,7 @@ from flask import Blueprint, json, make_response, request
 from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
-from webserver.models import Address, Country
+from webserver.models import Address, Country, Personne
 import datetime
 
 # Define blueprint
@@ -47,6 +47,18 @@ def create():
     # Get request values
     datas = request.values
 
+    # Check personne
+    if 'personne_id' not in datas:
+        return make_response(gettext(u"L'identifiant d'une personne est obligatoire."), 400)
+    try:
+        personne_id = int(datas['personne_id'])
+    except Exception:
+        return make_response(gettext(u"personne_id doit être un identifiant."), 400)
+        
+    personne = db.session.query(Personne).get(personne_id)
+    if personne is None:
+        return make_response(gettext(u"La personne n'existe pas."), 404)
+        
     # Check address
     if 'address' not in datas:
         return make_response(gettext(u"L'adresse est obligatoire."), 400)

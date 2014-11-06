@@ -11,6 +11,8 @@ class Address(Base):
     city = Column(String(100), nullable=False)
     country_id = Column(Integer, ForeignKey('country.id'))
     country = relationship("Country")
+    
+    personne_id = Column(Integer, ForeignKey('personne.id'))
 
     def to_dict(self):
         my_dict = dict()
