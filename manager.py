@@ -44,7 +44,7 @@ def install_with_data():
 
     # Add clients
     from webserver.models import Client
-    c1 = Client(firstname="Yvon", lastname="Gagner", mail="gagner@ducati.it", password="passwdc1", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    c1 = Client(firstname="Yvon", lastname="Gagner", mail="cli", password="ent", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(c1)
     db.session.add(c2)
