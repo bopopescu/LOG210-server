@@ -19,3 +19,5 @@ class LineOrder(Base):
         my_dict['id'] = self.id
         my_dict['dish'] = self.dish.to_dict()
         my_dict['quantity'] = self.quantity
+        
+        return my_dict
