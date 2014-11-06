@@ -141,7 +141,7 @@ def create():
         except:
             return make_response(gettext(u"dish_id doit être un identifiant."), 400)
         
-        #order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
+        order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
         
         
     # Add menu
@@ -249,7 +249,7 @@ def delete(id):
         return make_response(gettext(u"Dûe a une erreur inconnu, la commande ne peut pas être supprimée."), 500)
 
     # Build the response
-    response = make_response(jsonify(order.to_dict(lines_order=False)))
+    response = make_response(jsonify(order.to_dict(lines_order=False, state=False)))
     response.status_code = 200
     response.mimetype = 'application/json'
 

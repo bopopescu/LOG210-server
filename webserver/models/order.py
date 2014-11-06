@@ -20,7 +20,7 @@ class Order(Base):
     
     lines_order = relationship("LineOrder", cascade="save-update, merge, delete")
     
-    def to_dict(self, lines_order=True):
+    def to_dict(self, lines_order=True, state=True):
         my_dict = dict()
 
         my_dict['id'] = self.id
@@ -28,7 +28,9 @@ class Order(Base):
         my_dict['date'] = unicode(self.date)
         my_dict['created'] = unicode(self.created)
         my_dict['client'] = self.client.to_dict() if self.client else None
-        my_dict['state'] = self.state.to_dict() if self.state else None
+        
+        if state:
+            my_dict['state'] = self.state.to_dict() if self.state else None
 
         if lines_order:
             my_dict['lines_orders'] = [so.to_dict() for so in self.lines_order]
