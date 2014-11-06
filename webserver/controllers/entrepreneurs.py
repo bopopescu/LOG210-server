@@ -131,7 +131,9 @@ def create():
 
     # Create entrepreneur
     entrepreneur = Entrepreneur(firstname=datas['firstname'], lastname=datas['lastname'], phone=datas['phone'], address=datas['address'], zipcode=datas['zipcode'], city=datas['city'], country=country, mail=datas['mail'], password=datas['password'])
-
+    db.session.flush()
+    entrepreneur.create_order_address()
+    
     # Check birthdate
     if 'birthdate' in datas:
         try:

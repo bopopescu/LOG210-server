@@ -11,13 +11,37 @@ import datetime
 addresses = Blueprint('addresses', __name__)
 
 
+# Get address
+@addresses.route('', methods=['GET', 'OPTIONS'])
+def list():
+    """ Return addresses
+
+        Method: *GET*
+        URI: */addresses*
+        Params: ?personne_id=id
+    """
+
+    # Query
+    query = db.session.query(Address)
+    
+    if 'personne_id' in request.values:
+        query = query.filter(Address.personne_id == request.values['personne_id'])
+
+    addresses = query.all()
+    
+    # Build the response
+    response = make_response(jsonify([a.to_dict() for a in addresses]))
+    response.status_code = 200
+    response.mimetype = 'application/json'
+    return response
+    
 # Get one address
 @addresses.route('/<int:id>', methods=['GET', 'OPTIONS'])
 def index(id):
     """ Return one address by id.
 
         Method: *GET*
-        URI: */address/id*
+        URI: */addresses/id*
     """
 
     # Query

@@ -1,4 +1,4 @@
-from webserver.models import Base
+from webserver.models import Base, Address
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
@@ -21,7 +21,7 @@ class Personne(Base):
     mail = Column(String(100), nullable=False)
     password = Column(String(100), nullable=False)
     
-    order_addresses = relationship("Address", cascade="save-update, merge, delete")
+    addresses = relationship("Address", cascade="save-update, merge, delete")
 
     type = Column(String(20))
 
@@ -29,7 +29,13 @@ class Personne(Base):
         'polymorphic_identity': 'personne',
         'polymorphic_on': type
     }
-
+     
+    def create_order_address(self):
+        address = Address(address=self.address, zipcode=self.zipcode, city=self.city, country_id=self.country_id, personne_id=self.id)
+        from webserver import db
+        db.session.add(address)
+        db.session.commit()
+           
     # Flask-Login integration
     def is_authenticated(self):
         return True

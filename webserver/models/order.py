@@ -33,7 +33,6 @@ class Order(Base):
             my_dict['state'] = self.state.to_dict() if self.state else None
 
         if lines_order:
-            print self.lines_order[0]
             my_dict['lines_orders'] = [lo.to_dict() for lo in self.lines_order]
 
         return my_dict

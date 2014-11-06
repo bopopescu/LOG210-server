@@ -131,7 +131,9 @@ def create():
 
     # Create client
     client = Client(firstname=datas['firstname'], lastname=datas['lastname'], phone=datas['phone'], address=datas['address'], zipcode=datas['zipcode'], city=datas['city'], country=country, mail=datas['mail'], password=datas['password'])
-
+    db.session.flush()
+    client.create_order_address()
+    
     # Check birthdate
     if 'birthdate' in datas:
         try:

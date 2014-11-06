@@ -30,14 +30,15 @@ def install_with_data():
     rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs3 = Restaurateur(firstname="Marcel", lastname="Proust", mail="restau", password="rateur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    
     db.session.add(rs1)
     db.session.add(rs2)
     db.session.add(rs3)
 
     # Add entrepreneurs
     from webserver.models import Entrepreneur
-    e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     import datetime
+    e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1, birthdate=datetime.datetime(2010, 10, 10))
     db.session.add(e1)
     db.session.add(e2)
@@ -46,8 +47,22 @@ def install_with_data():
     from webserver.models import Client
     c1 = Client(firstname="Yvon", lastname="Gagner", mail="cli", password="ent", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    
     db.session.add(c1)
     db.session.add(c2)
+    
+    # !!! Add adresses to personne !!!
+    db.session.flush()
+    
+    rs1.create_order_address()
+    rs2.create_order_address()
+    rs3.create_order_address()
+    
+    e1.create_order_address()
+    e2.create_order_address()
+    
+    c1.create_order_address()
+    c2.create_order_address()
 
     # Add restaurants
     from webserver.models import Restaurant
