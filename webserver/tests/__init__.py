@@ -21,13 +21,13 @@ import datetime
 
 
 # Address
-def build_address(id, address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", country=None):
+def build_address(id, address="1010 Avenue de la banquise", zipcode="H1S1R1", city="Montreal", country=None, personne_id=None):
     """ Builder to create an address in database """
 
     if country is None:
         country = build_country(id=id)
 
-    address = Address(id=id, address=address, zipcode=zipcode, city=city, country=country)
+    address = Address(id=id, address=address, zipcode=zipcode, city=city, country=country, personne_id=personne_id)
     db.session.add(address)
 
     return address
