@@ -50,6 +50,9 @@ def list():
         
         query = query.join(StateOrder).filter(StateOrder.name == state)
         
+    if 'client_id' in request.values:
+        query = query.filter(Order.client_id == request.values['client_id'])
+        
     orders = query.all()
 
     # Build the response
