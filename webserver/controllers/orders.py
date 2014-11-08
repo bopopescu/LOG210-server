@@ -116,7 +116,7 @@ def create():
         return make_response(gettext(u"L'adresse de livraison est obligatoire."), 400)
     try:
         address_id = int(datas['address_id'])
-    except Exception:  # pragma: no cover
+    except Exception:
         return make_response(gettext(u"address_id doit être un identifiant."), 400)
 
     address = db.session.query(Address).get(address_id)
@@ -128,7 +128,7 @@ def create():
         return make_response(gettext(u"restaurant_id est obligatoire."), 400)
     try:
         restaurant_id = int(datas['restaurant_id'])
-    except Exception:  # pragma: no cover
+    except Exception:
         return make_response(gettext(u"restaurant_id doit être un identifiant."), 400)
 
     restaurant = db.session.query(Restaurant).get(restaurant_id)
