@@ -227,13 +227,13 @@ def update(id):
         order.state_id = state.id
         
         # SMS Notification
-        if app.config['TESTING'] is False:  # pragma: no cover
-            client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN) 
-            client.messages.create(
-                to="+15142902316",
-                from_="+14387932148",
-                body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.number, state.name),
-            )
+        # if app.config['TESTING'] is False:  # pragma: no cover
+        #     client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN)
+        #     client.messages.create(
+        #         to="+15142902316",
+        #         from_="+14387932148",
+        #         body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.number, state.name),
+        #     )
         
     # Commit
     try:
