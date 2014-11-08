@@ -15,12 +15,18 @@ class Order(Base):
     client_id = Column(Integer, ForeignKey('client.id'))
     client = relationship("Client")
     
+    address_id = Column(Integer, ForeignKey('address.id'))
+    address = relationship("Address")
+    
     state_id = Column(Integer, ForeignKey('state_order.id'))
     state = relationship("StateOrder")
     
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
+    restaurant = relationship("Restaurant")
+    
     lines_order = relationship("LineOrder", cascade="save-update, merge, delete")
     
-    def to_dict(self, lines_order=True, state=True):
+    def to_dict(self, lines_order=True, state=True, address=True, restaurant=True):
         my_dict = dict()
 
         my_dict['id'] = self.id
@@ -31,6 +37,12 @@ class Order(Base):
         
         if state:
             my_dict['state'] = self.state.to_dict() if self.state else None
+            
+        if address:
+            my_dict['address'] = self.address.to_dict() if self.address else None
+            
+        if restaurant:
+            my_dict['restaurant'] = self.restaurant.to_dict() if self.restaurant else None
 
         if lines_order:
             my_dict['lines_orders'] = [lo.to_dict() for lo in self.lines_order]

@@ -114,7 +114,7 @@ def create():
         return make_response(gettext(u"Le pays n'existe pas."), 404)
 
     # Create address
-    address = Address(address=datas['address'], zipcode=datas['zipcode'], city=datas['city'], country=country)
+    address = Address(address=datas['address'], zipcode=datas['zipcode'], city=datas['city'], country=country, personne_id=personne_id)
 
     # Add address
     db.session.add(address)

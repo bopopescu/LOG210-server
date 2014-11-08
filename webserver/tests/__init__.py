@@ -184,14 +184,14 @@ def delete_menus():
 
 
 # Order
-def build_order(id, number=1, date=None, client_id=None, state=None):
+def build_order(id, number=1, date=None, client_id=None, restaurant_id=None, state=None):
     """ Builder to create a menu in database """
 
     date = datetime.datetime(2014, 4, 4) if date is None else date
     state = StateOrder(name="En attente") if state is None else state
     db.session.add(state)
     
-    order = Order(id=id, number=number, date=date, client_id=client_id, state=state)
+    order = Order(id=id, number=number, date=date, client_id=client_id, restaurant_id=restaurant_id, state=state)
     db.session.add(order)
 
     return order

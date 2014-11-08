@@ -2,8 +2,8 @@
 
 from webserver import db
 from webserver.models import Order
-from webserver.tests import build_order, build_state_order, build_client
-from webserver.tests import delete_orders, delete_states_orders, delete_clients
+from webserver.tests import build_order, build_state_order, build_client, build_restaurant
+from webserver.tests import delete_orders, delete_states_orders, delete_clients, delete_restaurants
 from webserver.tests.functional import FunctionalTest
 
 
@@ -100,6 +100,9 @@ class List(FunctionalTest):
         build_order(id=5, state=so1, client_id=78)
         build_order(id=6, state=so2, client_id=78)
         
+        build_restaurant(id=532)
+        build_order(id=15, state=so1, restaurant_id=532)
+        
         db.session.commit()
 
     @classmethod
@@ -109,6 +112,7 @@ class List(FunctionalTest):
         delete_orders()
         delete_states_orders()
         delete_clients()
+        delete_restaurants()
         
         db.session.commit()
 
@@ -121,7 +125,7 @@ class List(FunctionalTest):
 
         # Check length
         result = self.parse(response.data)
-        assert len(result) == 5
+        assert len(result) == 6
 
         # Check id
         result_id = [r['id'] for r in result]
@@ -130,6 +134,7 @@ class List(FunctionalTest):
         assert 3 in result_id
         assert 5 in result_id
         assert 6 in result_id
+        assert 15 in result_id
         
     def test_list_with_state(self):
         """ GET /orders?state=1: list with state """
@@ -147,6 +152,21 @@ class List(FunctionalTest):
         assert 2 in result_id
         assert 3 in result_id
         assert 6 in result_id
+        
+    def test_list_with_restaurant(self):
+        """ GET /orders?restaurant_id=532: list with restaurant_id """
+
+        # Check request
+        response = self.get('/orders?restaurant_id=532')
+        assert response.status_code == 200
+
+        # Check length
+        result = self.parse(response.data)
+        assert len(result) == 1
+
+        # Check id
+        result_id = [r['id'] for r in result]
+        assert 15 in result_id
         
     def test_list_with_client(self):
         """ GET /orders?client_id=78: list with client_id """
