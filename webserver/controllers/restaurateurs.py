@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, json, make_response, request
+from flask import Blueprint, make_response, request
 from flask.ext.babel import gettext
 from webserver import db
 from webserver.lib.base import jsonify
@@ -9,6 +9,7 @@ import datetime
 
 # Define blueprint
 restaurateurs = Blueprint('restaurateurs', __name__)
+
 
 # Get list
 @restaurateurs.route('', methods=['GET', 'OPTIONS'])
@@ -29,6 +30,7 @@ def list():
     response.mimetype = 'application/json'
 
     return response
+
 
 # Get one restaurateur
 @restaurateurs.route('/<int:id>', methods=['GET', 'OPTIONS'])
@@ -133,7 +135,7 @@ def create():
     restaurateur = Restaurateur(firstname=datas['firstname'], lastname=datas['lastname'], phone=datas['phone'], address=datas['address'], zipcode=datas['zipcode'], city=datas['city'], country=country, mail=datas['mail'], password=datas['password'])
     db.session.flush()
     restaurateur.create_order_address()
-    
+
     # Check birthdate
     if 'birthdate' in datas:
         try:
@@ -203,6 +205,14 @@ def update(id):
             return make_response(gettext(u"Le prénom doit être une chaine de caractère."), 400)
         restaurateur.lastname = datas['lastname']
 
+    # Check mail
+    if 'mail' in datas:
+        if not isinstance(datas['mail'], (str, unicode)):
+            return make_response(gettext(u"L'adresse mail doit être une chaine de caractère."), 400)
+        if len(db.session.query(Personne).filter(Personne.mail == datas['mail']).all()) > 1:
+            return make_response(gettext(u"L'adresse mail est deja utilisee par un utilisateur."), 400)
+        restaurateur.mail = datas['mail']
+
     # Check password
     if 'password' in datas:
         if not isinstance(datas['password'], (str, unicode)):
@@ -261,22 +271,23 @@ def update(id):
 
     # Check restaurateur
     if 'restaurant_id' in datas:
-        try:
-            restaurant_id = int(datas['restaurant_id'])
-        except Exception:  # pragma: no cover
-            return make_response(gettext(u"restaurant_id doit être un identifiant."), 400)
+        if datas['restaurant_id'] == 'no_restaurant':
+            restaurateur.restaurant = None
+        else:
+            try:
+                restaurant_id = int(datas['restaurant_id'])
+            except Exception:  # pragma: no cover
+                return make_response(gettext(u"restaurant_id doit être un identifiant."), 400)
 
-        restaurant = db.session.query(Restaurant).get(restaurant_id)
-        if restaurant is None:
-            return make_response(gettext(u"Le restaurant n'existe pas."), 404)
+            restaurant = db.session.query(Restaurant).get(restaurant_id)
+            if restaurant is None:
+                return make_response(gettext(u"Le restaurant n'existe pas."), 404)
 
-        if restaurant.restaurateur is not None:
-            if restaurant.restaurateur.id != restaurateur.id:
-                return make_response(gettext(u"Le restaurant est déjà assigné à un restaurateur."), 400)
+            if restaurant.restaurateur is not None:
+                if restaurant.restaurateur.id != restaurateur.id:
+                    return make_response(gettext(u"Le restaurant est déjà assigné à un restaurateur."), 400)
 
-        restaurateur.restaurant = restaurant
-    else:
-        restaurateur.restaurant = None
+            restaurateur.restaurant = restaurant
 
     # Commit
     try:
@@ -291,6 +302,7 @@ def update(id):
     response.mimetype = 'application/json'
 
     return response
+
 
 # Delete a restaurateur
 @restaurateurs.route('/<int:id>', methods=['DELETE', 'OPTIONS'])
