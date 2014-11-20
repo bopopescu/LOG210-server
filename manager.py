@@ -8,29 +8,30 @@ manager = Manager(app)
 
 @manager.command
 def install():
-    
+
     # Create database
     db.drop_all()
     db.create_all()
     print("...Database successfuly installed")
-    
+
     # Add fixtures
     add_country()
     add_state_order()
-    
+
+
 @manager.command
 def install_with_data():
-    
+
     # Create database with fixtures
     install()
-    
+
     # Add restaurateurs
     from webserver.models import Restaurateur, Country
-    ct1 = db.session.query(Country).filter(Country.name=="Canada").one()
+    ct1 = db.session.query(Country).filter(Country.name == "Canada").one()
     rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs3 = Restaurateur(firstname="Marcel", lastname="Proust", mail="restau", password="rateur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
-    
+
     db.session.add(rs1)
     db.session.add(rs2)
     db.session.add(rs3)
@@ -47,20 +48,20 @@ def install_with_data():
     from webserver.models import Client
     c1 = Client(firstname="Yvon", lastname="Gagner", mail="cli", password="ent", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
-    
+
     db.session.add(c1)
     db.session.add(c2)
-    
+
     # !!! Add adresses to personne !!!
     db.session.flush()
-    
+
     rs1.create_order_address()
     rs2.create_order_address()
     rs3.create_order_address()
-    
+
     e1.create_order_address()
     e2.create_order_address()
-    
+
     c1.create_order_address()
     c2.create_order_address()
 
@@ -76,13 +77,18 @@ def install_with_data():
     db.session.add(r3)
     db.session.add(r4)
     db.session.add(r5)
-    
+
+    # Add livreur
+    from webserver.models import Livreur
+    liv1 = Livreur(firstname="Steve", lastname="Speed", mail="liv", password="reur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    db.session.add(liv1)
+
     # Add menus
     from webserver.models import Menu
     m1 = Menu(name="Lunch", restaurant_id=1)
     db.session.add(m1)
     db.session.flush()
-    
+
     # Add dishes
     from webserver.models import Dish
     d1 = Dish(name="Frites", description="Avec des pomme de terre fraiche", price=4.99, menu_id=1)
