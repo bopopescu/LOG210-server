@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, json, make_response, request
-from flask.ext.login import AnonymousUserMixin
+from flask import Blueprint, make_response, request
 from flask.ext.babel import gettext
 from webserver import db, app
 from webserver.lib.base import jsonify
-from webserver.models import Address, Order, StateOrder, Client, LineOrder, Restaurant
+from webserver.models import Address, Order, StateOrder, LineOrder, Restaurant
 
 from twilio.rest import TwilioRestClient
 from webserver.config import TwilioConfig
+import smtplib
 
 from sqlalchemy.orm import lazyload
 
 import datetime
-import werkzeug
 
 # Define blueprint
 orders = Blueprint('orders', __name__)
@@ -142,7 +141,7 @@ def create():
 
     # Get state "En attente"
     try:
-        state = db.session.query(StateOrder).filter(StateOrder.name=="En attente").one()
+        state = db.session.query(StateOrder).filter(StateOrder.name == "En attente").one()
     except:
         return make_response(gettext(u"L'état 'En attente' est inexistant."), 400)
 
@@ -170,7 +169,6 @@ def create():
             return make_response(gettext(u"dish_id doit être un identifiant."), 400)
 
         order.lines_order.append(LineOrder(dish_id=dish_id, quantity=quantity))
-
 
     # Add menu
     db.session.add(order)
@@ -232,8 +230,21 @@ def update(id):
         #     client.messages.create(
         #         to="+15144429905",
         #         from_="+14387932148",
-        #         body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.number, state.name),
+        #         body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.id, state.name),
         #     )
+
+        # Mail notification
+        # sender = 'donotreply@etsmtl.ca'
+        # receivers = ['benjamin.comeau.1@ens.etsmtl.ca']
+        #
+        # body = u"Bonjour votre commande numero %s est passee dans le statut: %s." % (order.id, state.name)
+        # message = ("From: ETS FOOD <donotreply@etsfood.me> \n"
+        #            "To: Benjamin Comeau <benjamin.comeau.1@etsmtl.me>\n"
+        #            "Subject: Notification de commande\n\n" + body)
+        # message = message.encode('utf8')
+        #
+        # smtpObj = smtplib.SMTP('smtp.etsmtl.ca')
+        # smtpObj.sendmail(sender, receivers, message)
 
     # Commit
     try:
@@ -248,6 +259,7 @@ def update(id):
     response.mimetype = 'application/json'
 
     return response
+
 
 # Delete a menu
 @orders.route('/<int:id>', methods=['DELETE', 'OPTIONS'])
