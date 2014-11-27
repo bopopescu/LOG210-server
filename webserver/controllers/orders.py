@@ -225,26 +225,26 @@ def update(id):
         order.state_id = state.id
 
         # SMS Notification
-        # if app.config['TESTING'] is False:  # pragma: no cover
-        #     client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN)
-        #     client.messages.create(
-        #         to="+15144429905",
-        #         from_="+14387932148",
-        #         body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.id, state.name),
-        #     )
+        if app.config['TESTING'] is False:  # pragma: no cover
+            client = TwilioRestClient(TwilioConfig.ACCOUNT_SID, TwilioConfig.AUTH_TOKEN)
+            client.messages.create(
+                to="+15144429905",
+                from_="+14387932148",
+                body=u"Bonjour votre commande n°%s est passée dans le statut: %s." % (order.id, state.name),
+            )
 
         # Mail notification
-        # sender = 'donotreply@etsmtl.ca'
-        # receivers = ['benjamin.comeau.1@ens.etsmtl.ca']
-        #
-        # body = u"Bonjour votre commande numero %s est passee dans le statut: %s." % (order.id, state.name)
-        # message = ("From: ETS FOOD <donotreply@etsfood.me> \n"
-        #            "To: Benjamin Comeau <benjamin.comeau.1@etsmtl.me>\n"
-        #            "Subject: Notification de commande\n\n" + body)
-        # message = message.encode('utf8')
-        #
-        # smtpObj = smtplib.SMTP('smtp.etsmtl.ca')
-        # smtpObj.sendmail(sender, receivers, message)
+        sender = 'donotreply@etsmtl.ca'
+        receivers = ['benjamin.comeau.1@ens.etsmtl.ca']
+
+        body = u"Bonjour votre commande numero %s est passee dans le statut: %s." % (order.id, state.name)
+        message = ("From: ETS FOOD <donotreply@etsfood.me> \n"
+                   "To: Benjamin Comeau <benjamin.comeau.1@etsmtl.me>\n"
+                   "Subject: Notification de commande\n\n" + body)
+        message = message.encode('utf8')
+
+        smtpObj = smtplib.SMTP('smtp.etsmtl.ca')
+        smtpObj.sendmail(sender, receivers, message)
 
     # Commit
     try:
