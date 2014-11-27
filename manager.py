@@ -30,7 +30,7 @@ def install_with_data():
     ct1 = db.session.query(Country).filter(Country.name == "Canada").one()
     rs1 = Restaurateur(firstname="Valentino", lastname="Rossi", mail="rossi@ducati.it", password="quarantesix", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     rs2 = Restaurateur(firstname="Fernando", lastname="Alonso", mail="alonso@ferrari.it", password="asturie", phone="123-456-7890", address="6558 rue de Normanville", city="Montreal", zipcode="H2S2B9", country=ct1)
-    rs3 = Restaurateur(firstname="Marcel", lastname="Proust", mail="restau", password="rateur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    rs3 = Restaurateur(firstname="Marcel", lastname="Proust", mail="restau@ets.ca", password="rateur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
 
     db.session.add(rs1)
     db.session.add(rs2)
@@ -40,13 +40,13 @@ def install_with_data():
     from webserver.models import Entrepreneur
     import datetime
     e1 = Entrepreneur(firstname="Jay", lastname="UnNom", mail="un@mail.com", password="passwd", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
-    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1, birthdate=datetime.datetime(2010, 10, 10))
+    e2 = Entrepreneur(firstname="Entre", lastname="Preneur", mail="entre@ets.ca", password="preneur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1, birthdate=datetime.datetime(2010, 10, 10))
     db.session.add(e1)
     db.session.add(e2)
 
     # Add clients
     from webserver.models import Client
-    c1 = Client(firstname="Yvon", lastname="Gagner", mail="cli", password="ent", phone="123-456-7890", address="2900 Boulevard Edouard-Montpetit", city="Montreal", zipcode="H3T 1J4", country=ct1)
+    c1 = Client(firstname="Yvon", lastname="Gagner", mail="cli@ets.ca", password="ent", phone="123-456-7890", address="2900 Boulevard Edouard-Montpetit", city="Montreal", zipcode="H3T 1J4", country=ct1)
     c2 = Client(firstname="Leo", lastname="Pard", mail="pard@ferrari.it", password="passwdc2", phone="123-456-7890", address="6548 rue de Normanville", city="Montreal", zipcode="H2S2B9", country=ct1)
 
     db.session.add(c1)
@@ -80,7 +80,7 @@ def install_with_data():
 
     # Add livreur
     from webserver.models import Livreur
-    liv1 = Livreur(firstname="Steve", lastname="Speed", mail="liv", password="reur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
+    liv1 = Livreur(firstname="Steve", lastname="Speed", mail="liv@ets.ca", password="reur", phone="123-456-7890", address="1001 Rue Notre Dame", city="Montreal", zipcode="H3S 1Z1", country=ct1)
     db.session.add(liv1)
 
     # Add menus
