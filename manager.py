@@ -133,5 +133,9 @@ def add_state_order():
     db.session.commit()
     print("...States order successfully added")
 
+@manager.command
+def run():
+    app.run(host='10.192.169.107')
+
 if __name__ == "__main__":
     manager.run()
