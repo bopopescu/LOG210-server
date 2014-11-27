@@ -67,8 +67,8 @@ def install_with_data():
 
     # Add restaurants
     from webserver.models import Restaurant
-    r1 = Restaurant(name="Subway", phone="514-444-4444", address="2900 Boulevard Edouard-Montpetit", city="Montreal", zipcode="H3T 1J4", cooking_type="Fastfood")
-    r2 = Restaurant(name="McDonalds", phone="514-444-4444", address="6548 rue de Normanville", city="Montreal", zipcode="H2S2B9", cooking_type="Fastfood")
+    r1 = Restaurant(name="Subway", phone="514-444-4444", address="1001 Ste-Catherine", city="Montreal", zipcode="H3K 3P2", cooking_type="Fastfood")
+    r2 = Restaurant(name="McDonalds", phone="514-444-4444", address="4301 St-Denis", city="Montreal", zipcode="H2S 1R4", cooking_type="Fastfood")
     r3 = Restaurant(name="La Banquise", phone="514-444-4444", address="2167 St-Denis", city="Montreal", zipcode="H4P 2R2", cooking_type="Poutine")
     r4 = Restaurant(name="Le Duc de Lorraine", phone="514-444-4444", address="2983 St-Denis", city="Montreal", zipcode="H1S 1R2", cooking_type="Gastronomie française")
     r5 = Restaurant(name="La Plazza", phone="514-444-4444", address="1893 St-Denis", city="Montreal", zipcode="H4C 2R1", restaurateur=rs3, cooking_type="Plats italiens")
@@ -99,19 +99,6 @@ def install_with_data():
     db.session.add(d2)
     db.session.add(d3)
     db.session.add(d4)
-    
-    from webserver.models import Order, LineOrder
-    o1 = Order(number="2", state_id="3", client_id=c1.id, restaurant_id=r2.id,  address_id=c1.id, date=datetime.datetime(2014, 11, 20, 13, 59, 29, 942300))
-    o2 = Order(number="3", state_id="3", client_id=c1.id, restaurant_id=r1.id, address_id=c2.id, date=datetime.datetime(2014, 11, 20, 13, 59, 29, 942300))
-    db.session.add(o1)
-    db.session.add(o2)
-    
-    lo1 = LineOrder(order_id=o1.id, dish_id=d1.id, quantity=2)
-    lo2 = LineOrder(order_id=o1.id, dish_id=d2.id, quantity=1)
-    lo3 = LineOrder(order_id=o2.id, dish_id=d3.id, quantity=4)
-    db.session.add(lo1)
-    db.session.add(lo2)
-    db.session.add(lo3)
 
     db.session.commit()
     print("...Datas test successfully added")

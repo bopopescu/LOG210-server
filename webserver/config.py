@@ -1,6 +1,6 @@
 from webserver.models import Base
 
-__all__ = ['DataBase', 'LocalConfig', 'TestingConfig']
+__all__ = ['DataBase', 'LocalConfig', 'CloudConfig', 'TestingConfig']
 
 class DataBase(object):
 
@@ -51,6 +51,11 @@ class LocalConfig(object):
     SECRET_KEY = 'foobarbaz'
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:root@localhost:8889/restaurants'
 
+class CloudConfig(object):
+    DEBUG = True
+    TESTING = False
+    SECRET_KEY = 'foobarbaz'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:389llSXG6z@localhost:3306/restaurants'
 
 class TestingConfig(object):
     DEBUG = True
