@@ -135,7 +135,7 @@ def add_state_order():
 
 @manager.command
 def run():
-    app.run(host='10.192.169.107')
+    app.run(host='104.131.90.215')
 
 if __name__ == "__main__":
     manager.run()
